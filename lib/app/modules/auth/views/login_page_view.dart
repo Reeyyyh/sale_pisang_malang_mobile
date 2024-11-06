@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/auth/controllers/login_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/register_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart'; // Pastikan path sesuai
+import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
 
 class LoginPageView extends StatelessWidget {
   final LoginController loginController = Get.put(LoginController());
@@ -65,33 +65,47 @@ class LoginPageView extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
+                    } else if (!GetUtils.isEmail(value)) {
+                      return 'Please enter a valid email address';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller: loginController.passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: const Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    return null;
-                  },
-                ),
+                Obx(() => TextFormField(
+                      controller: loginController.passwordController,
+                      obscureText: loginController.isPasswordHidden.value,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          icon: Icon(loginController.isPasswordHidden.value
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: loginController.togglePasswordVisibility,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
+                    )),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: loginController.login,
+                    onPressed: () {
+                      if (loginController.formKey.currentState!.validate()) {
+                        String email = loginController.emailController.text;
+                        String password = loginController.passwordController.text;
+                        loginController.login(email, password); // Kirimkan email dan password ke controller
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(

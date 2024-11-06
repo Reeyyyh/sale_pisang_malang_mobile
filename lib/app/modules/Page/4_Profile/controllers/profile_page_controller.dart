@@ -1,7 +1,10 @@
+// profile_controller.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/Admin/views/admin_dashboard_page.dart';
-import 'package:sale_pisang_malang/app/modules/auth/controllers/auth_controller.dart';
+import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
+
 
 class ProfileController extends GetxController {
   final AuthService _authService = AuthService();
@@ -9,20 +12,16 @@ class ProfileController extends GetxController {
   RxString userName = ''.obs;
   RxString userEmail = ''.obs;
 
-  // Fungsi untuk login dan mendapatkan name dan role
-  Future<void> login(String email, String password) async {
-    var user = await _authService.login(email, password);
+  // Fungsi untuk mendapatkan data user
+  Future<void> fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      userEmail.value = user.email!;
-
-      // Mendapatkan data pengguna (name dan role) dari Firestore
+      userEmail.value = user.email ?? '';
       var userData = await _authService.getUserData(user.uid);
       if (userData != null) {
-        userName.value = userData['name']!;
-        role.value = userData['role'] ?? 'user'; // Default ke 'user' jika role tidak ada
+        userName.value = userData['name'] ?? 'Guest';
+        role.value = userData['role'] ?? 'user';
       }
-    } else {
-      Get.snackbar("Error", "Login failed. Check your credentials.");
     }
   }
 
