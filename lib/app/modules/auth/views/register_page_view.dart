@@ -30,7 +30,7 @@ class RegisterPageView extends StatelessWidget {
               const Center(
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('assets/img/logo.png'),
+                  backgroundImage: AssetImage('assets/img/logo.jpg'),
                 ),
               ),
               const SizedBox(height: 24),

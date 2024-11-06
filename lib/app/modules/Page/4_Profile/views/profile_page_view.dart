@@ -33,15 +33,18 @@ class ProfilePageView extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-              ),
+            Container(
+              height: 120, // Tentukan tinggi yang sesuai
+              color: Theme.of(context)
+                  .primaryColor, // Menggunakan warna yang sama seperti DrawerHeader
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0), // Sesuaikan padding jika diperlukan
               child: const Text(
                 'Menu',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 24,
+                  fontSize: 18, // Ukuran font yang lebih kecil
                 ),
               ),
             ),
@@ -52,7 +55,8 @@ class ProfilePageView extends StatelessWidget {
                 title: const Text('Login'),
                 onTap: () {
                   Navigator.pop(context); // Menutup drawer
-                  Get.offAll(LoginPageView()); // Navigasi ke halaman Login
+                  Get.offAll(
+                      () => LoginPageView()); // Navigasi ke halaman Login
                 },
               ),
             if (profileController.role.value == '')
@@ -61,7 +65,8 @@ class ProfilePageView extends StatelessWidget {
                 title: const Text('Register'),
                 onTap: () {
                   Navigator.pop(context); // Menutup drawer
-                  Get.offAll(RegisterPageView()); // Navigasi ke halaman Register
+                  Get.offAll(
+                      () => RegisterPageView()); // Navigasi ke halaman Register
                 },
               ),
             // Tombol Logout hanya ditampilkan jika sudah login
@@ -86,15 +91,21 @@ class ProfilePageView extends StatelessWidget {
               backgroundImage: NetworkImage("https://via.placeholder.com/150"),
             ),
             const SizedBox(height: 16),
+            // Menampilkan nama user jika sudah login, atau welcome guest jika belum login
             Text(
-              profileController.userName.value,
+              profileController.role.value.isEmpty
+                  ? 'Welcome Guest' // Jika belum login, tampilkan "Welcome Guest"
+                  : profileController
+                      .userName.value, // Jika sudah login, tampilkan nama user
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(
-              profileController.userEmail.value,
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
-            ),
+            // Menampilkan email jika sudah login
+            if (profileController.role.value.isNotEmpty)
+              Text(
+                profileController.userEmail.value,
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
+              ),
             const SizedBox(height: 24),
             // Tombol Admin Dashboard hanya ditampilkan jika role admin
             if (profileController.role.value == 'admin')
@@ -104,7 +115,7 @@ class ProfilePageView extends StatelessWidget {
                 label: const Text('Admin Dashboard'),
               ),
             const SizedBox(height: 16),
-            // Tombol Logout
+            // Tombol Logout hanya ditampilkan jika sudah login
             if (profileController.role.value != '')
               ElevatedButton.icon(
                 onPressed: profileController.logout,
@@ -133,4 +144,3 @@ class ProfilePageView extends StatelessWidget {
     );
   }
 }
-

@@ -32,7 +32,7 @@ class LoginPageView extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('assets/img/logo.png'),
+                  backgroundImage: AssetImage('assets/img/logo.jpg'),
                 ),
                 const SizedBox(height: 24),
                 const Text(
