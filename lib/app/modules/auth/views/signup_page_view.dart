@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sale_pisang_malang/app/modules/auth/controllers/login_page_controller.dart';
-import 'package:sale_pisang_malang/app/modules/auth/views/signup_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/auth/controllers/signup_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
 
-class LoginPageView extends StatelessWidget {
-  final LoginController loginController = Get.put(LoginController());
+class SignUpPageView extends StatelessWidget {
+  final SignUpController authController = Get.put(SignUpController());
 
-  LoginPageView({super.key});
+  SignUpPageView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class LoginPageView extends StatelessWidget {
               BoxShadow(
                 color: Colors.black.withOpacity(0.3), // Shadow color
                 offset: const Offset(0, 4), // Offset shadow ke bawah
-                blurRadius: 6, // Menentukan seberapa kabur shadow
+                blurRadius: 2, // Menentukan seberapa kabur shadow
                 spreadRadius: 1, // Ukuran spread shadow
               ),
             ],
@@ -32,7 +32,7 @@ class LoginPageView extends StatelessWidget {
                 color: Colors.deepPurple, // Warna background AppBar
               ),
               child: AppBar(
-                title: const Text('Login', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                title: const Text('Sign Up', style: TextStyle(color: Colors.white)),
                 backgroundColor: Colors.transparent, // Menggunakan transparent agar tidak mengganggu shadow
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
@@ -50,7 +50,7 @@ class LoginPageView extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
-            key: loginController.formKey,
+            key: authController.formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -60,7 +60,7 @@ class LoginPageView extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  'Welcome Back!',
+                  'Create an Account!',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class LoginPageView extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Log in to continue',
+                  'Sign up to get started',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black54,
@@ -77,21 +77,40 @@ class LoginPageView extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 TextFormField(
-                  controller: loginController.emailController,
-                  keyboardType: TextInputType.emailAddress,
+                  controller: authController.nameController,
                   decoration: InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon:
-                        const Icon(Icons.email, color: Colors.deepPurple),
+                    labelText: 'Name',
+                    prefixIcon: const Icon(Icons.person, color: Colors.deepPurple),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 20),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: authController.emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: const Icon(Icons.email, color: Colors.deepPurple),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
@@ -102,46 +121,44 @@ class LoginPageView extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 16),
-                Obx(() => TextFormField(
-                      controller: loginController.passwordController,
-                      obscureText: loginController.isPasswordHidden.value,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon:
-                            const Icon(Icons.lock, color: Colors.deepPurple),
-                        suffixIcon: IconButton(
-                          icon: Icon(loginController.isPasswordHidden.value
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: loginController.togglePasswordVisibility,
+                Obx(
+                  () => TextFormField(
+                    controller: authController.passwordController,
+                    obscureText: authController.isPasswordHidden.value,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      prefixIcon: const Icon(Icons.lock, color: Colors.deepPurple),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          authController.isPasswordHidden.value
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20),
+                        onPressed: authController.togglePasswordVisibility,
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      },
-                    )),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (loginController.formKey.currentState!.validate()) {
-                        String email = loginController.emailController.text;
-                        String password =
-                            loginController.passwordController.text;
-                        loginController.login(email,
-                            password);
+                      if (authController.formKey.currentState!.validate()) {
+                        authController.register();
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -152,7 +169,7 @@ class LoginPageView extends StatelessWidget {
                       ),
                     ),
                     child: const Text(
-                      'Login',
+                      'Register',
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -165,15 +182,15 @@ class LoginPageView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Don’t have an account?',
+                      'Already have an account? ',
                       style: TextStyle(color: Colors.black54),
                     ),
                     TextButton(
                       onPressed: () {
-                        Get.to(() => SignUpPageView());
+                        Get.to(() => LoginPageView());
                       },
                       child: const Text(
-                        'Sign Up',
+                        'Login',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.deepPurple,

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 
-class RegisterController extends GetxController {
+class SignUpController extends GetxController {
   final AuthService _authService = AuthService();
 
   // Controllers untuk input

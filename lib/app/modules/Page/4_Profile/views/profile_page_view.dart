@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/Page/4_Profile/controllers/profile_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/auth/views/register_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/auth/views/signup_page_view.dart';
 
 class ProfilePageView extends StatelessWidget {
   const ProfilePageView({super.key});
@@ -34,7 +34,7 @@ class ProfilePageView extends StatelessWidget {
           children: [
             Container(
               height: 120,
-              color: Theme.of(context).primaryColor,
+              color: Colors.deepPurple,
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: const Text(
@@ -42,6 +42,7 @@ class ProfilePageView extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ),
@@ -59,10 +60,10 @@ class ProfilePageView extends StatelessWidget {
                     ),
                     ListTile(
                       leading: const Icon(Icons.app_registration),
-                      title: const Text('Register'),
+                      title: const Text('Sign Up'),
                       onTap: () {
                         Navigator.pop(context);
-                        Get.offAll(() => RegisterPageView());
+                        Get.offAll(() => SignUpPageView());
                       },
                     ),
                   ],
