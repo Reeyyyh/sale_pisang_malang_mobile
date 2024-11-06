@@ -107,24 +107,17 @@ class ProfilePageView extends StatelessWidget {
                   )
                 : Container()),
             const SizedBox(height: 24),
-            if (profileController.role.value == 'admin')
-              ElevatedButton.icon(
-                onPressed: profileController.goToAdminDashboard,
-                icon: const Icon(Icons.admin_panel_settings),
-                label: const Text('Admin Dashboard'),
-              ),
+            Obx(() {
+              if (profileController.role.value == 'admin') {
+                return ElevatedButton.icon(
+                  onPressed: profileController.goToAdminDashboard,
+                  icon: const Icon(Icons.admin_panel_settings),
+                  label: const Text('Admin Dashboard'),
+                );
+              }
+              return Container(); // Jika bukan admin, tampilkan Container kosong
+            }),
             const SizedBox(height: 16),
-            // if (profileController.role.value.isNotEmpty)
-            //   ElevatedButton.icon(
-            //     onPressed: profileController.logout,
-            //     icon: const Icon(Icons.logout),
-            //     label: const Text('Logout'),
-            //     style: ElevatedButton.styleFrom(
-            //       backgroundColor: Colors.redAccent,
-            //       minimumSize: const Size(double.infinity, 40),
-            //     ),
-            //   ),
-            const SizedBox(height: 24),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.settings),

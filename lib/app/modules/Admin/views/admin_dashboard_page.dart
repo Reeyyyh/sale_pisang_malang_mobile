@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sale_pisang_malang/app/modules/Page/4_Profile/views/profile_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/admin/controllers/admin_dashboard_controller.dart';
+import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
 
 class AdminDashboardView extends StatelessWidget {
   const AdminDashboardView({super.key});
@@ -19,7 +19,7 @@ class AdminDashboardView extends StatelessWidget {
             icon: const Icon(Icons.logout),
             onPressed: () {
               // Logika untuk logout
-              Get.offAll(() => const ProfilePageView());
+              Get.offAll(() => const StartPageView());
             },
           ),
         ],
