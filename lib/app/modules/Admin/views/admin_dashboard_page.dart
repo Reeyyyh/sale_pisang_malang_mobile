@@ -24,63 +24,96 @@ class AdminDashboardView extends StatelessWidget {
           ),
         ],
       ),
-      body: Obx(() {
-        if (adminController.items.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
-        }
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Obx(() {
+          if (adminController.items.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: adminController.nameController,
-                      decoration: const InputDecoration(labelText: 'Item Name'),
-                    ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Form untuk menambahkan item
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: adminController.nameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Item Name',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextFormField(
+                          controller: adminController.descriptionController,
+                          decoration: const InputDecoration(
+                            labelText: 'Description',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextFormField(
+                          controller: adminController.hargaController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            labelText: 'Price',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: adminController.addItem,
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: TextField(
-                      controller: adminController.descriptionController,
-                      decoration: const InputDecoration(labelText: 'Description'),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: adminController.hargaController,
-                      decoration: const InputDecoration(labelText: 'Price'),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: adminController.addItem,
-                  ),
-                ],
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: adminController.items.length,
-                itemBuilder: (context, index) {
-                  final item = adminController.items[index];
-                  return ListTile(
-                    title: Text(item.name),
-                    subtitle: Text('${item.description} - ${item.harga}'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        adminController.deleteItem(item.id);
-                      },
-                    ),
-                  );
-                },
+              const SizedBox(height: 16),
+
+              // List item yang telah ditambahkan
+              Expanded(
+                child: ListView.builder(
+                  itemCount: adminController.items.length,
+                  itemBuilder: (context, index) {
+                    final item = adminController.items[index];
+                    return Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      margin: const EdgeInsets.only(bottom: 12),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(16.0),
+                        title: Text(
+                          item.name,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text('${item.description} - ${item.harga}'),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            adminController.deleteItem(item.id);
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
-        );
-      }),
+            ],
+          );
+        }),
+      ),
     );
   }
 }

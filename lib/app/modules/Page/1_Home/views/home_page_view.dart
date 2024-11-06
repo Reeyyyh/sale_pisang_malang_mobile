@@ -12,19 +12,14 @@ class HomePageView extends StatelessWidget {
     return Scaffold(
       body: Obx(() {
         if (homeController.items.isEmpty) {
-          // Tampilkan indikator loading jika data kosong
-          return const Center(
-            child: CircularProgressIndicator(color: Colors.black),
-          );
+          return const Center(child: CircularProgressIndicator(color: Colors.black));
         }
         return CustomScrollView(
           slivers: [
-            // Header aplikasi dengan efek gradient
             SliverPersistentHeader(
               pinned: true,
               delegate: AppBarSliverDelegate(),
             ),
-            // Grid produk
             SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -44,10 +39,7 @@ class HomePageView extends StatelessWidget {
                           ListTile(
                             title: Text(
                               item.name,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(item.description),
                           ),
@@ -57,10 +49,7 @@ class HomePageView extends StatelessWidget {
                             children: [
                               Text(
                                 'Rp ${item.harga}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               IconButton(
                                 icon: const Icon(Icons.add_shopping_cart),
