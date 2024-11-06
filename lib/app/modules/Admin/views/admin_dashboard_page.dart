@@ -18,7 +18,6 @@ class AdminDashboardView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Logika untuk logout
               Get.offAll(() => const StartPageView());
             },
           ),
@@ -40,41 +39,36 @@ class AdminDashboardView extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Row(
+                  child: Column(
                     children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: adminController.nameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Item Name',
-                            border: OutlineInputBorder(),
-                          ),
+                      TextFormField(
+                        controller: adminController.nameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Item Name',
+                          border: OutlineInputBorder(),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: TextFormField(
-                          controller: adminController.descriptionController,
-                          decoration: const InputDecoration(
-                            labelText: 'Description',
-                            border: OutlineInputBorder(),
-                          ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: adminController.descriptionController,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                          border: OutlineInputBorder(),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: TextFormField(
-                          controller: adminController.hargaController,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Price',
-                            border: OutlineInputBorder(),
-                          ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: adminController.hargaController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Price',
+                          border: OutlineInputBorder(),
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.add),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
                         onPressed: adminController.addItem,
+                        child: const Text('Add Item'),
                       ),
                     ],
                   ),
@@ -98,12 +92,23 @@ class AdminDashboardView extends StatelessWidget {
                           item.name,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text('${item.description} - ${item.harga}'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            adminController.deleteItem(item.id);
-                          },
+                        subtitle: Text('${item.description} - Rp ${item.harga}'),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () {
+                                adminController.showEditDialog(item);
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                adminController.deleteItem(item.id);
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     );

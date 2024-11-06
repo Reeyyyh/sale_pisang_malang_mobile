@@ -29,7 +29,7 @@ class AdminDashboardController extends GetxController {
       nameController.clear();
       descriptionController.clear();
       hargaController.clear();
-      fetchItems(); // Refresh the list after adding
+      fetchItems();
       Get.snackbar('Item Added', '${nameController.text} has been added.');
     } else {
       Get.snackbar('Error', 'Please fill all fields');
@@ -38,8 +38,52 @@ class AdminDashboardController extends GetxController {
 
   Future<void> deleteItem(String id) async {
     await FirebaseFirestore.instance.collection('items').doc(id).delete();
-    fetchItems(); // Refresh the list after deleting
+    fetchItems();
     Get.snackbar('Item Deleted', 'Item has been deleted.');
+  }
+
+  void showEditDialog(ItemModel item) {
+    // Initialize fields with current values
+    nameController.text = item.name;
+    descriptionController.text = item.description;
+    hargaController.text = item.harga;
+
+    Get.defaultDialog(
+      title: 'Edit Item',
+      content: Column(
+        children: [
+          TextFormField(
+            controller: nameController,
+            decoration: const InputDecoration(labelText: 'Item Name'),
+          ),
+          TextFormField(
+            controller: descriptionController,
+            decoration: const InputDecoration(labelText: 'Description'),
+          ),
+          TextFormField(
+            controller: hargaController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(labelText: 'Price'),
+          ),
+        ],
+      ),
+      textConfirm: 'Save',
+      textCancel: 'Cancel',
+      onConfirm: () {
+        updateItem(item.id);
+        Get.back(); // Close dialog
+      },
+    );
+  }
+
+  Future<void> updateItem(String id) async {
+    await FirebaseFirestore.instance.collection('items').doc(id).update({
+      'name': nameController.text,
+      'description': descriptionController.text,
+      'harga': hargaController.text,
+    });
+    fetchItems();
+    Get.snackbar('Item Updated', 'Item has been updated.');
   }
 }
 
