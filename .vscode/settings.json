@@ -1,0 +1,9 @@
+{
+    "workbench.colorTheme": "Monokai",
+    "editor.fontFamily": "jetbrains mono",
+    "editor.fontLigatures": true,
+    "explorer.compactFolders": false,
+
+    "dart.previewFlutterUiGuides": true,
+    "dart.previewFlutterUiGuidesCustomTracking": true
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922758528966",
+    "project_id": "sale-pisang-malang",
+    "storage_bucket": "sale-pisang-malang.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922758528966:android:0ed88a62389cef3a24bcc7",
+        "android_client_info": {
+          "package_name": "com.salepisangmalang"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7cH3_LgjKaVqLOtrhJUjpxgvD0PRefLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
