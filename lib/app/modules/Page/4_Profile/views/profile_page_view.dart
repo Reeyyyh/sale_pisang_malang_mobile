@@ -19,7 +19,7 @@ class ProfilePageView extends StatelessWidget {
             // Shadow layer
             Positioned.fill(
               child: Transform.scale(
-                scale: 1.10, // Sedikit lebih besar untuk efek bayangan
+                scale: 1.10, // Slightly larger for shadow effect
                 child: ClipPath(
                   clipper: AppBarClipper(),
                   child: Container(
@@ -34,8 +34,7 @@ class ProfilePageView extends StatelessWidget {
               child: AppBar(
                 title: const Text(
                   'Profile',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 centerTitle: true,
                 backgroundColor: Colors.blueAccent,
@@ -70,10 +69,7 @@ class ProfilePageView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: const Text(
                   'Menu',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -82,10 +78,7 @@ class ProfilePageView extends StatelessWidget {
                 return Column(
                   children: [
                     ListTile(
-                      leading: const Icon(
-                        Icons.login,
-                        size: 30,
-                      ),
+                      leading: const Icon(Icons.login, size: 30),
                       title: const Text('Login'),
                       onTap: () {
                         Navigator.pop(context);
@@ -96,10 +89,7 @@ class ProfilePageView extends StatelessWidget {
                       },
                     ),
                     ListTile(
-                      leading: const Icon(
-                        Icons.app_registration,
-                        size: 30,
-                      ),
+                      leading: const Icon(Icons.app_registration, size: 30),
                       title: const Text('Sign Up'),
                       onTap: () {
                         Navigator.pop(context);
@@ -125,7 +115,7 @@ class ProfilePageView extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,10 +133,7 @@ class ProfilePageView extends StatelessWidget {
                   profileController.role.value.isEmpty
                       ? 'Welcome Guest'
                       : profileController.userName.value,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -161,13 +148,13 @@ class ProfilePageView extends StatelessWidget {
                 : Container()),
             const SizedBox(height: 24),
 
+            // Gunakan Expanded atau Flexible di sini untuk memastikan tampilan
             Obx(() {
               if (profileController.role.value == 'admin') {
                 return Card(
                   elevation: 5,
                   child: ListTile(
-                    leading: const Icon(Icons.admin_panel_settings,
-                        color: Colors.blueAccent),
+                    leading: const Icon(Icons.admin_panel_settings, color: Colors.blueAccent),
                     title: const Text('Admin Dashboard'),
                     onTap: profileController.goToAdminDashboard,
                   ),
@@ -196,6 +183,7 @@ class ProfilePageView extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
+            // Gunakan Expanded atau Flexible di sini
             Obx(() {
               if (profileController.role.value.isNotEmpty) {
                 return ElevatedButton.icon(
@@ -229,8 +217,10 @@ class AppBarClipper extends CustomClipper<Path> {
     final path = Path();
     path.lineTo(0, size.height - 40);
     path.quadraticBezierTo(
-      size.width / 2, size.height,
-      size.width, size.height - 40,
+      size.width / 2,
+      size.height,
+      size.width,
+      size.height - 40,
     );
     path.lineTo(size.width, 0);
     path.close();

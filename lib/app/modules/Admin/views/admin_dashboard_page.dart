@@ -9,7 +9,8 @@ class AdminDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Menginisialisasi AdminDashboardController
-    final AdminDashboardController adminController = Get.put(AdminDashboardController());
+    final AdminDashboardController adminController =
+        Get.put(AdminDashboardController());
 
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +37,8 @@ class AdminDashboardView extends StatelessWidget {
               // Form untuk menambahkan item
               Card(
                 elevation: 4,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -84,7 +86,8 @@ class AdminDashboardView extends StatelessWidget {
                     final item = adminController.items[index];
                     return Card(
                       elevation: 3,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                       margin: const EdgeInsets.only(bottom: 12),
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(16.0),
@@ -92,7 +95,8 @@ class AdminDashboardView extends StatelessWidget {
                           item.name,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text('${item.description} - Rp ${item.harga}'),
+                        subtitle:
+                            Text('${item.description} - Rp ${item.harga}'),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
