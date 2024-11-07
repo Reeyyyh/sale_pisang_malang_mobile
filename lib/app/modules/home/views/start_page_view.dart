@@ -56,7 +56,7 @@ class StartPageView extends StatelessWidget {
           child: Obx(() => CurvedNavigationBar(
                 height: 68,
                 backgroundColor: Colors.transparent,
-                buttonBackgroundColor: const Color.fromARGB(255, 39, 176, 176), // Warna tombol
+                buttonBackgroundColor: const Color.fromARGB(168, 98, 183, 183), // Warna tombol
                 buttonLabelColor: Colors.black,
                 items: icons
                     .asMap()
