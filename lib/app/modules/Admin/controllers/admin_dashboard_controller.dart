@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sale_pisang_malang/app/modules/Page/1_Home/controllers/home_page_controller.dart';
+import 'package:sale_pisang_malang/app/models/items_model.dart';
 
 class AdminDashboardController extends GetxController {
   var items = <ItemModel>[].obs;
