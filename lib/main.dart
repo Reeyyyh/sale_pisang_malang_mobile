@@ -6,7 +6,6 @@ import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  
   runApp(
     const GetMaterialApp(
       debugShowCheckedModeBanner: false,

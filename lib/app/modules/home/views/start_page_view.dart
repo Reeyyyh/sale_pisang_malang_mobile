@@ -6,6 +6,7 @@ import 'package:sale_pisang_malang/app/modules/Page/1_Home/views/home_page_view.
 import 'package:sale_pisang_malang/app/modules/Page/2_MyOrder/views/my_order_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/views/favorite_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/Page/4_Profile/views/profile_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/modules/home/controllers/start_page_controller.dart';
 
 class StartPageView extends StatelessWidget {
@@ -14,6 +15,7 @@ class StartPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final StartPageController startController = Get.put(StartPageController());
+    Get.put(AuthService());
 
     // Daftar halaman yang akan ditampilkan pada bottom navigation
     final List<Widget> pages = [

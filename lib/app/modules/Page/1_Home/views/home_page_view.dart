@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/Page/1_Home/controllers/home_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});
@@ -8,6 +9,7 @@ class HomePageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
+    final AuthService authService = Get.find<AuthService>();
 
     return Scaffold(
       body: Obx(() {
@@ -81,32 +83,36 @@ class HomePageView extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                                Icons.add_shopping_cart),
-                                            onPressed: () {
-                                              Get.snackbar(
-                                                'Item Added',
-                                                '${item.name} has been added to your cart',
-                                                snackPosition:
-                                                    SnackPosition.TOP,
-                                              );
-                                            },
-                                          ),
-                                          const SizedBox(
-                                              width:
-                                                  16), // Memberikan jarak antara ikon
-                                          IconButton(
-                                            icon: const Icon(Icons.favorite, color: Colors.redAccent,),
-                                            onPressed: () {
-                                              Get.snackbar(
-                                                'Item Added',
-                                                '${item.name} has been added to your cart',
-                                                snackPosition:
-                                                    SnackPosition.TOP,
-                                              );
-                                            },
-                                          ),
+IconButton(
+  icon: const Icon(Icons.add_shopping_cart),
+  onPressed: () {
+    print('User ID at cart icon pressed: ${homeController.isUserGuest ? "Guest" : authService.currentUser?.uid}');
+    homeController.checkUserAccess('Cart');
+    if (!homeController.isUserGuest) {
+      Get.snackbar(
+        'Item Added',
+        '${item.name} has been added to your cart',
+        snackPosition: SnackPosition.TOP,
+      );
+    }
+  },
+),
+IconButton(
+  icon: const Icon(Icons.favorite, color: Colors.redAccent),
+  onPressed: () {
+    print('User ID at favorite icon pressed: ${homeController.isUserGuest ? "Guest" : authService.currentUser?.uid}');
+    homeController.checkUserAccess('Favorites');
+    if (!homeController.isUserGuest) {
+      Get.snackbar(
+        'Item Added',
+        '${item.name} has been added to your favorites',
+        snackPosition: SnackPosition.TOP,
+      );
+    }
+  },
+),
+
+
                                         ],
                                       ),
                                     ],

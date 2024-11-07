@@ -28,7 +28,47 @@ class AdminDashboardView extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Obx(() {
           if (adminController.items.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: adminController.nameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Item Name',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: adminController.descriptionController,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: adminController.hargaController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Price',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: adminController.addItem,
+                        child: const Text('Add Item'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
           }
 
           return Column(

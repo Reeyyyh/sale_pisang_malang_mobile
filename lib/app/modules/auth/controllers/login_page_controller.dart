@@ -4,30 +4,23 @@ import 'package:sale_pisang_malang/app/modules/Page/4_Profile/controllers/profil
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
 
+
 class LoginController extends GetxController {
-  final AuthService _authService = AuthService();
-  final ProfileController _profileController = Get.put(ProfileController());
-
-  // Deklarasi form key untuk validasi form
+  final AuthService _authService = Get.find<AuthService>(); 
   final formKey = GlobalKey<FormState>();
-
-  // Kontroller untuk email dan password
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  // Reactive variable untuk menyembunyikan password
   var isPasswordHidden = true.obs;
 
-  // Fungsi untuk mengubah visibilitas password
   void togglePasswordVisibility() {
     isPasswordHidden.value = !isPasswordHidden.value;
   }
 
-  // Fungsi login yang menerima email dan password
+  // Fungsi login
   void login(String email, String password) async {
     var user = await _authService.login(email, password);
     if (user != null) {
-      _profileController.fetchUserData(); // Sinkronkan data pengguna
+      Get.find<ProfileController>().fetchUserData(); // Sinkronkan data pengguna
       Get.offAll(() => const StartPageView());
       Get.snackbar("Login Success", "Welcome back!");
     } else {
