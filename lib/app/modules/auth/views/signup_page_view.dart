@@ -32,7 +32,7 @@ class SignUpPageView extends StatelessWidget {
                 color: Colors.deepPurple, // Warna background AppBar
               ),
               child: AppBar(
-                title: const Text('Sign Up', style: TextStyle(color: Colors.white)),
+                title: const Text('Sign Up', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 backgroundColor: Colors.transparent, // Menggunakan transparent agar tidak mengganggu shadow
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),

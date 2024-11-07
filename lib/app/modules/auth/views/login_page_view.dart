@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/auth/controllers/login_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/signup_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/home/controllers/start_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
 
 class LoginPageView extends StatelessWidget {
@@ -32,10 +33,14 @@ class LoginPageView extends StatelessWidget {
                 color: Colors.deepPurple, // Warna background AppBar
               ),
               child: AppBar(
-                title: const Text('Login', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                backgroundColor: Colors.transparent, // Menggunakan transparent agar tidak mengganggu shadow
+                title: const Text('Login',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+                backgroundColor: Colors
+                    .transparent, // Menggunakan transparent agar tidak mengganggu shadow
                 leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                  icon:
+                      const Icon(Icons.arrow_back_ios_new, color: Colors.white),
                   onPressed: () {
                     Get.offAll(() => const StartPageView());
                   },
@@ -140,8 +145,7 @@ class LoginPageView extends StatelessWidget {
                         String email = loginController.emailController.text;
                         String password =
                             loginController.passwordController.text;
-                        loginController.login(email,
-                            password);
+                        loginController.login(email, password);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -197,7 +201,8 @@ class CustomAppBarClipper extends CustomClipper<Path> {
     var path = Path();
     path.lineTo(0, 0);
     path.lineTo(0, size.height - 20);
-    path.quadraticBezierTo(size.width / 2, size.height, size.width, size.height - 20);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height - 20);
     path.lineTo(size.width, 0);
     path.close();
     return path;
