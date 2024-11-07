@@ -97,7 +97,7 @@ class HomePageView extends StatelessWidget {
                                               width:
                                                   16), // Memberikan jarak antara ikon
                                           IconButton(
-                                            icon: const Icon(Icons.favorite),
+                                            icon: const Icon(Icons.favorite, color: Colors.redAccent,),
                                             onPressed: () {
                                               Get.snackbar(
                                                 'Item Added',
