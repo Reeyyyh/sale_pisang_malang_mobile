@@ -48,28 +48,49 @@ class StartPageView extends StatelessWidget {
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.purpleAccent, Colors.yellowAccent, Colors.redAccent, Colors.blueAccent], // Ungu ke Biru
+              colors: [
+                Color.fromRGBO(116, 48, 97, 1),
+                Color.fromRGBO(106, 30, 85, 1),
+                Colors.redAccent,
+                Color.fromRGBO(166, 77, 121, 1),
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26, // Shadow color
+                offset: Offset(0, -3), // Posisi bayangan ke atas
+                blurRadius: 6, // Kelembutan bayangan
+                spreadRadius: 1, // Ukuran penyebaran bayangan
+              ),
+            ],
           ),
           child: Obx(() => CurvedNavigationBar(
                 height: 68,
                 backgroundColor: Colors.transparent,
-                buttonBackgroundColor: const Color.fromARGB(168, 98, 183, 183), // Warna tombol
+                buttonBackgroundColor:
+                    const Color.fromARGB(146, 16, 18, 18), // Warna tombol
                 buttonLabelColor: Colors.black,
                 items: icons
                     .asMap()
                     .map((index, icon) => MapEntry(
                           index,
                           CurvedNavigationBarItem(
-                            icon: Icon(icon, size: 30, color: Colors.black),
+                            icon: Icon(icon,
+                                size: 30,
+                                color: startController.selectedIndex.value ==
+                                        index
+                                    ? Colors.white
+                                    : Colors
+                                        .grey), // Ubah warna ikon berdasarkan status
                             label: labels[index],
                           ),
                         ))
                     .values
                     .toList(),
-                index: startController.selectedIndex.value, // sinkronkan dengan controller
+                index: startController
+                    .selectedIndex.value, // sinkronkan dengan controller
                 onTap: (index) {
                   startController.changePage(index);
                 },

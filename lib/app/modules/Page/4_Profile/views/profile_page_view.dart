@@ -12,31 +12,59 @@ class ProfilePageView extends StatelessWidget {
     final ProfileController profileController = Get.put(ProfileController());
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        centerTitle: true,
-        actions: [
-          Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-              );
-            },
-          ),
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(120),
+        child: Stack(
+          children: [
+            // Shadow layer
+            Positioned.fill(
+              child: Transform.scale(
+                scale: 1.10, // Sedikit lebih besar untuk efek bayangan
+                child: ClipPath(
+                  clipper: AppBarClipper(),
+                  child: Container(
+                    color: Colors.black.withOpacity(0.2), // Shadow color
+                  ),
+                ),
+              ),
+            ),
+            // Main AppBar layer
+            ClipPath(
+              clipper: AppBarClipper(),
+              child: AppBar(
+                title: const Text(
+                  'Profile',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+                centerTitle: true,
+                backgroundColor: Colors.blueAccent,
+                actions: [
+                  Builder(
+                    builder: (BuildContext context) {
+                      return IconButton(
+                        icon: const Icon(Icons.menu),
+                        onPressed: () {
+                          Scaffold.of(context).openEndDrawer();
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       endDrawer: Drawer(
-        width: 200,
+        width: 250,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             Hero(
               tag: 'drawerToAppBarHero',
               child: Container(
-                height: 100,
+                height: 120,
                 color: Colors.deepPurple,
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -54,25 +82,29 @@ class ProfilePageView extends StatelessWidget {
                 return Column(
                   children: [
                     ListTile(
-                      leading: const Icon(Icons.login),
+                      leading: const Icon(
+                        Icons.login,
+                        size: 30,
+                      ),
                       title: const Text('Login'),
                       onTap: () {
                         Navigator.pop(context);
-                        // Get.offAll(() => LoginPageView());
-                        Get.to(() => LoginPageView())?.then((_) {
-                          // Hapus halaman sebelumnya dari stack setelah transisi
+                        Get.to(() => LoginPageView())?.then((_) async {
+                          await Future.delayed(const Duration(seconds: 2));
                           Get.offAll(() => LoginPageView());
                         });
                       },
                     ),
                     ListTile(
-                      leading: const Icon(Icons.app_registration),
+                      leading: const Icon(
+                        Icons.app_registration,
+                        size: 30,
+                      ),
                       title: const Text('Sign Up'),
                       onTap: () {
                         Navigator.pop(context);
-                        // Get.offAll(() => SignUpPageView());
-                        Get.to(() => SignUpPageView())?.then((_) {
-                          // Hapus halaman sebelumnya dari stack setelah transisi
+                        Get.to(() => SignUpPageView())?.then((_) async {
+                          await Future.delayed(const Duration(seconds: 2));
                           Get.offAll(() => SignUpPageView());
                         });
                       },
@@ -96,54 +128,115 @@ class ProfilePageView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/img/logo.jpg'),
+            const Center(
+              child: CircleAvatar(
+                radius: 60,
+                backgroundImage: AssetImage('assets/img/logo.jpg'),
+              ),
             ),
             const SizedBox(height: 16),
-            // Menampilkan nama pengguna atau "Guest" jika belum login
-            Obx(() => Text(
+            Obx(
+              () => Center(
+                child: Text(
                   profileController.role.value.isEmpty
                       ? 'Welcome Guest'
                       : profileController.userName.value,
                   style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
-                )),
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 8),
-            // Menampilkan email jika sudah login
             Obx(() => profileController.role.value.isNotEmpty
-                ? Text(
-                    profileController.userEmail.value,
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                ? Center(
+                    child: Text(
+                      profileController.userEmail.value,
+                      style: const TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
                   )
                 : Container()),
             const SizedBox(height: 24),
+
             Obx(() {
               if (profileController.role.value == 'admin') {
-                return ElevatedButton.icon(
-                  onPressed: profileController.goToAdminDashboard,
-                  icon: const Icon(Icons.admin_panel_settings),
-                  label: const Text('Admin Dashboard'),
+                return Card(
+                  elevation: 5,
+                  child: ListTile(
+                    leading: const Icon(Icons.admin_panel_settings,
+                        color: Colors.blueAccent),
+                    title: const Text('Admin Dashboard'),
+                    onTap: profileController.goToAdminDashboard,
+                  ),
                 );
               }
-              return Container(); // Jika bukan admin, tampilkan Container kosong
+              return Container();
             }),
             const SizedBox(height: 16),
             const Divider(),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () {},
+
+            Card(
+              elevation: 5,
+              child: ListTile(
+                leading: const Icon(Icons.settings),
+                title: const Text('Settings'),
+                onTap: () {},
+              ),
             ),
-            ListTile(
-              leading: const Icon(Icons.help_outline),
-              title: const Text('Help & Support'),
-              onTap: () {},
+            Card(
+              elevation: 5,
+              child: ListTile(
+                leading: const Icon(Icons.help_outline),
+                title: const Text('Help & Support'),
+                onTap: () {},
+              ),
             ),
+            const SizedBox(height: 24),
+
+            Obx(() {
+              if (profileController.role.value.isNotEmpty) {
+                return ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                  label: const Text(
+                    'Edit Profile',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    minimumSize: const Size(double.infinity, 40),
+                  ),
+                );
+              }
+              return Container();
+            }),
           ],
         ),
       ),
     );
   }
+}
+
+class AppBarClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height - 40);
+    path.quadraticBezierTo(
+      size.width / 2, size.height,
+      size.width, size.height - 40,
+    );
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
