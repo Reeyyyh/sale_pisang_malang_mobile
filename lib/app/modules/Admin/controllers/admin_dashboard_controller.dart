@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sale_pisang_malang/app/modules/Page/1_Home/controllers/home_page_controller.dart';
 
 class AdminDashboardController extends GetxController {
   var items = <ItemModel>[].obs;
@@ -84,24 +85,5 @@ class AdminDashboardController extends GetxController {
     });
     fetchItems();
     Get.snackbar('Item Updated', 'Item has been updated.');
-  }
-}
-
-// Model untuk item
-class ItemModel {
-  final String id;
-  final String name;
-  final String description;
-  final String harga;
-
-  ItemModel({required this.id, required this.name, required this.description, required this.harga});
-
-  factory ItemModel.fromDocument(DocumentSnapshot doc) {
-    return ItemModel(
-      id: doc.id,
-      name: doc['name'] ?? 'Tidak ada nama',
-      description: doc['description'] ?? 'Tidak ada deskripsi',
-      harga: doc['harga'] ?? '0',
-    );
   }
 }
