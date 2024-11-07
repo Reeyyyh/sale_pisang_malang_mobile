@@ -12,7 +12,8 @@ class HomePageView extends StatelessWidget {
     return Scaffold(
       body: Obx(() {
         if (homeController.items.isEmpty) {
-          return const Center(child: CircularProgressIndicator(color: Colors.black));
+          return const Center(
+              child: CircularProgressIndicator(color: Colors.black));
         }
         return CustomScrollView(
           slivers: [
@@ -38,7 +39,8 @@ class HomePageView extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min, // Menjaga tinggi card tetap minimal
+                        mainAxisSize: MainAxisSize
+                            .min, // Menjaga tinggi card tetap minimal
                         children: [
                           ListTile(
                             title: Text(
@@ -50,33 +52,65 @@ class HomePageView extends StatelessWidget {
                             ),
                             subtitle: Text(item.description),
                           ),
-                          const SizedBox(height: 8),
                           const Divider(), // Pemisah antara deskripsi dan harga
-                          const SizedBox(height: 8),
                           Flexible(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: Text(
-                                    'Rp ${item.harga}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green, // Memberi warna pada harga
-                                    ),
-                                    overflow: TextOverflow.ellipsis, // Menghindari overflow harga
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Rp ${item.harga}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors
+                                              .green, // Memberi warna pada harga
+                                        ),
+                                        overflow: TextOverflow
+                                            .ellipsis, // Menghindari overflow harga
+                                      ),
+                                      const SizedBox(
+                                          height:
+                                              8), // Memberikan jarak antara harga dan ikon
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(
+                                                Icons.add_shopping_cart),
+                                            onPressed: () {
+                                              Get.snackbar(
+                                                'Item Added',
+                                                '${item.name} has been added to your cart',
+                                                snackPosition:
+                                                    SnackPosition.TOP,
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(
+                                              width:
+                                                  16), // Memberikan jarak antara ikon
+                                          IconButton(
+                                            icon: const Icon(Icons.favorite),
+                                            onPressed: () {
+                                              Get.snackbar(
+                                                'Item Added',
+                                                '${item.name} has been added to your cart',
+                                                snackPosition:
+                                                    SnackPosition.TOP,
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.add_shopping_cart),
-                                  onPressed: () {
-                                    Get.snackbar(
-                                      'Item Added',
-                                      '${item.name} has been added to your cart',
-                                      snackPosition: SnackPosition.BOTTOM,
-                                    );
-                                  },
                                 ),
                               ],
                             ),
@@ -98,7 +132,8 @@ class HomePageView extends StatelessWidget {
 
 class AppBarSliverDelegate extends SliverPersistentHeaderDelegate {
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Stack(
       children: [
         // Background shadow layer, slightly larger than the foreground layer
@@ -162,8 +197,10 @@ class AppBarClipper extends CustomClipper<Path> {
     final path = Path();
     path.lineTo(0, size.height - 40);
     path.quadraticBezierTo(
-      size.width / 2, size.height,
-      size.width, size.height - 40,
+      size.width / 2,
+      size.height,
+      size.width,
+      size.height - 40,
     );
     path.lineTo(size.width, 0);
     path.close();
