@@ -14,35 +14,39 @@ class LoginPageView extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(100.0),
-        child: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3), // Shadow color
-                offset: const Offset(0, 4), // Offset shadow ke bawah
-                blurRadius: 6, // Menentukan seberapa kabur shadow
-                spreadRadius: 1, // Ukuran spread shadow
-              ),
-            ],
-          ),
-          child: ClipPath(
-            clipper: CustomAppBarClipper(), // Menggunakan custom clipper
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.deepPurple, // Warna background AppBar
-              ),
-              child: AppBar(
-                title: const Text('Login',
+        child: Hero(
+          tag: 'drawerToAppBarHero',
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  offset: const Offset(0, 4),
+                  blurRadius: 6,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+            child: ClipPath(
+              clipper: CustomAppBarClipper(),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.deepPurple,
+                ),
+                child: AppBar(
+                  title: const Text(
+                    'Login',
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-                backgroundColor: Colors
-                    .transparent, // Menggunakan transparent agar tidak mengganggu shadow
-                leading: IconButton(
-                  icon:
-                      const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                  onPressed: () {
-                    Get.offAll(() => const StartPageView());
-                  },
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  backgroundColor: Colors.transparent,
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new,
+                        color: Colors.white),
+                    onPressed: () {
+                      Get.offAll(() => const StartPageView());
+                    },
+                  ),
                 ),
               ),
             ),

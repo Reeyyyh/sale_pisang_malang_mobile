@@ -29,20 +29,23 @@ class ProfilePageView extends StatelessWidget {
         ],
       ),
       endDrawer: Drawer(
+        width: 200,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            Container(
-              height: 120,
-              color: Colors.deepPurple,
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold
+            Hero(
+              tag: 'drawerToAppBarHero',
+              child: Container(
+                height: 100,
+                color: Colors.deepPurple,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: const Text(
+                  'Menu',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -55,7 +58,11 @@ class ProfilePageView extends StatelessWidget {
                       title: const Text('Login'),
                       onTap: () {
                         Navigator.pop(context);
-                        Get.offAll(() => LoginPageView());
+                        // Get.offAll(() => LoginPageView());
+                        Get.to(() => LoginPageView())?.then((_) {
+                          // Hapus halaman sebelumnya dari stack setelah transisi
+                          Get.offAll(() => LoginPageView());
+                        });
                       },
                     ),
                     ListTile(
@@ -63,7 +70,11 @@ class ProfilePageView extends StatelessWidget {
                       title: const Text('Sign Up'),
                       onTap: () {
                         Navigator.pop(context);
-                        Get.offAll(() => SignUpPageView());
+                        // Get.offAll(() => SignUpPageView());
+                        Get.to(() => SignUpPageView())?.then((_) {
+                          // Hapus halaman sebelumnya dari stack setelah transisi
+                          Get.offAll(() => SignUpPageView());
+                        });
                       },
                     ),
                   ],

@@ -14,31 +14,39 @@ class SignUpPageView extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(100.0),
-        child: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3), // Shadow color
-                offset: const Offset(0, 4), // Offset shadow ke bawah
-                blurRadius: 2, // Menentukan seberapa kabur shadow
-                spreadRadius: 1, // Ukuran spread shadow
-              ),
-            ],
-          ),
-          child: ClipPath(
-            clipper: CustomAppBarClipper(), // Menggunakan custom clipper
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.deepPurple, // Warna background AppBar
-              ),
-              child: AppBar(
-                title: const Text('Sign Up', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                backgroundColor: Colors.transparent, // Menggunakan transparent agar tidak mengganggu shadow
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                  onPressed: () {
-                    Get.offAll(() => const StartPageView());
-                  },
+        child: Hero(
+          tag: 'drawerToAppBarHero',
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  offset: const Offset(0, 4),
+                  blurRadius: 6,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+            child: ClipPath(
+              clipper: CustomAppBarClipper(),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.deepPurple,
+                ),
+                child: AppBar(
+                  title: const Text(
+                    'Sign Up',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  backgroundColor: Colors.transparent,
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new,
+                        color: Colors.white),
+                    onPressed: () {
+                      Get.offAll(() => const StartPageView());
+                    },
+                  ),
                 ),
               ),
             ),
@@ -80,14 +88,16 @@ class SignUpPageView extends StatelessWidget {
                   controller: authController.nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
-                    prefixIcon: const Icon(Icons.person, color: Colors.deepPurple),
+                    prefixIcon:
+                        const Icon(Icons.person, color: Colors.deepPurple),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 20),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -101,14 +111,16 @@ class SignUpPageView extends StatelessWidget {
                   controller: authController.emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    prefixIcon: const Icon(Icons.email, color: Colors.deepPurple),
+                    prefixIcon:
+                        const Icon(Icons.email, color: Colors.deepPurple),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 20),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
@@ -127,7 +139,8 @@ class SignUpPageView extends StatelessWidget {
                     obscureText: authController.isPasswordHidden.value,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock, color: Colors.deepPurple),
+                      prefixIcon:
+                          const Icon(Icons.lock, color: Colors.deepPurple),
                       suffixIcon: IconButton(
                         icon: Icon(
                           authController.isPasswordHidden.value
@@ -142,7 +155,8 @@ class SignUpPageView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
                       ),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 20),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -214,7 +228,8 @@ class CustomAppBarClipper extends CustomClipper<Path> {
     var path = Path();
     path.lineTo(0, 0);
     path.lineTo(0, size.height - 20);
-    path.quadraticBezierTo(size.width / 2, size.height, size.width, size.height - 20);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height - 20);
     path.lineTo(size.width, 0);
     path.close();
     return path;
