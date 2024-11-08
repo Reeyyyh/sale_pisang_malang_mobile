@@ -4,7 +4,6 @@ import 'package:sale_pisang_malang/app/modules/Admin/views/admin_dashboard_page.
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 
-
 class ProfileController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();
   RxString role = ''.obs;
@@ -36,7 +35,8 @@ class ProfileController extends GetxController {
     if (role.value == 'admin') {
       Get.offAll(() => const AdminDashboardView());
     } else {
-      Get.snackbar("Access Denied", "You are not authorized to access the admin dashboard.");
+      Get.snackbar("Access Denied",
+          "You are not authorized to access the admin dashboard.");
     }
   }
 }

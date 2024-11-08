@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/Page/4_Profile/controllers/profile_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
@@ -34,7 +35,8 @@ class ProfilePageView extends StatelessWidget {
               child: AppBar(
                 title: const Text(
                   'Profile',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 centerTitle: true,
                 backgroundColor: Colors.blueAccent,
@@ -57,61 +59,105 @@ class ProfilePageView extends StatelessWidget {
       ),
       endDrawer: Drawer(
         width: 250,
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
-            Hero(
-              tag: 'drawerToAppBarHero',
-              child: Container(
-                height: 120,
-                color: Colors.deepPurple,
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: const Text(
-                  'Menu',
-                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  Hero(
+                    tag: 'drawerToAppBarHero',
+                    child: Container(
+                      height: 120,
+                      color: Colors.deepPurple,
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: const Text(
+                        'Menu',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Obx(() {
+                    if (profileController.role.value.isEmpty) {
+                      return Column(
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.login, size: 30),
+                            title: const Text('Login'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Get.to(() => LoginPageView())?.then((_) async {
+                                await Future.delayed(
+                                    const Duration(seconds: 2));
+                                Get.offAll(() => LoginPageView());
+                              });
+                            },
+                          ),
+                          ListTile(
+                            leading:
+                                const Icon(Icons.app_registration, size: 30),
+                            title: const Text('Sign Up'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Get.to(() => SignUpPageView())?.then((_) async {
+                                await Future.delayed(
+                                    const Duration(seconds: 2));
+                                Get.offAll(() => SignUpPageView());
+                              });
+                            },
+                          ),
+                        ],
+                      );
+                    } else {
+                      return ListTile(
+                        leading: const Icon(Icons.logout),
+                        title: const Text('Logout'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          profileController.logout();
+                        },
+                      );
+                    }
+                  }),
+                ],
               ),
             ),
-            Obx(() {
-              if (profileController.role.value.isEmpty) {
-                return Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.login, size: 30),
-                      title: const Text('Login'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Get.to(() => LoginPageView())?.then((_) async {
-                          await Future.delayed(const Duration(seconds: 2));
-                          Get.offAll(() => LoginPageView());
-                        });
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.app_registration, size: 30),
-                      title: const Text('Sign Up'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Get.to(() => SignUpPageView())?.then((_) async {
-                          await Future.delayed(const Duration(seconds: 2));
-                          Get.offAll(() => SignUpPageView());
-                        });
-                      },
-                    ),
-                  ],
-                );
-              } else {
-                return ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Logout'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    profileController.logout();
-                  },
-                );
-              }
-            }),
+            // Footer yang diletakkan di bagian bawah Drawer
+            Container(
+              width: double.maxFinite,
+              padding: const EdgeInsets.all(16),
+              color: const Color(0xFF2A2A2A), // Background lebih gelap
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const FaIcon(
+                          FontAwesomeIcons.instagram,
+                          color: Color(0xFFE4405F), // Warna khas Instagram
+                          size: 30,
+                        ),
+                        onPressed: () => {},
+                      ),
+                      IconButton(
+                        icon: const FaIcon(
+                          FontAwesomeIcons.shopify,
+                          color: Color(0xFFFF8C42), // Warna oranye yang serasi
+                          size: 30,
+                        ),
+                        onPressed: () => {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -133,7 +179,8 @@ class ProfilePageView extends StatelessWidget {
                   profileController.role.value.isEmpty
                       ? 'Welcome Guest'
                       : profileController.userName.value,
-                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 28, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -154,7 +201,8 @@ class ProfilePageView extends StatelessWidget {
                 return Card(
                   elevation: 5,
                   child: ListTile(
-                    leading: const Icon(Icons.admin_panel_settings, color: Colors.blueAccent),
+                    leading: const Icon(Icons.admin_panel_settings,
+                        color: Colors.blueAccent),
                     title: const Text('Admin Dashboard'),
                     onTap: profileController.goToAdminDashboard,
                   ),

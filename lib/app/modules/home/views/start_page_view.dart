@@ -51,10 +51,10 @@ class StartPageView extends StatelessWidget {
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color.fromRGBO(116, 48, 97, 1),
-                Color.fromRGBO(106, 30, 85, 1),
-                Colors.redAccent,
-                Color.fromRGBO(166, 77, 121, 1),
+                Color.fromRGBO(182, 255, 250, 1),
+                Color.fromRGBO(152, 228, 255, 1),
+                Color.fromRGBO(128, 179, 255, 1),
+                Color.fromRGBO(104, 126, 255, 1),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
