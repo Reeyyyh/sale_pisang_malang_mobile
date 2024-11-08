@@ -11,53 +11,110 @@ class FavoritePageView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorite'),
+        title: const Text(
+          'Favorite',
+          style: TextStyle(
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        elevation: 0,
       ),
-      body: Obx(() {
-        // Cetak user ID atau nama untuk verifikasi
-        print('Current user status: ${favoriteController.isGuest.value ? "Guest" : "Logged in"}');
-        
-        // Kondisi 1: Pengguna adalah guest
-        if (favoriteController.isGuest.value) {
-          return const Center(
-            child: Text(
-              'Login to add and view your favorites.',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-          );
-        }
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Obx(() {
+          // Cetak user ID atau nama untuk verifikasi
+          print(
+              'Current user status: ${favoriteController.isGuest.value ? "Guest" : "Logged in"}');
 
-        // Kondisi 2: Pengguna sudah login tetapi belum ada favorit
-        if (favoriteController.favorites.isEmpty) {
-          return const Center(
-            child: Text(
-              'No Favorites Yet. Add some items to your favorites!',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-          );
-        }
-
-        // Kondisi 3: Pengguna sudah login dan memiliki favorit
-        return ListView.builder(
-          itemCount: favoriteController.favorites.length,
-          itemBuilder: (context, index) {
-            final favorite = favoriteController.favorites[index];
-            return ListTile(
-              title: Text(favorite.name),
-              subtitle: Text('Price: ${favorite.price}'),
-              trailing: IconButton(
-                icon: const Icon(Icons.remove_circle_outline),
-                onPressed: () {
-                  // Implementasikan fungsi untuk menghapus favorit jika diperlukan
-                  // favoriteController.removeFavorite(favorite);
-                },
+          // Kondisi 1: Pengguna adalah guest
+          if (favoriteController.isGuest.value) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.favorite_border,
+                    size: 100,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Login to add and view your favorites.',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             );
-          },
-        );
-      }),
+          }
+
+          // Kondisi 2: Pengguna sudah login tetapi belum ada favorit
+          if (favoriteController.favorites.isEmpty) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.favorite_border,
+                    size: 100,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'No Favorites Yet. Add some items to your favorites!',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // Kondisi 3: Pengguna sudah login dan memiliki favorit
+          return ListView.builder(
+            itemCount: favoriteController.favorites.length,
+            itemBuilder: (context, index) {
+              final favorite = favoriteController.favorites[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12.0),
+                  leading: const Icon(
+                    Icons.favorite,
+                    color: Colors.redAccent,
+                    size: 40,
+                  ),
+                  title: Text(
+                    favorite.name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  subtitle: Text(
+                    'Price: ${favorite.price}',
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.remove_circle_outline,
+                        color: Colors.red),
+                    onPressed: () {
+                      // Implementasikan fungsi untuk menghapus favorit jika diperlukan
+                      // favoriteController.removeFavorite(favorite);
+                    },
+                  ),
+                ),
+              );
+            },
+          );
+        }),
+      ),
     );
   }
 }
