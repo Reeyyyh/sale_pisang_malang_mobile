@@ -9,17 +9,32 @@ class HomeController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();
   
   var isLoggedIn = false.obs;
+  var isLoading = true.obs; // Status loading
+  var hasError = false.obs; // Status error jika tidak ada data setelah 2 detik
 
   @override
   void onInit() {
     super.onInit();
     fetchItems();
     checkUserStatus();
+    startLoadingTimeout();
   }
 
-  void fetchItems() {
+    void fetchItems() {
     FirebaseFirestore.instance.collection('items').snapshots().listen((snapshot) {
       items.value = snapshot.docs.map((doc) => ItemModel.fromDocument(doc)).toList();
+      isLoading.value = false; // Set loading selesai saat data sudah ada
+      hasError.value = items.isEmpty; // Jika tetap kosong, set error
+    });
+  }
+
+  void startLoadingTimeout() {
+    // Menghentikan loading dan set error jika data tidak ada setelah 2 detik
+    Future.delayed(const Duration(seconds: 2), () {
+      if (items.isEmpty) {
+        isLoading.value = false;
+        hasError.value = true;
+      }
     });
   }
 
@@ -48,4 +63,5 @@ class HomeController extends GetxController {
       // Akses diizinkan
     }
   }
+
 }

@@ -31,16 +31,16 @@ class AdminDashboardController extends GetxController {
       descriptionController.clear();
       hargaController.clear();
       fetchItems();
-      Get.snackbar('Item Added', '${nameController.text} has been added.');
+      Get.snackbar('Item Added', '${nameController.text} has been added.', snackPosition: SnackPosition.BOTTOM);
     } else {
-      Get.snackbar('Error', 'Please fill all fields');
+      Get.snackbar('Error', 'Please fill all fields', snackPosition: SnackPosition.BOTTOM);
     }
   }
 
   Future<void> deleteItem(String id) async {
     await FirebaseFirestore.instance.collection('items').doc(id).delete();
     fetchItems();
-    Get.snackbar('Item Deleted', 'Item has been deleted.');
+    Get.snackbar('Item Deleted', 'Item has been deleted.', snackPosition: SnackPosition.BOTTOM);
   }
 
   void showEditDialog(ItemModel item) {
@@ -84,6 +84,6 @@ class AdminDashboardController extends GetxController {
       'harga': hargaController.text,
     });
     fetchItems();
-    Get.snackbar('Item Updated', 'Item has been updated.');
+    Get.snackbar('Item Updated', 'Item has been updated.', snackPosition: SnackPosition.BOTTOM);
   }
 }

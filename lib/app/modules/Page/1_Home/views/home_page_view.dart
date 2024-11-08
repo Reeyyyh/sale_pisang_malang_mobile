@@ -12,126 +12,185 @@ class HomePageView extends StatelessWidget {
     final AuthService authService = Get.find<AuthService>();
 
     return Scaffold(
-      body: Obx(() {
-        if (homeController.items.isEmpty) {
-          return const Center(
-              child: CircularProgressIndicator(color: Colors.black));
-        }
-        return CustomScrollView(
-          slivers: [
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: AppBarSliverDelegate(),
-            ),
-            SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.75,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  final item = homeController.items[index];
-                  return Card(
-                    elevation: 8, // Menambahkan shadow untuk card
-                    margin: const EdgeInsets.all(8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+      body: Obx(
+        () {
+          // Jika item kosong, tampilkan SliverPersistentHeader dan CircularProgressIndicator
+          if (homeController.isLoading.value) {
+            // Tampilkan loading jika sedang loading
+            return CustomScrollView(
+              slivers: [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: AppBarSliverDelegate(),
+                ),
+                const SliverToBoxAdapter(
+                  child: Center(
+                    child: CircularProgressIndicator(color: Colors.black),
+                  ),
+                ),
+              ],
+            );
+          } else if (homeController.hasError.value) {
+            // Tampilkan pesan error jika tidak ada data setelah 2 detik
+            return CustomScrollView(
+              slivers: [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: AppBarSliverDelegate(),
+                ),
+                const SliverToBoxAdapter(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search_off,
+                          color: Colors.red,
+                          size: 60,
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Failed to load data',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize
-                            .min, // Menjaga tinggi card tetap minimal
-                        children: [
-                          ListTile(
-                            title: Text(
-                              item.name,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text(item.description),
-                          ),
-                          const Divider(), // Pemisah antara deskripsi dan harga
-                          Flexible(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Rp ${item.harga}',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors
-                                              .green, // Memberi warna pada harga
-                                        ),
-                                        overflow: TextOverflow
-                                            .ellipsis, // Menghindari overflow harga
-                                      ),
-                                      const SizedBox(
-                                          height:
-                                              8), // Memberikan jarak antara harga dan ikon
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-IconButton(
-  icon: const Icon(Icons.add_shopping_cart),
-  onPressed: () {
-    print('User ID at cart icon pressed: ${homeController.isUserGuest ? "Guest" : authService.currentUser?.uid}');
-    homeController.checkUserAccess('Cart');
-    if (!homeController.isUserGuest) {
-      Get.snackbar(
-        'Item Added',
-        '${item.name} has been added to your cart',
-        snackPosition: SnackPosition.TOP,
-      );
-    }
-  },
-),
-IconButton(
-  icon: const Icon(Icons.favorite, color: Colors.redAccent),
-  onPressed: () {
-    print('User ID at favorite icon pressed: ${homeController.isUserGuest ? "Guest" : authService.currentUser?.uid}');
-    homeController.checkUserAccess('Favorites');
-    if (!homeController.isUserGuest) {
-      Get.snackbar(
-        'Item Added',
-        '${item.name} has been added to your favorites',
-        snackPosition: SnackPosition.TOP,
-      );
-    }
-  },
-),
-
-
-                                        ],
-                                      ),
-                                    ],
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return CustomScrollView(
+              slivers: [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: AppBarSliverDelegate(),
+                ),
+                SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.75,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      final item = homeController.items[index];
+                      return Card(
+                        elevation: 8, // Menambahkan shadow untuk card
+                        margin: const EdgeInsets.all(8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize
+                                .min, // Menjaga tinggi card tetap minimal
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  item.name,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ],
-                            ),
+                                subtitle: Text(item.description),
+                              ),
+                              const Divider(), // Pemisah antara deskripsi dan harga
+                              Flexible(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Rp ${item.harga}',
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors
+                                                  .green, // Memberi warna pada harga
+                                            ),
+                                            overflow: TextOverflow
+                                                .ellipsis, // Menghindari overflow harga
+                                          ),
+                                          const SizedBox(
+                                              height:
+                                                  8), // Memberikan jarak antara harga dan ikon
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(
+                                                    Icons.add_shopping_cart),
+                                                onPressed: () {
+                                                  print(
+                                                      'User ID at cart icon pressed: ${homeController.isUserGuest ? "Guest" : authService.currentUser?.uid}');
+                                                  homeController
+                                                      .checkUserAccess('Cart');
+                                                  if (!homeController
+                                                      .isUserGuest) {
+                                                    Get.snackbar(
+                                                      'Item Added',
+                                                      '${item.name} has been added to your cart',
+                                                      snackPosition:
+                                                          SnackPosition.TOP,
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(Icons.favorite,
+                                                    color: Colors.redAccent),
+                                                onPressed: () {
+                                                  print(
+                                                      'User ID at favorite icon pressed: ${homeController.isUserGuest ? "Guest" : authService.currentUser?.uid}');
+                                                  homeController
+                                                      .checkUserAccess(
+                                                          'Favorites');
+                                                  if (!homeController
+                                                      .isUserGuest) {
+                                                    Get.snackbar(
+                                                      'Item Added',
+                                                      '${item.name} has been added to your favorites',
+                                                      snackPosition:
+                                                          SnackPosition.TOP,
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-                childCount: homeController.items.length,
-              ),
-            ),
-          ],
-        );
-      }),
+                        ),
+                      );
+                    },
+                    childCount: homeController.items.length,
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
     );
   }
 }
