@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/Page/1_Home/controllers/home_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
+import 'package:sale_pisang_malang/app/components/component.dart';
 
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});
@@ -161,12 +162,8 @@ class HomePageView extends StatelessWidget {
                                                           'Favorites');
                                                   if (!homeController
                                                       .isUserGuest) {
-                                                    Get.snackbar(
-                                                      'Item Added',
-                                                      '${item.name} has been added to your favorites',
-                                                      snackPosition:
-                                                          SnackPosition.TOP,
-                                                    );
+                                                    homeController
+                                                        .addToFavorites(item);
                                                   }
                                                 },
                                               ),
@@ -253,25 +250,4 @@ class AppBarSliverDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return false;
   }
-}
-
-// Custom clipper untuk membuat bentuk AppBar
-class AppBarClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.lineTo(0, size.height - 40);
-    path.quadraticBezierTo(
-      size.width / 2,
-      size.height,
-      size.width,
-      size.height - 40,
-    );
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

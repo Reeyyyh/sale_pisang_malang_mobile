@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:sale_pisang_malang/app/components/component.dart';
 import 'package:sale_pisang_malang/app/modules/Page/4_Profile/controllers/profile_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/signup_page_view.dart';
@@ -57,6 +58,8 @@ class ProfilePageView extends StatelessWidget {
           ],
         ),
       ),
+
+
       endDrawer: Drawer(
         width: 250,
         child: Column(
@@ -161,6 +164,8 @@ class ProfilePageView extends StatelessWidget {
           ],
         ),
       ),
+
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -257,24 +262,4 @@ class ProfilePageView extends StatelessWidget {
       ),
     );
   }
-}
-
-class AppBarClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.lineTo(0, size.height - 40);
-    path.quadraticBezierTo(
-      size.width / 2,
-      size.height,
-      size.width,
-      size.height - 40,
-    );
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

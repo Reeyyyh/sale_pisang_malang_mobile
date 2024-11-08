@@ -1,13 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sale_pisang_malang/app/models/items_model.dart';
+import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favorite_page_controller.dart';
+
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 
 class HomeController extends GetxController {
   var items = <ItemModel>[].obs;
   final AuthService _authService = Get.find<AuthService>();
-  
+  final FavoriteController _favoriteController = Get.put(FavoriteController());
+
   var isLoggedIn = false.obs;
   var isLoading = true.obs; // Status loading
   var hasError = false.obs; // Status error jika tidak ada data setelah 2 detik
@@ -20,8 +24,11 @@ class HomeController extends GetxController {
     startLoadingTimeout();
   }
 
-    void fetchItems() {
-    FirebaseFirestore.instance.collection('items').snapshots().listen((snapshot) {
+  void fetchItems() {
+    FirebaseFirestore.instance
+        .collection('items')
+        .snapshots()
+        .listen((snapshot) {
       items.value = snapshot.docs.map((doc) => ItemModel.fromDocument(doc)).toList();
       isLoading.value = false; // Set loading selesai saat data sudah ada
       hasError.value = items.isEmpty; // Jika tetap kosong, set error
@@ -29,7 +36,6 @@ class HomeController extends GetxController {
   }
 
   void startLoadingTimeout() {
-    // Menghentikan loading dan set error jika data tidak ada setelah 2 detik
     Future.delayed(const Duration(seconds: 2), () {
       if (items.isEmpty) {
         isLoading.value = false;
@@ -39,7 +45,6 @@ class HomeController extends GetxController {
   }
 
   void checkUserStatus() {
-    // Periksa apakah ada user yang login
     if (_authService.isUserLoggedIn()) {
       isLoggedIn.value = true;
     } else {
@@ -64,4 +69,26 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> addToFavorites(ItemModel item) async {
+    if (isUserGuest) {
+      checkUserAccess('Favorites');
+      return;
+    }
+
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userID = user.uid;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .collection('favorites')
+          .doc(item.id)
+          .set({
+        'itemName': item.name,
+        'itemPrice': item.harga,
+      });
+      _favoriteController.fetchFavorites(); // Memperbarui tampilan favorit
+      Get.snackbar('Success', 'Item ${item.name} added to favorites.');
+    }
+  }
 }

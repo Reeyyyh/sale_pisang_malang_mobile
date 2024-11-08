@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:sale_pisang_malang/app/modules/Page/1_Home/controllers/home_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favorite_page_controller.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -7,7 +10,26 @@ class AuthService {
   User? currentUser;
   Map<String, dynamic>? currentUserData;
 
-  // Fungsi login dengan mengambil data pengguna yang login
+  AuthService() {
+    initializeUser();
+  }
+
+  Future<void> initializeUser() async {
+    User? user = _auth.currentUser;
+    if (user == null) {
+      print('User is currently signed out!');
+      initializeGuestUser();
+    } else {
+      print('User is signed in!');
+      currentUser = user;
+      currentUserData = await getUserData(currentUser!.uid);
+      checkUserStatus();
+    }
+    // Memperbarui kontroler setelah status user ditentukan
+    Get.find<HomeController>().checkUserStatus();
+    Get.find<FavoriteController>().checkUserStatus();
+  }
+
   Future<User?> login(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -18,13 +40,15 @@ class AuthService {
       if (currentUser != null) {
         currentUserData = await getUserData(currentUser!.uid);
       }
+      // Memperbarui kontroler setelah login
+      Get.find<HomeController>().checkUserStatus();
+      Get.find<FavoriteController>().checkUserStatus();
       return currentUser;
     } catch (e) {
       throw Exception('Login Failed: $e');
     }
   }
 
-  // Fungsi untuk mendapatkan data pengguna dari Firestore
   Future<Map<String, dynamic>?> getUserData(String uid) async {
     try {
       DocumentSnapshot userDoc = await _firestore.collection('users').doc(uid).get();
@@ -34,31 +58,31 @@ class AuthService {
     }
   }
 
-  // Fungsi untuk inisialisasi user guest
   void initializeGuestUser() {
     currentUserData = {
       'name': 'Guest',
       'email': 'guest@gmail.com',
       'role': 'guest',
     };
-    currentUser = null; // Tidak ada UID Firebase untuk guest
+    currentUser = null;
   }
 
-  // Fungsi untuk logout
   Future<void> logout() async {
     try {
       await _auth.signOut();
-      initializeGuestUser(); // Set kembali sebagai guest setelah logout
+      initializeGuestUser();
+      // Memperbarui kontroler setelah logout
+      Get.find<HomeController>().checkUserStatus();
+      Get.find<FavoriteController>().checkUserStatus();
     } catch (e) {
       throw Exception('Logout Failed: $e');
     }
   }
 
   bool isUserLoggedIn() {
-    return FirebaseAuth.instance.currentUser != null;
+    return _auth.currentUser != null;
   }
 
-  // Fungsi untuk melakukan registrasi pengguna baru
   Future<User?> register(String email, String password, String name) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -74,6 +98,16 @@ class AuthService {
       return userCredential.user;
     } catch (e) {
       throw Exception('Registration Failed: $e');
+    }
+  }
+
+  void checkUserStatus() {
+    if (isUserLoggedIn()) {
+      currentUser = _auth.currentUser;
+      print('User status: Logged in');
+    } else {
+      initializeGuestUser();
+      print('User status: Guest');
     }
   }
 }

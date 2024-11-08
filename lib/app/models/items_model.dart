@@ -1,6 +1,7 @@
 // Model untuk item
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// Model untuk item model admin menambahkan barang
 class ItemModel {
   final String id;
   final String name;
@@ -19,3 +20,15 @@ class ItemModel {
   }
 }
 
+// Model untuk item favorit
+class FavoriteItem {
+  final String id;
+  final String name;
+  final String price;
+
+  FavoriteItem({
+    required this.id,
+    required this.name,
+    required this.price,
+  });
+}
