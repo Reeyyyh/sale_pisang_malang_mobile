@@ -6,12 +6,16 @@ import 'package:sale_pisang_malang/app/modules/Page/4_Profile/controllers/profil
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/signup_page_view.dart';
 
+
 class ProfilePageView extends StatelessWidget {
   const ProfilePageView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.put(ProfileController());
+
+    // Panggil fungsi untuk mendapatkan data pengguna ketika halaman pertama kali dibuka
+    profileController.fetchUserData();
 
     return Scaffold(
       appBar: PreferredSize(
@@ -58,8 +62,6 @@ class ProfilePageView extends StatelessWidget {
           ],
         ),
       ),
-
-
       endDrawer: Drawer(
         width: 250,
         child: Column(
@@ -130,11 +132,10 @@ class ProfilePageView extends StatelessWidget {
                 ],
               ),
             ),
-            // Footer yang diletakkan di bagian bawah Drawer
             Container(
               width: double.maxFinite,
               padding: const EdgeInsets.all(16),
-              color: const Color(0xFF2A2A2A), // Background lebih gelap
+              color: const Color(0xFF2A2A2A),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -143,7 +144,7 @@ class ProfilePageView extends StatelessWidget {
                       IconButton(
                         icon: const FaIcon(
                           FontAwesomeIcons.instagram,
-                          color: Color(0xFFE4405F), // Warna khas Instagram
+                          color: Color(0xFFE4405F),
                           size: 30,
                         ),
                         onPressed: () => {},
@@ -151,7 +152,7 @@ class ProfilePageView extends StatelessWidget {
                       IconButton(
                         icon: const FaIcon(
                           FontAwesomeIcons.shopify,
-                          color: Color(0xFFFF8C42), // Warna oranye yang serasi
+                          color: Color(0xFFFF8C42),
                           size: 30,
                         ),
                         onPressed: () => {},
@@ -164,8 +165,6 @@ class ProfilePageView extends StatelessWidget {
           ],
         ),
       ),
-
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -199,8 +198,6 @@ class ProfilePageView extends StatelessWidget {
                   )
                 : Container()),
             const SizedBox(height: 24),
-
-            // Gunakan Expanded atau Flexible di sini untuk memastikan tampilan
             Obx(() {
               if (profileController.role.value == 'admin') {
                 return Card(
@@ -217,7 +214,6 @@ class ProfilePageView extends StatelessWidget {
             }),
             const SizedBox(height: 16),
             const Divider(),
-
             Card(
               elevation: 5,
               child: ListTile(
@@ -235,8 +231,6 @@ class ProfilePageView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-
-            // Gunakan Expanded atau Flexible di sini
             Obx(() {
               if (profileController.role.value.isNotEmpty) {
                 return ElevatedButton.icon(
