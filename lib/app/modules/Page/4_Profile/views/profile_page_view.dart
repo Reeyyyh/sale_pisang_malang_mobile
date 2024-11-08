@@ -6,7 +6,6 @@ import 'package:sale_pisang_malang/app/modules/Page/4_Profile/controllers/profil
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/signup_page_view.dart';
 
-
 class ProfilePageView extends StatelessWidget {
   const ProfilePageView({super.key});
 
@@ -22,26 +21,27 @@ class ProfilePageView extends StatelessWidget {
         preferredSize: const Size.fromHeight(120),
         child: Stack(
           children: [
-            // Shadow layer
             Positioned.fill(
               child: Transform.scale(
-                scale: 1.10, // Slightly larger for shadow effect
+                scale: 1.10,
                 child: ClipPath(
                   clipper: AppBarClipper(),
                   child: Container(
-                    color: Colors.black.withOpacity(0.2), // Shadow color
+                    color: Colors.black.withOpacity(0.2),
                   ),
                 ),
               ),
             ),
-            // Main AppBar layer
             ClipPath(
               clipper: AppBarClipper(),
               child: AppBar(
                 title: const Text(
                   'Profile',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
                 ),
                 centerTitle: true,
                 backgroundColor: Colors.blueAccent,
@@ -49,7 +49,11 @@ class ProfilePageView extends StatelessWidget {
                   Builder(
                     builder: (BuildContext context) {
                       return IconButton(
-                        icon: const Icon(Icons.menu),
+                        icon: const FaIcon(
+                          Icons.menu_rounded,
+                          size: 36,
+                          color: Colors.white,
+                        ),
                         onPressed: () {
                           Scaffold.of(context).openEndDrawer();
                         },
@@ -74,7 +78,7 @@ class ProfilePageView extends StatelessWidget {
                     tag: 'drawerToAppBarHero',
                     child: Container(
                       height: 120,
-                      color: Colors.deepPurple,
+                      color: Colors.blueAccent,
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: const Text(
@@ -137,7 +141,7 @@ class ProfilePageView extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               color: const Color(0xFF2A2A2A),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Row(
                     children: [
@@ -153,6 +157,14 @@ class ProfilePageView extends StatelessWidget {
                         icon: const FaIcon(
                           FontAwesomeIcons.shopify,
                           color: Color(0xFFFF8C42),
+                          size: 30,
+                        ),
+                        onPressed: () => {},
+                      ),
+                      IconButton(
+                        icon: const FaIcon(
+                          FontAwesomeIcons.bagShopping,
+                          color: Color(0xFF40B54D),
                           size: 30,
                         ),
                         onPressed: () => {},
