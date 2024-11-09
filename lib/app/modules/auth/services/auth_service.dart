@@ -30,7 +30,8 @@ class AuthService {
     Get.find<FavoriteController>().checkUserStatus();
   }
 
-  Future<User?> login(String email, String password) async {
+  // fungsi auth login
+   Future<User?> login(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -40,12 +41,17 @@ class AuthService {
       if (currentUser != null) {
         currentUserData = await getUserData(currentUser!.uid);
       }
-      // Memperbarui kontroler setelah login
       Get.find<HomeController>().checkUserStatus();
       Get.find<FavoriteController>().checkUserStatus();
       return currentUser;
-    } catch (e) {
-      throw Exception('Login Failed: $e');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw Exception('Email tidak terdaftar');
+      } else if (e.code == 'wrong-password') {
+        throw Exception('Password salah');
+      } else {
+        throw Exception('Login Gagal: ${e.message}');
+      }
     }
   }
 

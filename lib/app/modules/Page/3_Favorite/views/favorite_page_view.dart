@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/components/component.dart';
 import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favorite_page_controller.dart';
@@ -111,7 +112,7 @@ class FavoritePageView extends StatelessWidget {
                 child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 12.0),
-                  leading: const Icon(
+                  leading: const FaIcon(
                     Icons.favorite,
                     color: Colors.redAccent,
                     size: 40,
@@ -126,7 +127,7 @@ class FavoritePageView extends StatelessWidget {
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   trailing: IconButton(
-                    icon: const Icon(Icons.remove_circle_outline,
+                    icon: const FaIcon(Icons.delete_outline_rounded,
                         color: Colors.red),
                     onPressed: () {
                       // Implement function to remove favorite if necessary

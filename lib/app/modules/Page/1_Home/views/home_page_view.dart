@@ -152,7 +152,7 @@ class HomePageView extends StatelessWidget {
                                                 },
                                               ),
                                               IconButton(
-                                                icon: const Icon(Icons.favorite,
+                                                icon: const Icon(Icons.favorite_border_rounded,
                                                     color: Colors.redAccent),
                                                 onPressed: () {
                                                   print(

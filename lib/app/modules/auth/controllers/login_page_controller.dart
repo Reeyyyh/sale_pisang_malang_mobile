@@ -18,13 +18,21 @@ class LoginController extends GetxController {
 
   // Fungsi login
   void login(String email, String password) async {
-    var user = await _authService.login(email, password);
-    if (user != null) {
-      Get.find<ProfileController>().fetchUserData(); // Sinkronkan data pengguna
-      Get.offAll(() => const StartPageView());
-      Get.snackbar("Login Success", "Welcome back!");
-    } else {
-      Get.snackbar("Login Failed", "Invalid credentials. Try again.");
+    try {
+      var user = await _authService.login(email, password);
+      if (user != null) {
+        Get.find<ProfileController>().fetchUserData();
+        Get.offAll(() => const StartPageView());
+        Get.snackbar("Login Success", "Welcome back!");
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Login Failed",
+        e.toString().replaceAll('Exception: ', ''),
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
     }
   }
 }
