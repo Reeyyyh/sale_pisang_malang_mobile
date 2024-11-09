@@ -218,7 +218,7 @@ class AppBarSliverDelegate extends SliverPersistentHeaderDelegate {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFFFFE135),
+                  Color.fromARGB(255, 216, 191, 43),
                   Color(0xFFFFA500),
                 ],
                 begin: Alignment.topLeft,
@@ -230,7 +230,7 @@ class AppBarSliverDelegate extends SliverPersistentHeaderDelegate {
                 'Welcome To Sale Pisang Malang',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),

@@ -66,6 +66,7 @@ class ProfilePageView extends StatelessWidget {
           ],
         ),
       ),
+      
       endDrawer: Drawer(
         width: 250,
         child: Column(
@@ -78,7 +79,7 @@ class ProfilePageView extends StatelessWidget {
                     tag: 'drawerToAppBarHero',
                     child: Container(
                       height: 120,
-                      color: Colors.blueAccent,
+                      color: Colors.deepPurple,
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: const Text(
@@ -177,6 +178,7 @@ class ProfilePageView extends StatelessWidget {
           ],
         ),
       ),
+      
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
