@@ -130,8 +130,7 @@ class FavoritePageView extends StatelessWidget {
                     icon: const FaIcon(Icons.delete_outline_rounded,
                         color: Colors.red),
                     onPressed: () {
-                      // Implement function to remove favorite if necessary
-                      // favoriteController.removeFavorite(favorite);
+                      favoriteController.removeFromFavorites(favorite.id);
                     },
                   ),
                 ),

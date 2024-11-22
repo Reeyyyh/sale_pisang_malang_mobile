@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"sale-pisang-malang","appId":"1:922758528966:android:0ed88a62389cef3a24bcc7","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"sale-pisang-malang","configurations":{"android":"1:922758528966:android:0ed88a62389cef3a24bcc7","ios":"1:922758528966:ios:5965ae680455776e24bcc7","macos":"1:922758528966:ios:5965ae680455776e24bcc7","web":"1:922758528966:web:6d188e3ebbd1d2c424bcc7","windows":"1:922758528966:web:714f195b89eb349224bcc7"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "sale-pisang-malang",
+                    "appId": "1:922758528966:android:0ed88a62389cef3a24bcc7",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "sale-pisang-malang",
+                    "configurations": {
+                        "android": "1:922758528966:android:0ed88a62389cef3a24bcc7",
+                        "ios": "1:922758528966:ios:5965ae680455776e24bcc7",
+                        "macos": "1:922758528966:ios:5965ae680455776e24bcc7",
+                        "web": "1:922758528966:web:6d188e3ebbd1d2c424bcc7",
+                        "windows": "1:922758528966:web:714f195b89eb349224bcc7"
+                    }
+                }
+            }
+        }
+    }
+}

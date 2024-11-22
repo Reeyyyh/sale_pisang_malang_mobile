@@ -13,9 +13,9 @@ class MyOrderController extends GetxController {
     // Simulasi pengambilan data dari database
     // Ganti dengan pengambilan data sebenarnya
     orders.value = [
-      OrderModel(id: '1', name: 'Pisang Raja', price: '20.000', status: 'Pending'),
-      OrderModel(id: '2', name: 'Pisang Ambon', price: '25.000', status: 'Completed'),
-      OrderModel(id: '3', name: 'Pisang Cavendish', price: '30.000', status: 'Cancelled'),
+      OrderModel(id: '1', name: 'Pisang Coklat', price: '20.000', status: 'Pending'),
+      OrderModel(id: '2', name: 'Pisang Keju', price: '25.000', status: 'Completed'),
+      OrderModel(id: '3', name: 'kripik pisang', price: '30.000', status: 'Cancelled'),
     ];
   }
 }
