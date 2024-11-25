@@ -66,7 +66,6 @@ class ProfilePageView extends StatelessWidget {
           ],
         ),
       ),
-      
       endDrawer: Drawer(
         width: 250,
         child: Column(
@@ -152,7 +151,7 @@ class ProfilePageView extends StatelessWidget {
                           color: Color(0xFFE4405F),
                           size: 30,
                         ),
-                        onPressed: () => {},
+                        onPressed: () => {profileController.goToInstagram()},
                       ),
                       IconButton(
                         icon: const FaIcon(
@@ -160,7 +159,7 @@ class ProfilePageView extends StatelessWidget {
                           color: Color(0xFFFF8C42),
                           size: 30,
                         ),
-                        onPressed: () => {},
+                        onPressed: () => {profileController.goToShopee()},
                       ),
                       IconButton(
                         icon: const FaIcon(
@@ -168,7 +167,7 @@ class ProfilePageView extends StatelessWidget {
                           color: Color(0xFF40B54D),
                           size: 30,
                         ),
-                        onPressed: () => {},
+                        onPressed: () => {profileController.goToTokopedia()},
                       ),
                     ],
                   ),
@@ -178,7 +177,6 @@ class ProfilePageView extends StatelessWidget {
           ],
         ),
       ),
-      
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
