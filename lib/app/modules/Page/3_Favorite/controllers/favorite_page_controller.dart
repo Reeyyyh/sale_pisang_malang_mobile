@@ -8,8 +8,7 @@ class FavoriteController extends GetxController {
   var isGuest = false.obs;
   final AuthService _authService = Get.find<AuthService>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  RxList<FavoriteItem> favorites =
-      <FavoriteItem>[].obs; // List untuk menyimpan item favorit
+  RxList<FavoriteItem> favorites = <FavoriteItem>[].obs; // List untuk menyimpan item favorit
 
   @override
   void onInit() {

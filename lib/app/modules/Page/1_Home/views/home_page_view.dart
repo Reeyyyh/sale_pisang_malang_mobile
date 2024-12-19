@@ -39,7 +39,8 @@ class HomePageView extends StatelessWidget {
                   pinned: true,
                   delegate: AppBarSliverDelegate(),
                 ),
-                const SliverToBoxAdapter(
+                const SliverFillRemaining(
+                  hasScrollBody: false, // Menghindari scroll pada bagian ini
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +52,7 @@ class HomePageView extends StatelessWidget {
                         ),
                         SizedBox(height: 16),
                         Text(
-                          'Failed to load data',
+                          'No data available',
                           style: TextStyle(
                               fontSize: 18,
                               color: Colors.redAccent,
@@ -148,7 +149,9 @@ class HomePageView extends StatelessWidget {
                                                 },
                                               ),
                                               IconButton(
-                                                icon: const Icon(Icons.favorite_border_rounded,
+                                                icon: const Icon(
+                                                    Icons
+                                                        .favorite_border_rounded,
                                                     color: Colors.redAccent),
                                                 onPressed: () {
                                                   print(
