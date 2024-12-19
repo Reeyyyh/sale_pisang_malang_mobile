@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/Page/1_Home/controllers/home_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/Page/2_MyOrder/controllers/cart_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favorite_page_controller.dart';
 
 class AuthService {
@@ -28,6 +29,7 @@ class AuthService {
     // Memperbarui kontroler setelah status user ditentukan
     Get.find<HomeController>().checkUserStatus();
     Get.find<FavoriteController>().checkUserStatus();
+    Get.find<CartPageController>().checkUserStatus();
   }
 
   // fungsi auth login
@@ -43,6 +45,7 @@ class AuthService {
       }
       Get.find<HomeController>().checkUserStatus();
       Get.find<FavoriteController>().checkUserStatus();
+      Get.find<CartPageController>().checkUserStatus();
       return currentUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -80,6 +83,7 @@ class AuthService {
       // Memperbarui kontroler setelah logout
       Get.find<HomeController>().checkUserStatus();
       Get.find<FavoriteController>().checkUserStatus();
+      Get.find<CartPageController>().checkUserStatus();
     } catch (e) {
       throw Exception('Logout Failed: $e');
     }

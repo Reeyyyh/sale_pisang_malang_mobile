@@ -8,7 +8,11 @@ class ItemModel {
   final String description;
   final String harga;
 
-  ItemModel({required this.id, required this.name, required this.description, required this.harga});
+  ItemModel(
+      {required this.id,
+      required this.name,
+      required this.description,
+      required this.harga});
 
   factory ItemModel.fromDocument(DocumentSnapshot doc) {
     return ItemModel(
@@ -31,4 +35,18 @@ class FavoriteItem {
     required this.name,
     required this.price,
   });
+}
+
+// Model untuk order
+class OrderModel {
+  final String id;
+  final String name;
+  final String price;
+  final String status;
+
+  OrderModel(
+      {required this.id,
+      required this.name,
+      required this.price,
+      required this.status});
 }

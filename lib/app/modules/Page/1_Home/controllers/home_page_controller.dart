@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sale_pisang_malang/app/models/items_model.dart';
+import 'package:sale_pisang_malang/app/modules/Page/2_MyOrder/controllers/cart_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favorite_page_controller.dart';
 
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
@@ -11,6 +12,7 @@ class HomeController extends GetxController {
   var items = <ItemModel>[].obs;
   final AuthService _authService = Get.find<AuthService>();
   final FavoriteController _favoriteController = Get.put(FavoriteController());
+  final CartPageController _MyOrderController = Get.put(CartPageController());
 
   var isLoggedIn = false.obs;
   var isLoading = true.obs; // Status loading
@@ -29,7 +31,8 @@ class HomeController extends GetxController {
         .collection('items')
         .snapshots()
         .listen((snapshot) {
-      items.value = snapshot.docs.map((doc) => ItemModel.fromDocument(doc)).toList();
+      items.value =
+          snapshot.docs.map((doc) => ItemModel.fromDocument(doc)).toList();
       isLoading.value = false; // Set loading selesai saat data sudah ada
       hasError.value = items.isEmpty; // Jika tetap kosong, set error
     });
@@ -64,8 +67,6 @@ class HomeController extends GetxController {
         backgroundColor: Colors.redAccent,
         colorText: Colors.white,
       );
-    } else {
-      // Akses diizinkan
     }
   }
 
@@ -89,6 +90,30 @@ class HomeController extends GetxController {
       });
       _favoriteController.fetchFavorites(); // Memperbarui tampilan favorit
       Get.snackbar('Success', 'Item ${item.name} added to favorites.');
+    }
+  }
+
+  Future<void> addToCart(ItemModel item) async {
+    if (isUserGuest) {
+      checkUserAccess('Cart');
+      return;
+    }
+
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userID = user.uid;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .collection('cart')
+          .doc(item.id)
+          .set({
+        'itemName': item.name,
+        'itemPrice': item.harga,
+        'itemStatus': 'Pending',
+      });
+      _MyOrderController.fetchOrders(); // Memperbarui tampilan order
+      Get.snackbar('Success', 'Item ${item.name} added to cart.');
     }
   }
 }

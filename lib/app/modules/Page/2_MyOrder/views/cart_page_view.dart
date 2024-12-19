@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/components/component.dart';
-import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favorite_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/Page/2_MyOrder/controllers/cart_page_controller.dart'; // Pastikan import controller
 
-class FavoritePageView extends StatelessWidget {
-  const FavoritePageView({super.key});
+class CartPageView extends StatelessWidget {
+  const CartPageView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final FavoriteController favoriteController = Get.put(FavoriteController());
+    final CartPageController orderController = Get.put(CartPageController());
 
     return Scaffold(
       body: CustomScrollView(
@@ -36,7 +35,7 @@ class FavoritePageView extends StatelessWidget {
                       color: Colors.blueAccent,
                       child: const Center(
                         child: Text(
-                          'Favorites',
+                          'My Orders',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -51,71 +50,87 @@ class FavoritePageView extends StatelessWidget {
             ),
           ),
 
-          // Konten ListView
+          // Konten ListView atau pesan jika user belum login
           Obx(() {
-            // Condition 1: Guest User
-            if (favoriteController.isGuest.value) {
+            if (orderController.isGuest.value) {
               return const SliverFillRemaining(
                 child: Center(
                   child: Text(
-                    'Please Login to see and add favorites.',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    'Please login to see your orders.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               );
             }
 
-            // Condition 2: No Favorites
-            if (favoriteController.favorites.isEmpty) {
+            if (orderController.orders.isEmpty) {
               return const SliverFillRemaining(
                 child: Center(
                   child: Text(
-                    'No Favorites Yet.',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    'No Orders Yet.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               );
             }
 
-            // Condition 3: List Favorites
             return SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final favorite = favoriteController.favorites[index];
+                  final order = orderController.orders[index];
                   return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    elevation: 4,
+                    elevation: 4.0,
+                    margin: const EdgeInsets.only(bottom: 12),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 12.0),
-                      leading: const FaIcon(
-                        Icons.favorite,
-                        color: Colors.redAccent,
-                        size: 40,
-                      ),
+                      contentPadding: const EdgeInsets.all(16.0),
                       title: Text(
-                        favorite.name,
+                        order.name,
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
-                      subtitle: Text(
-                        'Price: ${favorite.price}',
-                        style: const TextStyle(fontSize: 14, color: Colors.grey),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Price: ${order.price}',
+                            style: const TextStyle(
+                              color: Colors.green,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            'Status: ${order.status}',
+                            style: const TextStyle(
+                              color: Colors.orange,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
-                      trailing: IconButton(
-                        icon: const FaIcon(Icons.delete_outline_rounded,
-                            color: Colors.red),
-                        onPressed: () {
-                          favoriteController.removeFromFavorites(favorite.id);
-                        },
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        color: Colors.grey[600],
                       ),
+                      onTap: () {
+                        // Tambahkan fungsionalitas onTap di sini jika diperlukan
+                      },
                     ),
                   );
                 },
-                childCount: favoriteController.favorites.length,
+                childCount: orderController.orders.length,
               ),
             );
           }),
@@ -127,7 +142,7 @@ class FavoritePageView extends StatelessWidget {
 
 // Custom SliverPersistentHeader Delegate
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  final double height; // Menggunakan satu nilai tinggi tetap
+  final double height;
   final Widget child;
 
   _SliverAppBarDelegate({
@@ -136,17 +151,17 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return SizedBox.expand(
       child: child,
     );
   }
 
   @override
-  double get maxExtent => height; // Tinggi tetap
+  double get maxExtent => height;
+
   @override
-  double get minExtent => height; // Tinggi tetap
+  double get minExtent => height;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

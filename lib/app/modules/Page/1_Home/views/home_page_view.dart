@@ -142,12 +142,8 @@ class HomePageView extends StatelessWidget {
                                                       .checkUserAccess('Cart');
                                                   if (!homeController
                                                       .isUserGuest) {
-                                                    Get.snackbar(
-                                                      'Item Added',
-                                                      '${item.name} has been added to your cart',
-                                                      snackPosition:
-                                                          SnackPosition.TOP,
-                                                    );
+                                                    homeController
+                                                        .addToCart(item);
                                                   }
                                                 },
                                               ),
@@ -218,11 +214,11 @@ class AppBarSliverDelegate extends SliverPersistentHeaderDelegate {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.fromARGB(255, 216, 191, 43),
-                  Color(0xFFFFA500),
+                  Colors.blueAccent,
+                  Colors.blue,
                 ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
             child: const Center(

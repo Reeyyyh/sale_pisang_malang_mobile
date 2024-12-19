@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:sale_pisang_malang/app/modules/Page/1_Home/views/home_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/Page/2_MyOrder/views/my_order_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/Page/2_MyOrder/views/cart_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/views/favorite_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/Page/4_Profile/views/profile_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
@@ -20,7 +20,7 @@ class StartPageView extends StatelessWidget {
     // Daftar halaman yang akan ditampilkan pada bottom navigation
     final List<Widget> pages = [
       const HomePageView(),
-      const MyOrderPageView(),
+      const CartPageView(),
       const FavoritePageView(),
       const ProfilePageView(),
     ];
@@ -36,7 +36,7 @@ class StartPageView extends StatelessWidget {
     // Daftar label yang ditampilkan di bawah ikon
     final List<String> labels = [
       'Home',
-      'My Order',
+      'Cart',
       'Favorite',
       'Profile',
     ];
