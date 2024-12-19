@@ -49,31 +49,45 @@ class ProfileController extends GetxController {
 
   // Fungsi untuk membuka Instagram
   void goToInstagram() async {
-    final Uri instagramUrl = Uri.parse('https://www.instagram.com/salepisangmalang/'); // Ganti dengan URL Instagram yang diinginkan
+    final Uri instagramUrl = Uri.parse('https://www.instagram.com/salepisangmalang?igsh=MXh4cWYwdzN2cDRjaQ==');
     if (await canLaunchUrl(instagramUrl)) {
       await launchUrl(instagramUrl, mode: LaunchMode.externalApplication);
     } else {
-      Get.snackbar('Error', 'Could not launch Instagram.');
+      await launchUrl(instagramUrl, mode: LaunchMode.platformDefault);
+      // Get.snackbar('Error', 'Could not launch Instagram.');
     }
   }
 
   // Fungsi untuk membuka Shopee
   void goToShopee() async {
-    final Uri shopeeUrl = Uri.parse('https://shopee.co.id/salepisang_malang?entryPoint=ShopByPDP'); // Ganti dengan URL Shopee yang diinginkan
+    final Uri shopeeUrl = Uri.parse('https://id.shp.ee/LEsbUh8');
     if (await canLaunchUrl(shopeeUrl)) {
       await launchUrl(shopeeUrl, mode: LaunchMode.externalApplication);
     } else {
-      Get.snackbar('Error', 'Could not launch Shopee.');
+      await launchUrl(shopeeUrl, mode: LaunchMode.platformDefault);
+      // Get.snackbar('Error', 'Could not launch Shopee.');
     }
   }
 
   // Fungsi untuk membuka Tokopedia
   void goToTokopedia() async {
-    final Uri tokopediaUrl = Uri.parse('https://www.tokopedia.com/salepisangm'); // Ganti dengan URL Tokopedia yang diinginkan
+    final Uri tokopediaUrl = Uri.parse('https://tokopedia.link/qrlQbxnhOOb');
     if (await canLaunchUrl(tokopediaUrl)) {
       await launchUrl(tokopediaUrl, mode: LaunchMode.externalApplication);
     } else {
-      Get.snackbar('Error', 'Could not launch Tokopedia.');
+      await launchUrl(tokopediaUrl, mode: LaunchMode.platformDefault);
+      // Get.snackbar('Error', 'Could not launch Tokopedia.');
+    }
+  }
+
+  // Fungsi untuk membuka Tiktok
+  void goToTiktok() async {
+    final Uri tiktokUrl = Uri.parse('https://www.tiktok.com/@salepisangmalang');
+    if (await canLaunchUrl(tiktokUrl)) {
+      await launchUrl(tiktokUrl, mode: LaunchMode.externalApplication);
+    } else {
+      await launchUrl(tiktokUrl, mode: LaunchMode.platformDefault);
+      // Get.snackbar('Error', 'Could not launch Tokopedia.');
     }
   }
 }

@@ -143,33 +143,37 @@ class ProfilePageView extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const FaIcon(
-                          FontAwesomeIcons.instagram,
-                          color: Color(0xFFE4405F),
-                          size: 30,
-                        ),
-                        onPressed: () => {profileController.goToInstagram()},
-                      ),
-                      IconButton(
-                        icon: const FaIcon(
-                          FontAwesomeIcons.shopify,
-                          color: Color(0xFFFF8C42),
-                          size: 30,
-                        ),
-                        onPressed: () => {profileController.goToShopee()},
-                      ),
-                      IconButton(
-                        icon: const FaIcon(
-                          FontAwesomeIcons.bagShopping,
-                          color: Color(0xFF40B54D),
-                          size: 30,
-                        ),
-                        onPressed: () => {profileController.goToTokopedia()},
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: () => {profileController.goToInstagram()},
+                    child: Image.asset(
+                      width: 35,
+                      height: 35,
+                      'assets/icons/Instagram_icon.png',
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => {profileController.goToShopee()},
+                    child: Image.asset(
+                      width: 40,
+                      height: 40,
+                      'assets/icons/Shopee_icon.png',
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => {profileController.goToTokopedia()},
+                    child: Image.asset(
+                      width: 40,
+                      height: 40,
+                      'assets/icons/Tokopedia_icon.png',
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => {profileController.goToTiktok()},
+                    child: Image.asset(
+                      width: 40,
+                      height: 40,
+                      'assets/icons/Tiktok_icon.png',
+                    ),
                   ),
                 ],
               ),
@@ -184,7 +188,7 @@ class ProfilePageView extends StatelessWidget {
           children: [
             const Center(
               child: CircleAvatar(
-                radius: 60,
+                radius: 50,
                 backgroundImage: AssetImage('assets/img/logo.jpg'),
               ),
             ),
@@ -226,8 +230,31 @@ class ProfilePageView extends StatelessWidget {
             }),
             const SizedBox(height: 16),
             const Divider(),
+            Obx(
+              () {
+                if (profileController.role.value.isNotEmpty) {
+                  return ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      'Edit Profile',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      minimumSize: const Size(double.infinity, 40),
+                    ),
+                  );
+                }
+                return Container();
+              },
+            ),
+            const SizedBox(height: 20),
             Card(
-              elevation: 5,
+              elevation: 7,
               child: ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Settings'),
@@ -235,34 +262,31 @@ class ProfilePageView extends StatelessWidget {
               ),
             ),
             Card(
-              elevation: 5,
+              elevation: 7,
               child: ListTile(
                 leading: const Icon(Icons.help_outline),
                 title: const Text('Help & Support'),
                 onTap: () {},
               ),
             ),
-            const SizedBox(height: 24),
-            Obx(() {
-              if (profileController.role.value.isNotEmpty) {
-                return ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  label: const Text(
-                    'Edit Profile',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    minimumSize: const Size(double.infinity, 40),
-                  ),
-                );
-              }
-              return Container();
-            }),
+            Card(
+              elevation: 7,
+              child: ListTile(
+                leading: const Icon(Icons.announcement_outlined),
+                title: const Text('About app'),
+                onTap: () {
+                  showAboutDialog(
+                    context: context,
+                    applicationName: 'sale pisang malang',
+                    applicationLegalese: 'Thank you for choosing us',
+                    applicationIcon: const CircleAvatar(
+                      radius: 25,
+                      backgroundImage: AssetImage('assets/img/logo.jpg'),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
