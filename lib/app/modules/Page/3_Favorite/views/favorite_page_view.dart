@@ -77,40 +77,64 @@ class FavoritePageView extends StatelessWidget {
               );
             }
 
-            // Condition 3: List Favorites
+            // Condition 3: List Favorites with Swipe-to-Delete
             return SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final favorite = favoriteController.favorites[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                  return Dismissible(
+                    key: Key(favorite.id),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) {
+                      // Mengirimkan nama item bersama ID-nya
+                      favoriteController.removeFromFavorites(
+                          favorite.id, favorite.name);
+                    },
+                    background: Container(
+                      color: Colors.red,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text(
+                              'Swipe to delete',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Icon(Icons.delete, color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 12.0),
-                      leading: const FaIcon(
-                        Icons.favorite,
-                        color: Colors.redAccent,
-                        size: 40,
-                      ),
-                      title: Text(
-                        favorite.name,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      subtitle: Text(
-                        'Price: ${favorite.price}',
-                        style: const TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      trailing: IconButton(
-                        icon: const FaIcon(Icons.delete_outline_rounded,
-                            color: Colors.red),
-                        onPressed: () {
-                          favoriteController.removeFromFavorites(favorite.id);
-                        },
+                    child: Tooltip(
+                      message:
+                          'Swipe to delete', // Pesan tooltip saat di-hover atau di-tap
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12.0),
+                          leading: const FaIcon(Icons.favorite,
+                              color: Colors.redAccent, size: 40),
+                          title: Text(
+                            favorite.name,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          subtitle: Text(
+                            'Price: ${favorite.price}',
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.grey),
+                          ),
+                        ),
                       ),
                     ),
                   );

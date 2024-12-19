@@ -12,21 +12,18 @@ class CartPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    checkUserStatus();  // Memeriksa status user
+    checkUserStatus(); // Memeriksa status user
     if (!isGuest.value) {
-      fetchOrders();  // Fetch data orders jika bukan guest
+      fetchOrders(); // Fetch data orders jika bukan guest
     }
   }
 
   void checkUserStatus() {
-    print("Checking user status...");
     if (_authService.isUserLoggedIn()) {
       isGuest.value = false;
-      print("User is logged in.");
     } else {
       _authService.initializeGuestUser();
       isGuest.value = true;
-      print("User is a guest.");
     }
   }
 
@@ -35,31 +32,50 @@ class CartPageController extends GetxController {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null && !isGuest.value) {
       String userID = user.uid;
-      print("Fetching orders for user: $userID");
 
       FirebaseFirestore.instance
           .collection('users')
           .doc(userID)
-          .collection('cart')  // Pastikan menggunakan koleksi cart
+          .collection('cart') // Pastikan menggunakan koleksi cart
           .snapshots()
           .listen((snapshot) {
-        print("Snapshot received: ${snapshot.docs.length} items");
-        
         orders.value = snapshot.docs.map((doc) {
-          print("Order ID: ${doc.id}, Name: ${doc['itemName']}, Price: ${doc['itemPrice']}, Status: ${doc['itemStatus']}");
           return OrderModel(
             id: doc.id,
             name: doc['itemName'],
             price: doc['itemPrice'],
-            status: doc['itemStatus'],  // Gunakan field status dari cart
+            status: doc['itemStatus'], // Gunakan field status dari cart
           );
         }).toList();
-        print("Updated orders: ${orders.length}");
+        ;
         update(); // Update UI dengan data terbaru
       });
     } else {
       orders.clear(); // Jika user tidak login, kosongkan daftar orders
-      print("User is not logged in, clearing orders.");
+    }
+  }
+
+  // Fungsi untuk menghapus item dari cart
+  Future<void> removeFromOrders(String orderId, String orderName) async {
+    try {
+      // Pastikan user sudah login
+      if (_authService.currentUser != null) {
+        // Hapus item dari Firestore (cart)
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_authService.currentUser!.uid)
+            .collection('cart')
+            .doc(orderId)
+            .delete();
+
+        // Optional: Perbarui daftar orders setelah item dihapus
+        fetchOrders();
+        Get.snackbar("Success", "$orderName removed from orders.");
+      } else {
+        Get.snackbar("Error", "Please login to remove items from orders.");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to remove order: $e");
     }
   }
 }
