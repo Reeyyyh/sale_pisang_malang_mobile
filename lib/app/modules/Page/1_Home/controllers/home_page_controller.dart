@@ -43,8 +43,9 @@ class HomeController extends GetxController {
   }
 
   void fetchFavorites() async {
-    if (isUserGuest)
+    if (isUserGuest) {
       return; // Tidak mengambil data favorit jika user adalah guest
+    }
 
     // Mengambil data dari FavoriteController
     _favoriteController.fetchFavorites();
