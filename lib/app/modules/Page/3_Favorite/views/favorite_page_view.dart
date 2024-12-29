@@ -134,6 +134,7 @@ class FavoritePageView extends StatelessWidget {
                             style: const TextStyle(
                                 fontSize: 14, color: Colors.grey),
                           ),
+                          trailing: const Icon(Icons.arrow_left_rounded),
                         ),
                       ),
                     ),

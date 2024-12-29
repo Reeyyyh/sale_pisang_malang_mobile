@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/models/items_model.dart';
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
@@ -7,8 +8,16 @@ import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 class FavoriteController extends GetxController {
   var isGuest = false.obs;
   final AuthService _authService = Get.find<AuthService>();
+  // final HomeController _homeController = Get.find<HomeController>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   RxList<FavoriteItem> favorites = <FavoriteItem>[].obs; // List untuk menyimpan item favorit
+
+  var isFavorites = <String>{}.obs; // Set untuk menyimpan ID item favorit
+
+  bool isItemInFavorites(String itemId) {
+    return isFavorites.contains(itemId);
+  }
+
 
   @override
   void onInit() {
@@ -28,6 +37,46 @@ class FavoriteController extends GetxController {
     }
   }
 
+  void checkUserAccess(String featureName) {
+    if (isUserGuest) {
+      Get.snackbar(
+        'Login Required',
+        'Please login to add item in $featureName',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  bool get isUserGuest => _authService.currentUserData?['role'] == 'guest';
+
+    Future<void> addToFavorites(ItemModel item) async {
+    if (isUserGuest) {
+      checkUserAccess('Favorites');
+      return;
+    }
+
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userID = user.uid;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .collection('favorites')
+          .doc(item.id)
+          .set({
+        'itemName': item.name,
+        'itemPrice': item.harga,
+      });
+
+      isFavorites.add(item.id); // Perbarui lokal
+      print('Item added to favorites: ${item.id}'); // Debug
+      Get.snackbar('Success', 'Item ${item.name} added to favorites.');
+      fetchFavorites();
+    }
+  }
+
   // Fungsi untuk menghapus item dari daftar favorit
 Future<void> removeFromFavorites(String itemId, String itemName) async {
   try {
@@ -43,6 +92,7 @@ Future<void> removeFromFavorites(String itemId, String itemName) async {
       // Optional: Perbarui list favorit setelah item dihapus
       fetchFavorites();
       Get.snackbar("Success", "$itemName removed from favorites.");
+      isFavorites.remove(itemId);
     } else {
       Get.snackbar("Error", "Please login to remove items from favorites.");
     }
@@ -51,7 +101,7 @@ Future<void> removeFromFavorites(String itemId, String itemName) async {
   }
 }
 
-  void fetchFavorites() {
+  Future<void> fetchFavorites() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null && !isGuest.value) {
       String userID = user.uid;
