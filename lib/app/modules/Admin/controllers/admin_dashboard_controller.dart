@@ -22,25 +22,26 @@ class AdminDashboardController extends GetxController {
 
   Future<void> addItem() async {
     if (nameController.text.isNotEmpty && descriptionController.text.isNotEmpty && hargaController.text.isNotEmpty) {
-      await FirebaseFirestore.instance.collection('items').add({
+      DocumentReference docRef = await FirebaseFirestore.instance.collection('items').add({
         'name': nameController.text,
         'description': descriptionController.text,
         'harga': hargaController.text,
       });
+      await docRef.update({'id': docRef.id});
       nameController.clear();
       descriptionController.clear();
       hargaController.clear();
       fetchItems();
       Get.snackbar('Item Added', '${nameController.text} has been added.', snackPosition: SnackPosition.BOTTOM);
     } else {
-      Get.snackbar('Error', 'Please fill all fields', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('Error', 'Please fill all fields', snackPosition: SnackPosition.TOP);
     }
   }
 
   Future<void> deleteItem(String id) async {
     await FirebaseFirestore.instance.collection('items').doc(id).delete();
     fetchItems();
-    Get.snackbar('Item Deleted', 'Item has been deleted.', snackPosition: SnackPosition.BOTTOM);
+    Get.snackbar('Item Deleted', 'Item has been deleted.', snackPosition: SnackPosition.TOP);
   }
 
   void showEditDialog(ItemModel item) {
