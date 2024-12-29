@@ -9,13 +9,11 @@ import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favor
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 
 class HomeController extends GetxController {
-  var items = <ItemModel>[].obs;
-  var favorites = <String>{}.obs; // Set untuk menyimpan ID item favorit
-
   final AuthService _authService = Get.find<AuthService>();
   final FavoriteController _favoriteController = Get.put(FavoriteController());
   final CartPageController _cartController = Get.put(CartPageController());
 
+  var items = <ItemModel>[].obs;
   var isLoggedIn = false.obs;
   var isLoading = true.obs;
   var hasError = false.obs;
@@ -25,8 +23,9 @@ class HomeController extends GetxController {
     super.onInit();
     fetchItems();
     checkUserStatus();
-    if (!isUserGuest)
+    if (!isUserGuest) {
       fetchFavorites(); // Fetch favorites jika pengguna bukan guest
+    }
     startLoadingTimeout();
   }
 
@@ -49,9 +48,8 @@ class HomeController extends GetxController {
 
     // Mengambil data dari FavoriteController
     _favoriteController.fetchFavorites();
-    favorites.value =
-        _favoriteController.favorites.map((item) => item.id).toSet();
-    print('Favorites fetched: ${favorites.value}'); // Debug
+
+    _favoriteController.favorites.map((item) => item.id).toSet();
   }
 
   // Todo :  add data
@@ -61,25 +59,10 @@ class HomeController extends GetxController {
       checkUserAccess('Favorites');
       return;
     }
-
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String userID = user.uid;
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userID)
-          .collection('favorites')
-          .doc(item.id)
-          .set({
-        'itemName': item.name,
-        'itemPrice': item.harga,
-      });
-
-      favorites.add(item.id); // Perbarui lokal
-      print('Item added to favorites: ${item.id}'); // Debug
-      Get.snackbar('Success', 'Item ${item.name} added to favorites.');
-    }
+    await _favoriteController.addToFavorites(item);
   }
+
+
 
   Future<void> addToCart(ItemModel item) async {
     if (isUserGuest) {
@@ -107,20 +90,13 @@ class HomeController extends GetxController {
     }
   }
 
-  // Todo :  remove data
+  // Todo : Remove data
   Future<void> removeFromFavorites(String itemId, String itemName) async {
     if (isUserGuest) {
       checkUserAccess('Favorites');
       return;
     }
-
-    // Mengakses FavoriteController untuk menghapus item dari daftar favorit
     await _favoriteController.removeFromFavorites(itemId, itemName);
-
-    // Setelah menghapus, bisa memperbarui daftar favorit secara lokal jika diperlukan
-    favorites
-        .remove(itemId); // Menghapus item dari daftar lokal jika diperlukan
-    Get.snackbar("Success", "$itemName removed from favorites.");
   }
 
   void startLoadingTimeout() {
@@ -156,6 +132,6 @@ class HomeController extends GetxController {
   }
 
   bool isItemInFavorites(String itemId) {
-    return favorites.contains(itemId);
+    return _favoriteController.isItemInFavorites(itemId); // Panggil fungsi isItemInFavorites dari FavoriteController
   }
 }
