@@ -138,7 +138,7 @@ class CartPageView extends StatelessWidget {
               ],
             ),
             trailing: Icon(
-              Icons.chevron_right,
+              Icons.chevron_left,
               color: Colors.grey[600],
             ),
             onTap: () {

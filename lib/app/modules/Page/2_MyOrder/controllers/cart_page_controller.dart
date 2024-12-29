@@ -47,7 +47,6 @@ class CartPageController extends GetxController {
             status: doc['itemStatus'], // Gunakan field status dari cart
           );
         }).toList();
-        ;
         update(); // Update UI dengan data terbaru
       });
     } else {

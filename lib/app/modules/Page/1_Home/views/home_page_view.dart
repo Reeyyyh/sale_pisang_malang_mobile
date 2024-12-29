@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/Page/1_Home/controllers/home_page_controller.dart';
-import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/components/component.dart';
 
 class HomePageView extends StatelessWidget {
@@ -10,7 +9,6 @@ class HomePageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
-    final AuthService authService = Get.find<AuthService>();
 
     return Scaffold(
       body: Obx(
@@ -99,8 +97,14 @@ class HomePageView extends StatelessWidget {
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 ),
-                                subtitle: Text(item.description),
+                                subtitle: Text(
+                                  item.description,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               ),
                               const Divider(), // Pemisah antara deskripsi dan harga
                               Flexible(
@@ -137,8 +141,6 @@ class HomePageView extends StatelessWidget {
                                                 icon: const Icon(
                                                     Icons.add_shopping_cart),
                                                 onPressed: () {
-                                                  print(
-                                                      'User ID at cart icon pressed: ${homeController.isUserGuest ? "Guest" : authService.currentUser?.uid}');
                                                   homeController
                                                       .checkUserAccess('Cart');
                                                   if (!homeController
@@ -148,29 +150,48 @@ class HomePageView extends StatelessWidget {
                                                   }
                                                 },
                                               ),
-IconButton(
-  icon: Icon(
-    homeController.isUserGuest
-        ? Icons.favorite_border_rounded // Jika user guest, tampilkan ikon border
-        : (homeController.isItemInFavorites(item.id)
-            ? Icons.favorite_rounded // Jika item di favorit, tampilkan ikon penuh
-            : Icons.favorite_border_rounded), // Jika item tidak di favorit, tampilkan ikon border
-    color: homeController.isUserGuest // Periksa status login terlebih dahulu
-        ? Colors.grey  // Jika user guest, ikon menjadi abu-abu
-        : (homeController.isItemInFavorites(item.id) ? Colors.redAccent : null),
-  ),
-  onPressed: () {
-    homeController.checkUserAccess('Favorites');
-    if (!homeController.isUserGuest) {
-      if (homeController.isItemInFavorites(item.id)) {
-        homeController.removeFromFavorites(item.id, item.name);
-      } else {
-        homeController.addToFavorites(item);
-      }
-    }
-  },
-),
-
+                                              IconButton(
+                                                icon: Icon(
+                                                  homeController.isUserGuest
+                                                      ? Icons
+                                                          .favorite_border_rounded // Jika user guest, tampilkan ikon border
+                                                      : (homeController
+                                                              .isItemInFavorites(
+                                                                  item.id)
+                                                          ? Icons
+                                                              .favorite_rounded // Jika item di favorit, tampilkan ikon penuh
+                                                          : Icons
+                                                              .favorite_border_rounded), // Jika item tidak di favorit, tampilkan ikon border
+                                                  color: homeController
+                                                          .isUserGuest // Periksa status login terlebih dahulu
+                                                      ? Colors
+                                                          .grey // Jika user guest, ikon menjadi abu-abu
+                                                      : (homeController
+                                                              .isItemInFavorites(
+                                                                  item.id)
+                                                          ? Colors.redAccent
+                                                          : null),
+                                                ),
+                                                onPressed: () {
+                                                  homeController
+                                                      .checkUserAccess(
+                                                          'Favorites');
+                                                  if (!homeController
+                                                      .isUserGuest) {
+                                                    if (homeController
+                                                        .isItemInFavorites(
+                                                            item.id)) {
+                                                      homeController
+                                                          .removeFromFavorites(
+                                                              item.id,
+                                                              item.name);
+                                                    } else {
+                                                      homeController
+                                                          .addToFavorites(item);
+                                                    }
+                                                  }
+                                                },
+                                              ),
                                             ],
                                           ),
                                         ],
