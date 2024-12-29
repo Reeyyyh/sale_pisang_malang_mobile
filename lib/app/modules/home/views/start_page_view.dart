@@ -6,7 +6,6 @@ import 'package:sale_pisang_malang/app/modules/Page/1_Home/views/home_page_view.
 import 'package:sale_pisang_malang/app/modules/Page/2_MyOrder/views/cart_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/views/favorite_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/Page/4_Profile/views/profile_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/modules/home/controllers/start_page_controller.dart';
 
 class StartPageView extends StatelessWidget {
@@ -15,7 +14,6 @@ class StartPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final StartPageController startController = Get.put(StartPageController());
-    Get.put(AuthService());
 
     // Daftar halaman yang akan ditampilkan pada bottom navigation
     final List<Widget> pages = [
@@ -68,35 +66,37 @@ class StartPageView extends StatelessWidget {
               ),
             ],
           ),
-          child: Obx(() => CurvedNavigationBar(
-                height: 68,
-                backgroundColor: Colors.transparent,
-                buttonBackgroundColor:
-                    const Color.fromARGB(146, 16, 18, 18), // Warna tombol
-                buttonLabelColor: Colors.black,
-                items: icons
-                    .asMap()
-                    .map((index, icon) => MapEntry(
-                          index,
-                          CurvedNavigationBarItem(
-                            icon: Icon(icon,
-                                size: 30,
-                                color: startController.selectedIndex.value ==
-                                        index
-                                    ? Colors.white
-                                    : Colors
-                                        .grey), // Ubah warna ikon berdasarkan status
-                            label: labels[index],
-                          ),
-                        ))
-                    .values
-                    .toList(),
-                index: startController
-                    .selectedIndex.value, // sinkronkan dengan controller
-                onTap: (index) {
-                  startController.changePage(index);
-                },
-              )),
+          child: Obx(
+            () => CurvedNavigationBar(
+              height: 68,
+              backgroundColor: Colors.transparent,
+              buttonBackgroundColor:
+                  const Color.fromARGB(146, 16, 18, 18), // Warna tombol
+              buttonLabelColor: Colors.black,
+              items: icons
+                  .asMap()
+                  .map((index, icon) => MapEntry(
+                        index,
+                        CurvedNavigationBarItem(
+                          icon: Icon(icon,
+                              size: 30,
+                              color: startController.selectedIndex.value ==
+                                      index
+                                  ? Colors.white
+                                  : Colors
+                                      .grey), // Ubah warna ikon berdasarkan status
+                          label: labels[index],
+                        ),
+                      ))
+                  .values
+                  .toList(),
+              index: startController
+                  .selectedIndex.value, // sinkronkan dengan controller
+              onTap: (index) {
+                startController.changePage(index);
+              },
+            ),
+          ),
         ),
       ),
     );
