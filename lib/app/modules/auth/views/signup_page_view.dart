@@ -5,7 +5,7 @@ import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
 
 class SignUpPageView extends StatelessWidget {
-  final SignUpController authController = Get.put(SignUpController());
+  final SignUpController signUpController = Get.put(SignUpController());
 
   SignUpPageView({super.key});
 
@@ -31,7 +31,7 @@ class SignUpPageView extends StatelessWidget {
               clipper: CustomAppBarClipper(),
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Colors.deepPurple,
+                  color: Colors.blueAccent,
                 ),
                 child: AppBar(
                   title: const Text(
@@ -58,7 +58,7 @@ class SignUpPageView extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
-            key: authController.formKey,
+            key: signUpController.signUpFormKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -72,7 +72,7 @@ class SignUpPageView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple,
+                    color: Colors.blueAccent,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -85,11 +85,11 @@ class SignUpPageView extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 TextFormField(
-                  controller: authController.nameController,
+                  controller: signUpController.nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
                     prefixIcon:
-                        const Icon(Icons.person, color: Colors.deepPurple),
+                        const Icon(Icons.person, color: Colors.blueAccent),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -108,11 +108,11 @@ class SignUpPageView extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
-                  controller: authController.emailController,
+                  controller: signUpController.emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
                     prefixIcon:
-                        const Icon(Icons.email, color: Colors.deepPurple),
+                        const Icon(Icons.email, color: Colors.blueAccent),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -135,19 +135,19 @@ class SignUpPageView extends StatelessWidget {
                 const SizedBox(height: 16),
                 Obx(
                   () => TextFormField(
-                    controller: authController.passwordController,
-                    obscureText: authController.isPasswordHidden.value,
+                    controller: signUpController.passwordController,
+                    obscureText: signUpController.isPasswordHidden.value,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       prefixIcon:
-                          const Icon(Icons.lock, color: Colors.deepPurple),
+                          const Icon(Icons.lock, color: Colors.blueAccent),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          authController.isPasswordHidden.value
+                          signUpController.isPasswordHidden.value
                               ? Icons.visibility
                               : Icons.visibility_off,
                         ),
-                        onPressed: authController.togglePasswordVisibility,
+                        onPressed: signUpController.togglePasswordVisibility,
                       ),
                       filled: true,
                       fillColor: Colors.white,
@@ -171,12 +171,12 @@ class SignUpPageView extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (authController.formKey.currentState!.validate()) {
-                        authController.register();
+                      if (signUpController.signUpFormKey.currentState!.validate()) {
+                        signUpController.register();
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
+                      backgroundColor: Colors.blueAccent,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -201,13 +201,13 @@ class SignUpPageView extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Get.to(() => LoginPageView());
+                        Get.offAll(() => LoginPageView());
                       },
                       child: const Text(
                         'Login',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepPurple,
+                          color: Colors.blueAccent,
                         ),
                       ),
                     ),
