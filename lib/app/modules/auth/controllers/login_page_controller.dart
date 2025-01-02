@@ -1,38 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favorite_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/Page/4_Profile/controllers/profile_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
 
-
 class LoginController extends GetxController {
-  final AuthService _authService = Get.find<AuthService>(); 
-  final formKey = GlobalKey<FormState>();
+  final AuthService _authService = Get.find<AuthService>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   var isPasswordHidden = true.obs;
 
+  final loginFormKey  = GlobalKey<FormState>();
+  
   void togglePasswordVisibility() {
     isPasswordHidden.value = !isPasswordHidden.value;
   }
 
   // Fungsi login
-  void login(String email, String password) async {
-    try {
-      var user = await _authService.login(email, password);
-      if (user != null) {
-        Get.find<ProfileController>().fetchUserData();
-        Get.offAll(() => const StartPageView());
-        Get.snackbar("Login Success", "Welcome back!");
+  Future<void> login() async {
+    if (loginFormKey .currentState!.validate()) {
+      String email = emailController.text.trim();
+      String password = passwordController.text.trim();
+
+      try {
+        // Menggunakan AuthService untuk login
+        var user = await _authService.login(email, password);
+
+        if (user != null) {
+          // Mengambil data pengguna setelah login berhasil
+          await Get.find<ProfileController>().fetchUserData();
+          await Get.find<FavoriteController>().fetchFavorites();
+
+          // Navigasi ke halaman utama
+          Get.offAll(() => const StartPageView());
+
+          // Snackbar sukses
+          Get.snackbar(
+            "Login Success",
+            "Welcome back, ${_authService.currentUserData?['name'] ?? 'User'}!",
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.greenAccent,
+            colorText: Colors.black,
+          );
+        }
+      } catch (e) {
+        // Tangani kesalahan login
+        Get.snackbar(
+          "Login Failed",
+          e.toString().replaceAll('Exception: ', ''),
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+        );
       }
-    } catch (e) {
-      Get.snackbar(
-        "Login Failed",
-        e.toString().replaceAll('Exception: ', ''),
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
     }
   }
 }
