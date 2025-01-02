@@ -77,16 +77,18 @@ class ProfilePageView extends StatelessWidget {
                   Hero(
                     tag: 'drawerToAppBarHero',
                     child: Container(
-                      height: 120,
-                      color: Colors.deepPurple,
+                      height: 100,
+                      color: Colors.blueAccent,
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: const Text(
-                        'Menu',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      child: const Center(
+                        child: Text(
+                          'Menu',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -95,41 +97,102 @@ class ProfilePageView extends StatelessWidget {
                     if (profileController.role.value.isEmpty) {
                       return Column(
                         children: [
-                          ListTile(
-                            leading: const Icon(Icons.login, size: 30),
-                            title: const Text('Login'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.to(() => LoginPageView())?.then((_) async {
-                                await Future.delayed(
-                                    const Duration(seconds: 2));
-                                Get.offAll(() => LoginPageView());
-                              });
-                            },
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey, // Warna border
+                                  width: 1.0, // Ketebalan border
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                    8.0), // Sudut melengkung
+                              ),
+                              child: ListTile(
+                                leading: const Icon(Icons.login, size: 30),
+                                title: const Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Get.to(() => LoginPageView())
+                                      ?.then((_) async {
+                                    await Future.delayed(
+                                        const Duration(seconds: 2));
+                                    Get.offAll(() => LoginPageView());
+                                  });
+                                },
+                              ),
+                            ),
                           ),
-                          ListTile(
-                            leading:
-                                const Icon(Icons.app_registration, size: 30),
-                            title: const Text('Sign Up'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.to(() => SignUpPageView())?.then((_) async {
-                                await Future.delayed(
-                                    const Duration(seconds: 2));
-                                Get.offAll(() => SignUpPageView());
-                              });
-                            },
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey, // Warna border
+                                  width: 1.0, // Ketebalan border
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                    8.0), // Sudut melengkung
+                              ),
+                              child: ListTile(
+                                leading: const Icon(Icons.app_registration,
+                                    size: 30),
+                                title: const Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Get.to(() => SignUpPageView())
+                                      ?.then((_) async {
+                                    await Future.delayed(
+                                        const Duration(seconds: 2));
+                                    Get.offAll(() => SignUpPageView());
+                                  });
+                                },
+                              ),
+                            ),
                           ),
                         ],
                       );
                     } else {
-                      return ListTile(
-                        leading: const Icon(Icons.logout),
-                        title: const Text('Logout'),
-                        onTap: () {
-                          Navigator.pop(context);
-                          profileController.logout();
-                        },
+                      return Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey, // Warna border
+                              width: 1.0, // Ketebalan border
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(8.0), // Sudut melengkung
+                          ),
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.logout,
+                              color: Colors.red,
+                            ),
+                            title: const Text(
+                              'Logout',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              profileController.logout();
+                            },
+                          ),
+                        ),
                       );
                     }
                   }),
@@ -213,21 +276,6 @@ class ProfilePageView extends StatelessWidget {
                     ),
                   )
                 : Container()),
-            const SizedBox(height: 24),
-            Obx(() {
-              if (profileController.role.value == 'admin') {
-                return Card(
-                  elevation: 5,
-                  child: ListTile(
-                    leading: const Icon(Icons.admin_panel_settings,
-                        color: Colors.blueAccent),
-                    title: const Text('Admin Dashboard'),
-                    onTap: profileController.goToAdminDashboard,
-                  ),
-                );
-              }
-              return Container();
-            }),
             const SizedBox(height: 16),
             const Divider(),
             Obx(

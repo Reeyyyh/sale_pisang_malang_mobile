@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sale_pisang_malang/app/modules/Admin/views/admin_dashboard_page.dart';
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -35,15 +34,6 @@ class ProfileController extends GetxController {
     userName.value = 'Guest';
     userEmail.value = '';
     Get.offAll(() => LoginPageView());
-  }
-
-  // Fungsi untuk menuju ke dashboard admin
-  void goToAdminDashboard() {
-    if (role.value == 'admin') {
-      Get.offAll(() => const AdminDashboardView());
-    } else {
-      Get.snackbar("Access Denied", "You are not authorized to access the admin dashboard.");
-    }
   }
 
 
