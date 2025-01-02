@@ -8,6 +8,7 @@ import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favor
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   User? currentUser;
   Map<String, dynamic>? currentUserData;
 
@@ -24,12 +25,21 @@ class AuthService {
       print('User is signed in!');
       currentUser = user;
       currentUserData = await getUserData(currentUser!.uid);
-      checkUserStatus();
     }
-    // Memperbarui kontroler setelah status user ditentukan
-    Get.find<HomeController>().checkUserStatus();
-    Get.find<FavoriteController>().checkUserStatus();
-    Get.find<CartPageController>().checkUserStatus();
+    // Panggil fungsi update dari luar controller, bukan di sini.
+    updateControllersStatus();
+  }
+
+  void updateControllersStatus() {
+    if (Get.isRegistered<HomeController>()) {
+      Get.find<HomeController>().checkUserStatus();
+    }
+    if (Get.isRegistered<FavoriteController>()) {
+      Get.find<FavoriteController>().checkUserStatus();
+    }
+    if (Get.isRegistered<CartPageController>()) {
+      Get.find<CartPageController>().checkUserStatus();
+    }
   }
 
   // fungsi auth login
@@ -58,9 +68,71 @@ class AuthService {
     }
   }
 
+  // fungsi auth register
+  Future<User?> register(String name, String email, String password) async {
+    try {
+      // Mendaftarkan pengguna baru
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      String uid = userCredential.user!.uid; // Ambil UID pengguna baru
+
+      // Simpan data pengguna ke Firestore
+      await _firestore.collection('users').doc(uid).set({
+        'id': uid, // Tambahkan UID
+        'name': name,
+        'email': email,
+        'role': 'user',
+      });
+
+      // Perbarui currentUser dan currentUserData
+      currentUser = userCredential.user;
+      currentUserData = {
+        'id': uid,
+        'name': name,
+        'email': email,
+        'role': 'user'
+      };
+
+      // Perbarui kontroler setelah registrasi
+      _updateControllersStatus();
+
+      return currentUser;
+    } on FirebaseAuthException catch (e) {
+      // Tangani error Firebase Authentication
+      if (e.code == 'email-already-in-use') {
+        throw Exception('Email sudah terdaftar');
+      } else if (e.code == 'weak-password') {
+        throw Exception('Password terlalu lemah');
+      } else {
+        throw Exception('Registrasi gagal: ${e.message}');
+      }
+    } catch (e) {
+      // Tangani error lainnya
+      throw Exception('Registrasi gagal: $e');
+    }
+  }
+
+  void _updateControllersStatus() {
+    // Memastikan kontroler hanya diakses jika sudah terdaftar di GetX
+    if (Get.isRegistered<HomeController>()) {
+      Get.find<HomeController>().checkUserStatus();
+    }
+    if (Get.isRegistered<FavoriteController>()) {
+      Get.find<FavoriteController>().checkUserStatus();
+    }
+    if (Get.isRegistered<CartPageController>()) {
+      Get.find<CartPageController>().checkUserStatus();
+    }
+  }
+
   Future<Map<String, dynamic>?> getUserData(String uid) async {
     try {
-      DocumentSnapshot userDoc = await _firestore.collection('users').doc(uid).get();
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(uid).get();
       return userDoc.exists ? userDoc.data() as Map<String, dynamic>? : null;
     } catch (e) {
       throw Exception('Error getting user data: $e');
@@ -91,24 +163,6 @@ class AuthService {
 
   bool isUserLoggedIn() {
     return _auth.currentUser != null;
-  }
-
-  Future<User?> register(String email, String password, String name) async {
-    try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      String uid = userCredential.user!.uid;
-      await _firestore.collection('users').doc(uid).set({
-        'name': name,
-        'email': email,
-        'role': email == 'adminpage@gmail.com' ? 'admin' : 'user',
-      });
-      return userCredential.user;
-    } catch (e) {
-      throw Exception('Registration Failed: $e');
-    }
   }
 
   void checkUserStatus() {
