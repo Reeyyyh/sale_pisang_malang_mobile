@@ -110,32 +110,28 @@ class FavoritePageView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    child: Tooltip(
-                      message:
-                          'Swipe to delete', // Pesan tooltip saat di-hover atau di-tap
-                      child: Card(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
+                        leading: const FaIcon(Icons.favorite,
+                            color: Colors.redAccent, size: 40),
+                        title: Text(
+                          favorite.name,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12.0),
-                          leading: const FaIcon(Icons.favorite,
-                              color: Colors.redAccent, size: 40),
-                          title: Text(
-                            favorite.name,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                          subtitle: Text(
-                            'Price: ${favorite.price}',
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.grey),
-                          ),
-                          trailing: const Icon(Icons.arrow_left_rounded),
+                        subtitle: Text(
+                          'Price: ${favorite.price}',
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
+                        trailing: const Icon(Icons.arrow_left_rounded),
                       ),
                     ),
                   );
