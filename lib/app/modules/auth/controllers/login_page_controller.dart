@@ -29,8 +29,8 @@ class LoginController extends GetxController {
 
         if (user != null) {
           // Mengambil data pengguna setelah login berhasil
-          await Get.find<ProfileController>().fetchUserData();
           await Get.find<FavoriteController>().fetchFavorites();
+          await Get.find<ProfileController>().fetchUserData();
 
           // Navigasi ke halaman utama
           Get.offAll(() => const StartPageView());
