@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sale_pisang_malang/app/modules/Page/1_Home/controllers/home_page_controller.dart';
 import 'package:sale_pisang_malang/app/components/component.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/1_Home/controllers/home_page_controller.dart';
 
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});

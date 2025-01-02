@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:sale_pisang_malang/app/modules/Page/1_Home/controllers/home_page_controller.dart';
-import 'package:sale_pisang_malang/app/modules/Page/2_MyOrder/controllers/cart_page_controller.dart';
-import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favorite_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/1_Home/controllers/home_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/2_MyOrder/controllers/cart_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/3_Favorite/controllers/favorite_page_controller.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -88,14 +88,14 @@ class AuthService {
         'role': 'user',
       });
 
-      // Perbarui currentUser dan currentUserData
-      currentUser = userCredential.user;
-      currentUserData = {
-        'id': uid,
-        'name': name,
-        'email': email,
-        'role': 'user'
-      };
+      // // Perbarui currentUser dan currentUserData
+      // currentUser = userCredential.user;
+      // currentUserData = {
+      //   'id': uid,
+      //   'name': name,
+      //   'email': email,
+      //   'role': 'user'
+      // };
 
       // Perbarui kontroler setelah registrasi
       _updateControllersStatus();

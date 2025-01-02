@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sale_pisang_malang/app/modules/admin/controllers/admin_dashboard_controller.dart';
-import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/Admin/page/1_dashboard/controllers/dashboard_controller.dart';
 
 class AdminDashboardView extends StatelessWidget {
   const AdminDashboardView({super.key});
@@ -15,14 +14,6 @@ class AdminDashboardView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Dashboard'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              Get.offAll(() => const StartPageView());
-            },
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

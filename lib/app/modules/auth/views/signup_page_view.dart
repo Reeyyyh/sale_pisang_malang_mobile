@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/modules/auth/controllers/signup_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/client/home/views/start_page_view.dart';
 
 class SignUpPageView extends StatelessWidget {
   final SignUpController signUpController = Get.put(SignUpController());

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/controllers/favorite_page_controller.dart';
-import 'package:sale_pisang_malang/app/modules/Page/4_Profile/controllers/profile_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
-import 'package:sale_pisang_malang/app/modules/home/views/start_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/client/home/views/start_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/3_Favorite/controllers/favorite_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/4_Profile/controllers/profile_page_controller.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();

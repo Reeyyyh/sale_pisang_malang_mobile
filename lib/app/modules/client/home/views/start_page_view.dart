@@ -2,11 +2,12 @@ import 'package:curved_navigation_bar_with_label/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:sale_pisang_malang/app/modules/Page/1_Home/views/home_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/Page/2_MyOrder/views/cart_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/Page/3_Favorite/views/favorite_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/Page/4_Profile/views/profile_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/home/controllers/start_page_controller.dart';
+
+import 'package:sale_pisang_malang/app/modules/client/home/controllers/start_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/1_Home/views/home_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/2_MyOrder/views/cart_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/3_Favorite/views/favorite_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/4_Profile/views/profile_page_view.dart';
 
 class StartPageView extends StatelessWidget {
   const StartPageView({super.key});
