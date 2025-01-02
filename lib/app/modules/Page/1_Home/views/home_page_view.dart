@@ -144,54 +144,60 @@ class HomePageView extends StatelessWidget {
                                                   homeController
                                                       .checkUserAccess('Cart');
                                                   if (!homeController
-                                                      .isUserGuest) {
+                                                      .isUserGuest.value) {
                                                     homeController
                                                         .addToCart(item);
                                                   }
                                                 },
                                               ),
-                                              IconButton(
-                                                icon: Icon(
-                                                  homeController.isUserGuest
-                                                      ? Icons
-                                                          .favorite_border_rounded // Jika user guest, tampilkan ikon border
-                                                      : (homeController
-                                                              .isItemInFavorites(
-                                                                  item.id)
-                                                          ? Icons
-                                                              .favorite_rounded // Jika item di favorit, tampilkan ikon penuh
-                                                          : Icons
-                                                              .favorite_border_rounded), // Jika item tidak di favorit, tampilkan ikon border
-                                                  color: homeController
-                                                          .isUserGuest // Periksa status login terlebih dahulu
-                                                      ? Colors
-                                                          .grey // Jika user guest, ikon menjadi abu-abu
-                                                      : (homeController
-                                                              .isItemInFavorites(
-                                                                  item.id)
-                                                          ? Colors.redAccent
-                                                          : null),
-                                                ),
-                                                onPressed: () {
-                                                  homeController
-                                                      .checkUserAccess(
-                                                          'Favorites');
-                                                  if (!homeController
-                                                      .isUserGuest) {
-                                                    if (homeController
-                                                        .isItemInFavorites(
-                                                            item.id)) {
-                                                      homeController
-                                                          .removeFromFavorites(
-                                                              item.id,
-                                                              item.name);
-                                                    } else {
-                                                      homeController
-                                                          .addToFavorites(item);
+                                              Obx(() {
+                                                return IconButton(
+                                                  icon: Icon(
+                                                    homeController
+                                                            .isUserGuest.value
+                                                        ? Icons
+                                                            .favorite_border_rounded // Jika user guest, tampilkan ikon border
+                                                        : (homeController
+                                                                .isItemInFavorites(
+                                                                    item.id)
+                                                                .value
+                                                            ? Icons
+                                                                .favorite_rounded // Jika item di favorit, tampilkan ikon penuh
+                                                            : Icons
+                                                                .favorite_border_rounded), // Jika item tidak di favorit, tampilkan ikon border
+                                                    color: homeController
+                                                            .isUserGuest.value
+                                                        ? null
+                                                        : (homeController
+                                                                .isItemInFavorites(
+                                                                    item.id)
+                                                                .value
+                                                            ? Colors.redAccent
+                                                            : null),
+                                                  ),
+                                                  onPressed: () {
+                                                    homeController
+                                                        .checkUserAccess(
+                                                            'Favorites');
+                                                    if (!homeController
+                                                        .isUserGuest.value) {
+                                                      if (homeController
+                                                          .isItemInFavorites(
+                                                              item.id)
+                                                          .value) {
+                                                        homeController
+                                                            .removeFromFavorites(
+                                                                item.id,
+                                                                item.name);
+                                                      } else {
+                                                        homeController
+                                                            .addToFavorites(
+                                                                item);
+                                                      }
                                                     }
-                                                  }
-                                                },
-                                              ),
+                                                  },
+                                                );
+                                              })
                                             ],
                                           ),
                                         ],
