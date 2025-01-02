@@ -49,6 +49,7 @@ dependencies:
   
   flutter:
     sdk: flutter
+  intl: ^0.20.1
   
 
 dev_dependencies:

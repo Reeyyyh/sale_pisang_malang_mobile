@@ -50,3 +50,34 @@ class OrderModel {
       required this.price,
       required this.status});
 }
+
+// model untuk chat
+class ChatMessage {
+  final String message;
+  final String sender;
+  final DateTime timestamp;  // Gunakan DateTime, bukan Timestamp
+
+  ChatMessage({
+    required this.message,
+    required this.sender,
+    required this.timestamp,
+  });
+
+  // Untuk mengubah data chat dari Firestore ke dalam bentuk objek
+  factory ChatMessage.fromFirestore(Map<String, dynamic> firestoreData) {
+    return ChatMessage(
+      message: firestoreData['message'],
+      sender: firestoreData['sender'],
+      timestamp: (firestoreData['timestamp'] as Timestamp).toDate(),  // Konversi Timestamp ke DateTime
+    );
+  }
+
+  // Untuk mengubah objek menjadi format Firestore
+  Map<String, dynamic> toFirestore() {
+    return {
+      'message': message,
+      'sender': sender,
+      'timestamp': Timestamp.fromDate(timestamp),  // Konversi DateTime ke Timestamp
+    };
+  }
+}

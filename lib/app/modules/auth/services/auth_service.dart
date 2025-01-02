@@ -88,15 +88,6 @@ class AuthService {
         'role': 'user',
       });
 
-      // // Perbarui currentUser dan currentUserData
-      // currentUser = userCredential.user;
-      // currentUserData = {
-      //   'id': uid,
-      //   'name': name,
-      //   'email': email,
-      //   'role': 'user'
-      // };
-
       // Perbarui kontroler setelah registrasi
       _updateControllersStatus();
 

@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/components/component.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
-import 'package:sale_pisang_malang/app/modules/client/chats/views/chats_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/client/chats/views/client_chats_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/2_MyOrder/controllers/cart_page_controller.dart';
 
 class CartPageView extends StatelessWidget {
@@ -251,7 +252,10 @@ class CartPageView extends StatelessWidget {
             );
           } else {
             // Jika user sudah login
-            Get.to(const ChatsPageView());
+            final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+            if (userId.isNotEmpty) {
+              Get.to(ClientChatsAdminPageView(userId: userId));
+            }
           }
         },
         backgroundColor: Colors.blueAccent,

@@ -7,11 +7,14 @@ import 'package:sale_pisang_malang/app/models/items_model.dart';
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/2_MyOrder/controllers/cart_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/3_Favorite/controllers/favorite_page_controller.dart';
+import 'package:sale_pisang_malang/app/modules/client/page/4_Profile/controllers/profile_page_controller.dart';
 
 class HomeController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();
   final FavoriteController _favoriteController = Get.put(FavoriteController());
   final CartPageController _cartController = Get.put(CartPageController());
+
+  final ProfileController _profileController = Get.put(ProfileController());
 
   RxBool get isUserGuest =>
       RxBool(_authService.currentUserData?['role'] == 'guest');
@@ -30,6 +33,7 @@ class HomeController extends GetxController {
       fetchFavorites(); // Fetch favorites jika pengguna bukan guest
     }
     startLoadingTimeout();
+    _profileController.fetchUserData();
   }
 
   void fetchItems() {
