@@ -10,14 +10,14 @@ class FavoriteController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();
   // final HomeController _homeController = Get.find<HomeController>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  RxList<FavoriteItem> favorites = <FavoriteItem>[].obs; // List untuk menyimpan item favorit
+  RxList<FavoriteItem> favorites =
+      <FavoriteItem>[].obs; // List untuk menyimpan item favorit
 
   var isFavorites = <String>{}.obs; // Set untuk menyimpan ID item favorit
 
-  bool isItemInFavorites(String itemId) {
-    return isFavorites.contains(itemId);
+  RxBool isItemInFavorites(String itemId) {
+    return isFavorites.contains(itemId).obs;
   }
-
 
   @override
   void onInit() {
@@ -51,55 +51,55 @@ class FavoriteController extends GetxController {
 
   bool get isUserGuest => _authService.currentUserData?['role'] == 'guest';
 
-    Future<void> addToFavorites(ItemModel item) async {
-    if (isUserGuest) {
-      checkUserAccess('Favorites');
-      return;
-    }
-
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String userID = user.uid;
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userID)
-          .collection('favorites')
-          .doc(item.id)
-          .set({
-        'itemName': item.name,
-        'itemPrice': item.harga,
-      });
-
-      isFavorites.add(item.id); // Perbarui lokal
-      print('Item added to favorites: ${item.id}'); // Debug
-      Get.snackbar('Success', 'Item ${item.name} added to favorites.');
-      fetchFavorites();
-    }
+  Future<void> addToFavorites(ItemModel item) async {
+  if (isUserGuest) {
+    checkUserAccess('Favorites');
+    return;
   }
 
-  // Fungsi untuk menghapus item dari daftar favorit
-Future<void> removeFromFavorites(String itemId, String itemName) async {
-  try {
-    // Pastikan user sudah login
-    if (_authService.currentUser != null) {
-      await _firestore
-          .collection('users')
-          .doc(_authService.currentUser!.uid)
-          .collection('favorites')
-          .doc(itemId)
-          .delete();
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    String userID = user.uid;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userID)
+        .collection('favorites')
+        .doc(item.id)
+        .set({
+      'id': item.id,
+      'itemName': item.name,
+      'itemPrice': item.harga,
+    });
 
-      // Optional: Perbarui list favorit setelah item dihapus
-      fetchFavorites();
-      Get.snackbar("Success", "$itemName removed from favorites.");
-      isFavorites.remove(itemId);
-    } else {
-      Get.snackbar("Error", "Please login to remove items from favorites.");
-    }
-  } catch (e) {
-    Get.snackbar("Error", "Failed to remove item: $e");
+    isFavorites.add(item.id); // Perbarui lokal
+    fetchFavorites(); // Pastikan UI diperbarui dengan data terbaru
+    Get.snackbar('Success', 'Item ${item.name} added to favorites.');
   }
 }
+
+
+  // Fungsi untuk menghapus item dari daftar favorit
+  Future<void> removeFromFavorites(String itemId, String itemName) async {
+  if (isUserGuest) {
+    checkUserAccess('Favorites');
+    return;
+  }
+
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('favorites')
+        .doc(itemId)
+        .delete();
+
+    isFavorites.remove(itemId); // Perbarui lokal
+    fetchFavorites(); // Pastikan UI diperbarui dengan data terbaru
+    Get.snackbar("Success", "$itemName removed from favorites.");
+  }
+}
+
 
   Future<void> fetchFavorites() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -111,7 +111,7 @@ Future<void> removeFromFavorites(String itemId, String itemName) async {
           .collection('favorites')
           .snapshots()
           .listen((snapshot) {
-        // Mengubah data snapshot menjadi list FavoriteItem
+        // Perbarui daftar lokal
         favorites.value = snapshot.docs.map((doc) {
           return FavoriteItem(
             id: doc.id,
@@ -119,10 +119,11 @@ Future<void> removeFromFavorites(String itemId, String itemName) async {
             price: doc['itemPrice'],
           );
         }).toList();
-        update(); // Update UI dengan data terbaru
+        update(); // Perbarui UI
       });
     } else {
       favorites.clear(); // Jika user tidak login, kosongkan daftar favorit
+      isFavorites.clear();
     }
   }
 }
