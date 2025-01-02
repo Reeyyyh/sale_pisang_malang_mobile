@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/components/component.dart';
+import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/client/chats/views/chats_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/2_MyOrder/controllers/cart_page_controller.dart';
 
 class CartPageView extends StatelessWidget {
@@ -49,7 +51,6 @@ class CartPageView extends StatelessWidget {
               ),
             ),
           ),
-
           // Konten ListView atau pesan jika user belum login
           Obx(() {
             if (orderController.isGuest.value) {
@@ -164,6 +165,101 @@ class CartPageView extends StatelessWidget {
             );
           }),
         ],
+      ),
+      // Floating Action Button untuk chat
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          final CartPageController cartController =
+              Get.find<CartPageController>();
+
+          // Periksa apakah user adalah guest
+          if (cartController.isGuest.value) {
+            // Jika user belum login
+            Get.defaultDialog(
+              title: "",
+              content: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.lock_outline,
+                    size: 60,
+                    color: Colors.redAccent,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Login Required",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "You need to login to use the chat feature.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: Colors.black54),
+                  ),
+                ],
+              ),
+              confirm: ElevatedButton.icon(
+                onPressed: () {
+                  Get.back(); // Tutup dialog
+                  Get.off(LoginPageView()); // Navigasi ke halaman login
+                },
+                icon: const Icon(
+                  Icons.login,
+                  size: 20,
+                  color: Colors.white,
+                ),
+                label: const Text(
+                  "Login",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              cancel: TextButton(
+                onPressed: () => Get.back(),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.grey, // Warna teks
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        8), // Kurangi radius jika ingin lebih kecil
+                    side: const BorderSide(
+                        color: Colors.grey), // Tambahkan border
+                  ),
+                ),
+                child: const Text(
+                  "Cancel",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500, // Teks sedikit lebih tebal
+                  ),
+                ),
+              ),
+              radius: 8, // Membuat sudut dialog melengkung
+            );
+          } else {
+            // Jika user sudah login
+            Get.to(const ChatsPageView());
+          }
+        },
+        backgroundColor: Colors.blueAccent,
+        tooltip: "Chat with Admin",
+        child: const Icon(
+          Icons.chat,
+          color: Colors.white,
+        ),
       ),
     );
   }
