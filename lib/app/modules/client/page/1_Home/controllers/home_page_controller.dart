@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,6 +56,13 @@ class HomeController extends GetxController {
   }
 
   // Todo :  add data
+  Future<void> addToCart(ItemModel item) async {
+    if (isUserGuest.value) {
+      checkUserAccess('Cart');
+      return;
+    }
+    await _cartController.addToCart(item);
+  }
 
   Future<void> addToFavorites(ItemModel item) async {
     if (isUserGuest.value) {
@@ -65,34 +71,12 @@ class HomeController extends GetxController {
     }
     await _favoriteController.addToFavorites(item);
   }
-
-  Future<void> addToCart(ItemModel item) async {
-    if (isUserGuest.value) {
-      checkUserAccess('Cart');
-      return;
-    }
-
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String userID = user.uid;
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userID)
-          .collection('cart')
-          .doc(item.id)
-          .set({
-        'itemName': item.name,
-        'itemPrice': item.harga,
-        'itemStatus': 'Pending',
-      });
-
-      print('Item added to cart: ${item.id}'); // Debug
-      _cartController.fetchOrders(); // Memperbarui tampilan order
-      Get.snackbar('Success', 'Item ${item.name} added to cart.');
-    }
-  }
+  
 
   // Todo : Remove data
+
+
+
   Future<void> removeFromFavorites(String itemId, String itemName) async {
     if (isUserGuest.value) {
       checkUserAccess('Favorites');

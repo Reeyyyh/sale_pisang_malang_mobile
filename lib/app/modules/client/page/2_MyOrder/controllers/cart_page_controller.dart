@@ -28,7 +28,7 @@ class CartPageController extends GetxController {
   }
 
   // Fungsi untuk mengambil daftar cart dari Firestore
-  void fetchOrders() {
+  Future<void> fetchOrders() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null && !isGuest.value) {
       String userID = user.uid;
@@ -51,6 +51,42 @@ class CartPageController extends GetxController {
       });
     } else {
       orders.clear(); // Jika user tidak login, kosongkan daftar orders
+    }
+  }
+
+  Future<void> addToCart(ItemModel item) async {
+    try {
+      // Cek apakah pengguna sudah login
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        String userID = user.uid;
+
+        // Menambahkan item ke dalam cart di Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userID)
+            .collection('cart')
+            .doc(item.id) // ID item sebagai document ID
+            .set({
+          'id': item.id,
+          'itemName': item.name,
+          'itemPrice': item.harga,
+          'itemStatus': 'Pending',
+        });
+
+        // Menampilkan notifikasi sukses
+        Get.snackbar('Success', '${item.name} added to cart.');
+
+        // Memperbarui tampilan cart
+        fetchOrders();
+      } else {
+        // Jika pengguna belum login
+        Get.snackbar("Error", "Please login to add items to cart.");
+      }
+    } catch (e) {
+      // Menangani error saat proses penyimpanan data
+      Get.snackbar("Error", "Failed to add item to cart: $e");
     }
   }
 

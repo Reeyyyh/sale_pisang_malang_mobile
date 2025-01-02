@@ -19,6 +19,8 @@ class FavoriteController extends GetxController {
     return isFavorites.contains(itemId).obs;
   }
 
+  bool get isUserGuest => _authService.currentUserData?['role'] == 'guest';
+
   @override
   void onInit() {
     super.onInit();
@@ -49,7 +51,6 @@ class FavoriteController extends GetxController {
     }
   }
 
-  bool get isUserGuest => _authService.currentUserData?['role'] == 'guest';
 
   Future<void> addToFavorites(ItemModel item) async {
     if (isUserGuest) {

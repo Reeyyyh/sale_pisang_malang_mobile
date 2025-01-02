@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sale_pisang_malang/app/models/items_model.dart';
 
-class AdminDashboardController extends GetxController {
+class DashboardController extends GetxController {
   var items = <ItemModel>[].obs;
   var nameController = TextEditingController();
   var descriptionController = TextEditingController();
@@ -32,7 +32,7 @@ class AdminDashboardController extends GetxController {
       descriptionController.clear();
       hargaController.clear();
       fetchItems();
-      Get.snackbar('Item Added', '${nameController.text} has been added.', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('Item Added', '${nameController.text} has been added.', snackPosition: SnackPosition.TOP);
     } else {
       Get.snackbar('Error', 'Please fill all fields', snackPosition: SnackPosition.TOP);
     }
@@ -85,6 +85,6 @@ class AdminDashboardController extends GetxController {
       'harga': hargaController.text,
     });
     fetchItems();
-    Get.snackbar('Item Updated', 'Item has been updated.', snackPosition: SnackPosition.BOTTOM);
+    Get.snackbar('Item Updated', 'Item has been updated.', snackPosition: SnackPosition.TOP);
   }
 }

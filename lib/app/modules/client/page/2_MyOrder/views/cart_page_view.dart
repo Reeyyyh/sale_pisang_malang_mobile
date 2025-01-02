@@ -83,74 +83,75 @@ class CartPageView extends StatelessWidget {
             }
 
             return SliverList(
-  delegate: SliverChildBuilderDelegate(
-    (context, index) {
-      final order = orderController.orders[index];
-      return Dismissible(
-        key: Key(order.id), // Pastikan ID unik untuk setiap item
-        direction: DismissDirection.endToStart, // Swipe dari kanan ke kiri
-        onDismissed: (direction) {
-          // Menghapus item dari daftar
-          orderController.removeFromOrders(order.id, order.name);
-        },
-        background: Container(
-          color: Colors.red,
-          child: const Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Icon(Icons.delete, color: Colors.white),
-            ),
-          ),
-        ),
-        child: Card(
-          elevation: 4.0,
-          margin: const EdgeInsets.only(bottom: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(16.0),
-            title: Text(
-              order.name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final order = orderController.orders[index];
+                  return Dismissible(
+                    key: Key(order.id), // Pastikan ID unik untuk setiap item
+                    direction:
+                        DismissDirection.endToStart, // Swipe dari kanan ke kiri
+                    onDismissed: (direction) {
+                      // Menghapus item dari daftar
+                      orderController.removeFromOrders(order.id, order.name);
+                    },
+                    background: Container(
+                      color: Colors.red,
+                      child: const Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Icon(Icons.delete, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    child: Card(
+                      elevation: 4.0,
+                      margin: const EdgeInsets.only(bottom: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(16.0),
+                        title: Text(
+                          order.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Price: ${order.price}',
+                              style: const TextStyle(
+                                color: Colors.green,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              'Status: ${order.status}',
+                              style: const TextStyle(
+                                color: Colors.orange,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                        trailing: Icon(
+                          Icons.chevron_left,
+                          color: Colors.grey[600],
+                        ),
+                        onTap: () {
+                          // Tambahkan fungsionalitas onTap di sini jika diperlukan
+                        },
+                      ),
+                    ),
+                  );
+                },
+                childCount: orderController.orders.length,
               ),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Price: ${order.price}',
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  'Status: ${order.status}',
-                  style: const TextStyle(
-                    color: Colors.orange,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-            trailing: Icon(
-              Icons.chevron_left,
-              color: Colors.grey[600],
-            ),
-            onTap: () {
-              // Tambahkan fungsionalitas onTap di sini jika diperlukan
-            },
-          ),
-        ),
-      );
-    },
-    childCount: orderController.orders.length,
-  ),
-);
+            );
           }),
         ],
       ),
@@ -169,7 +170,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return SizedBox.expand(
       child: child,
     );
