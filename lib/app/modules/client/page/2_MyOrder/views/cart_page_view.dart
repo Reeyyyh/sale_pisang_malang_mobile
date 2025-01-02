@@ -96,12 +96,22 @@ class CartPageView extends StatelessWidget {
                     },
                     background: Container(
                       color: Colors.red,
-                      child: const Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Icon(Icons.delete, color: Colors.white),
-                        ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text(
+                              'Swipe to delete',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Icon(Icons.delete, color: Colors.white),
+                          ),
+                        ],
                       ),
                     ),
                     child: Card(
