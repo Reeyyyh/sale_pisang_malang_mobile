@@ -13,6 +13,9 @@ class HomeController extends GetxController {
   final FavoriteController _favoriteController = Get.put(FavoriteController());
   final CartPageController _cartController = Get.put(CartPageController());
 
+  RxBool get isUserGuest =>
+      RxBool(_authService.currentUserData?['role'] == 'guest');
+
   var items = <ItemModel>[].obs;
   var isLoggedIn = false.obs;
   var isLoading = true.obs;
@@ -23,7 +26,7 @@ class HomeController extends GetxController {
     super.onInit();
     fetchItems();
     checkUserStatus();
-    if (!isUserGuest) {
+    if (!isUserGuest.value) {
       fetchFavorites(); // Fetch favorites jika pengguna bukan guest
     }
     startLoadingTimeout();
@@ -42,7 +45,7 @@ class HomeController extends GetxController {
   }
 
   void fetchFavorites() async {
-    if (isUserGuest) {
+    if (isUserGuest.value) {
       return; // Tidak mengambil data favorit jika user adalah guest
     }
 
@@ -55,17 +58,15 @@ class HomeController extends GetxController {
   // Todo :  add data
 
   Future<void> addToFavorites(ItemModel item) async {
-    if (isUserGuest) {
+    if (isUserGuest.value) {
       checkUserAccess('Favorites');
       return;
     }
     await _favoriteController.addToFavorites(item);
   }
 
-
-
   Future<void> addToCart(ItemModel item) async {
-    if (isUserGuest) {
+    if (isUserGuest.value) {
       checkUserAccess('Cart');
       return;
     }
@@ -92,7 +93,7 @@ class HomeController extends GetxController {
 
   // Todo : Remove data
   Future<void> removeFromFavorites(String itemId, String itemName) async {
-    if (isUserGuest) {
+    if (isUserGuest.value) {
       checkUserAccess('Favorites');
       return;
     }
@@ -117,10 +118,11 @@ class HomeController extends GetxController {
     }
   }
 
-  bool get isUserGuest => _authService.currentUserData?['role'] == 'guest';
+  // bool get isUserGuest => _authService.currentUserData?['role'] == 'guest';
+  // Ubah isUserGuest menjadi RxBool agar dapat diobservasi.
 
   void checkUserAccess(String featureName) {
-    if (isUserGuest) {
+    if (isUserGuest.value) {
       Get.snackbar(
         'Login Required',
         'Please login to add item in $featureName',
@@ -131,7 +133,7 @@ class HomeController extends GetxController {
     }
   }
 
-  bool isItemInFavorites(String itemId) {
-    return _favoriteController.isItemInFavorites(itemId); // Panggil fungsi isItemInFavorites dari FavoriteController
+  RxBool isItemInFavorites(String itemId) {
+    return RxBool(_favoriteController.isFavorites.contains(itemId));
   }
 }
