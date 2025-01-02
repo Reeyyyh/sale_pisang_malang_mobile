@@ -31,7 +31,7 @@ class LoginPageView extends StatelessWidget {
               clipper: CustomAppBarClipper(),
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Colors.deepPurple,
+                  color: Colors.blueAccent,
                 ),
                 child: AppBar(
                   title: const Text(
@@ -58,7 +58,7 @@ class LoginPageView extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
-            key: loginController.formKey,
+              key: loginController.loginFormKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -72,7 +72,7 @@ class LoginPageView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple,
+                    color: Colors.blueAccent,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -90,7 +90,7 @@ class LoginPageView extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'Email',
                     prefixIcon:
-                        const Icon(Icons.email, color: Colors.deepPurple),
+                        const Icon(Icons.email, color: Colors.blueAccent),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -116,7 +116,7 @@ class LoginPageView extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: 'Password',
                         prefixIcon:
-                            const Icon(Icons.lock, color: Colors.deepPurple),
+                            const Icon(Icons.lock, color: Colors.blueAccent),
                         suffixIcon: IconButton(
                           icon: Icon(loginController.isPasswordHidden.value
                               ? Icons.visibility_off
@@ -144,15 +144,12 @@ class LoginPageView extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (loginController.formKey.currentState!.validate()) {
-                        String email = loginController.emailController.text;
-                        String password =
-                            loginController.passwordController.text;
-                        loginController.login(email, password);
+                      if (loginController.loginFormKey .currentState!.validate()) {
+                        loginController.login();
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
+                      backgroundColor: Colors.blueAccent,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -177,13 +174,13 @@ class LoginPageView extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Get.to(() => SignUpPageView());
+                        Get.offAll(() => SignUpPageView());
                       },
                       child: const Text(
                         'Sign Up',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepPurple,
+                          color: Colors.blueAccent,
                         ),
                       ),
                     ),
