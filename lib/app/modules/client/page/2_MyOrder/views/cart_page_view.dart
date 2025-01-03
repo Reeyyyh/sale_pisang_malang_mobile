@@ -207,7 +207,7 @@ class CartPageView extends StatelessWidget {
               confirm: ElevatedButton.icon(
                 onPressed: () {
                   Get.back(); // Tutup dialog
-                  Get.off(LoginPageView()); // Navigasi ke halaman login
+                  Get.off(() => LoginPageView()); // Navigasi ke halaman login
                 },
                 icon: const Icon(
                   Icons.login,

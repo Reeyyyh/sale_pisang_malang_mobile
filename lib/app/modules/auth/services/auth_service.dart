@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:sale_pisang_malang/app/modules/client/home/views/start_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/1_Home/controllers/home_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/2_MyOrder/controllers/cart_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/3_Favorite/controllers/favorite_page_controller.dart';
@@ -140,17 +141,33 @@ class AuthService {
   }
 
   Future<void> logout() async {
-    try {
-      await _auth.signOut();
-      initializeGuestUser();
-      // Memperbarui kontroler setelah logout
-      Get.find<HomeController>().checkUserStatus();
-      Get.find<FavoriteController>().checkUserStatus();
-      Get.find<CartPageController>().checkUserStatus();
-    } catch (e) {
-      throw Exception('Logout Failed: $e');
+  try {
+    await _auth.signOut();
+
+    // Inisialisasi kontroler jika belum diinisialisasi
+    if (!Get.isRegistered<HomeController>()) {
+      Get.put(HomeController());
     }
+    if (!Get.isRegistered<FavoriteController>()) {
+      Get.put(FavoriteController());
+    }
+    if (!Get.isRegistered<CartPageController>()) {
+      Get.put(CartPageController());
+    }
+
+    initializeGuestUser();
+
+    // Memperbarui kontroler setelah logout
+    Get.find<HomeController>().checkUserStatus();
+    Get.find<FavoriteController>().checkUserStatus();
+    Get.find<CartPageController>().checkUserStatus();
+
+    // Navigasi ke StartPageView
+    Get.offAll(() => const StartPageView());
+  } catch (e) {
+    throw Exception('Logout Failed: $e');
   }
+}
 
   bool isUserLoggedIn() {
     return _auth.currentUser != null;
