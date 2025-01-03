@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart'; // Tambahkan package intl untuk format waktu
+import 'package:intl/intl.dart'; // Untuk format waktu
+import 'package:sale_pisang_malang/app/models/items_model.dart';
 import 'package:sale_pisang_malang/app/modules/client/chats/controllers/client_chats_page_controller.dart';
 
 class ClientChatsAdminPageView extends StatelessWidget {
@@ -10,8 +11,7 @@ class ClientChatsAdminPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ClientChatsPageController controller =
-        Get.put(ClientChatsPageController(userId: userId));
+    final ClientChatsPageController controller = Get.put(ClientChatsPageController(userId: userId));
 
     return Scaffold(
       appBar: AppBar(
@@ -37,15 +37,11 @@ class ClientChatsAdminPageView extends StatelessWidget {
               if (controller.messages.isEmpty) {
                 // Menunggu beberapa detik sebelum menampilkan pesan "Belum ada pesan."
                 return FutureBuilder(
-                  future: Future.delayed(const Duration(
-                      seconds: 1,
-                      milliseconds: 500)), // Menunggu selama 1.5 detik
+                  future: Future.delayed(const Duration(seconds: 1, milliseconds: 500)), // 1.5 detik
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      // Setelah 3 detik, tampilkan pesan jika masih kosong
                       return const Center(child: Text('Belum ada pesan.'));
                     } else {
-                      // Menampilkan loading indicator sementara fetching
                       return const Center(child: CircularProgressIndicator());
                     }
                   },
@@ -56,28 +52,22 @@ class ClientChatsAdminPageView extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 itemCount: controller.messages.length,
                 itemBuilder: (context, index) {
-                  final message = controller.messages[index];
-                  final isUser = message['sender'] ==
-                      userId; // Cek jika sender adalah user
+                  final ChatMessage message = controller.messages[index];
+                  final bool isUser = message.sender == userId;
 
                   // Format waktu menjadi jam:menit
-                  final timestamp = message['timestamp'] as DateTime;
-                  final formattedTime = DateFormat('HH:mm').format(timestamp);
-                  final formattedDate =
-                      DateFormat('dd MMM yyyy').format(timestamp);
+                  final String formattedTime = DateFormat('HH:mm').format(message.timestamp);
+                  final String formattedDate = DateFormat('dd MMM yyyy').format(message.timestamp);
 
                   // Cek apakah tanggal sebelumnya berbeda dengan tanggal saat ini
                   String? displayDate;
                   if (index == 0) {
-                    // Tampilkan tanggal untuk pesan pertama
-                    displayDate = formattedDate;
+                    displayDate = formattedDate; // Tampilkan tanggal untuk pesan pertama
                   } else {
-                    final previousMessage = controller.messages[index - 1];
-                    final previousDate = DateFormat('dd MMM yyyy')
-                        .format(previousMessage['timestamp'] as DateTime);
+                    final ChatMessage previousMessage = controller.messages[index - 1];
+                    final String previousDate = DateFormat('dd MMM yyyy').format(previousMessage.timestamp);
                     if (formattedDate != previousDate) {
-                      displayDate =
-                          formattedDate; // Tampilkan tanggal jika berbeda
+                      displayDate = formattedDate; // Tampilkan tanggal jika berbeda
                     }
                   }
 
@@ -96,41 +86,30 @@ class ClientChatsAdminPageView extends StatelessWidget {
                           ),
                         ),
                       Align(
-                        alignment: isUser
-                            ? Alignment.centerRight
-                            : Alignment
-                                .centerLeft, // Sesuaikan posisi berdasarkan pengirim
+                        alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
                         child: Padding(
-                          // Tambahkan Padding di sekitar Container bubble chat
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0), // Padding horizontal
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 5.0),
                             padding: const EdgeInsets.all(12.0),
                             decoration: BoxDecoration(
-                              color: isUser
-                                  ? Colors.blueAccent
-                                  : Colors.grey[
-                                      300], // Warna pesan tergantung pada pengirim
+                              color: isUser ? Colors.blueAccent : Colors.grey[300],
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             child: Column(
-                              crossAxisAlignment: isUser
-                                  ? CrossAxisAlignment.end
-                                  : CrossAxisAlignment.start,
+                              crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  message['message'],
+                                  message.message,
                                   style: TextStyle(
                                     color: isUser ? Colors.white : Colors.black,
                                   ),
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  formattedTime, // Menampilkan waktu
+                                  formattedTime,
                                   style: TextStyle(
-                                    color:
-                                        isUser ? Colors.white : Colors.black54,
+                                    color: isUser ? Colors.white : Colors.black54,
                                     fontSize: 12,
                                   ),
                                 ),

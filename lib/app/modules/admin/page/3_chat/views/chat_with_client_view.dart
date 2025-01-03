@@ -57,7 +57,8 @@ class ChatWithClientView extends StatelessWidget {
                   itemCount: controller.messages.length,
                   itemBuilder: (context, index) {
                     final chatMessage = controller.messages[index];
-                    final isAdmin = chatMessage.sender == 'admin';
+                    final isAdmin = chatMessage.sender ==
+                        controller.adminId; // Periksa berdasarkan UID admin
 
                     // Format timestamp
                     final formattedTime =
@@ -72,10 +73,11 @@ class ChatWithClientView extends StatelessWidget {
                       displayDate = formattedDate;
                     } else {
                       final previousMessage = controller.messages[index - 1];
-                      final previousDate =
-                          DateFormat('dd MMM yyyy').format(previousMessage.timestamp);
+                      final previousDate = DateFormat('dd MMM yyyy')
+                          .format(previousMessage.timestamp);
                       if (formattedDate != previousDate) {
-                        displayDate = formattedDate; // Tampilkan tanggal jika berbeda
+                        displayDate =
+                            formattedDate; // Tampilkan tanggal jika berbeda
                       }
                     }
 
@@ -97,8 +99,10 @@ class ChatWithClientView extends StatelessWidget {
                           alignment: isAdmin
                               ? Alignment.centerRight
                               : Alignment.centerLeft,
-                          child: Padding( // Menambahkan padding di sekitar bubble chat
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Padding horizontal
+                          child: Padding(
+                            // Menambahkan padding di sekitar bubble chat
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0), // Padding horizontal
                             child: Container(
                               margin: const EdgeInsets.symmetric(vertical: 5.0),
                               padding: const EdgeInsets.all(12.0),
@@ -116,10 +120,11 @@ class ChatWithClientView extends StatelessWidget {
                                   Text(
                                     chatMessage.message,
                                     style: TextStyle(
-                                      color: isAdmin ? Colors.white : Colors.black,
+                                      color:
+                                          isAdmin ? Colors.white : Colors.black,
                                     ),
                                   ),
-                                  SizedBox(height: 4),
+                                  const SizedBox(height: 4),
                                   Text(
                                     formattedTime, // Menampilkan waktu yang sudah diformat
                                     style: TextStyle(

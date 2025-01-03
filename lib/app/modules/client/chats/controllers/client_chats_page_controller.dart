@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:sale_pisang_malang/app/models/items_model.dart';
 
 class ClientChatsPageController extends GetxController {
-  RxList<Map<String, dynamic>> messages = <Map<String, dynamic>>[].obs;
+  
+  RxList<ChatMessage> messages = <ChatMessage>[].obs; // Gunakan model ChatMessage
   TextEditingController messageController = TextEditingController();
 
   final String userId;
@@ -26,11 +28,7 @@ class ClientChatsPageController extends GetxController {
         .snapshots()
         .listen((snapshot) {
       messages.value = snapshot.docs.map((doc) {
-        return {
-          'sender': doc['sender'],
-          'message': doc['message'],
-          'timestamp': doc['timestamp'].toDate(),
-        };
+        return ChatMessage.fromFirestore(doc.data());
       }).toList();
     });
   }
@@ -40,16 +38,18 @@ class ClientChatsPageController extends GetxController {
     final message = messageController.text;
     if (message.isEmpty) return;
 
+    final newMessage = ChatMessage(
+      message: message,
+      sender: userId,
+      timestamp: DateTime.now(),
+    );
+
     // Simpan pesan ke Firestore
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection('chats')
-        .add({
-      'sender': userId, // ID user
-      'message': message,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
+        .add(newMessage.toFirestore());
 
     messageController.clear(); // Bersihkan input field setelah mengirim pesan
   }

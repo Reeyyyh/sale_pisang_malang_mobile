@@ -254,7 +254,7 @@ class CartPageView extends StatelessWidget {
             // Jika user sudah login
             final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
             if (userId.isNotEmpty) {
-              Get.to(ClientChatsAdminPageView(userId: userId));
+              Get.to(() => ClientChatsAdminPageView(userId: userId));
             }
           }
         },
