@@ -55,7 +55,7 @@ class OrderModel {
 class ChatMessage {
   final String message;
   final String sender;
-  final DateTime timestamp;  // Gunakan DateTime, bukan Timestamp
+  final DateTime timestamp;
 
   ChatMessage({
     required this.message,
@@ -68,7 +68,7 @@ class ChatMessage {
     return ChatMessage(
       message: firestoreData['message'],
       sender: firestoreData['sender'],
-      timestamp: (firestoreData['timestamp'] as Timestamp).toDate(),  // Konversi Timestamp ke DateTime
+      timestamp: (firestoreData['timestamp'] as Timestamp).toDate(),
     );
   }
 
@@ -77,7 +77,7 @@ class ChatMessage {
     return {
       'message': message,
       'sender': sender,
-      'timestamp': Timestamp.fromDate(timestamp),  // Konversi DateTime ke Timestamp
+      'timestamp': Timestamp.fromDate(timestamp),
     };
   }
 }
