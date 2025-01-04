@@ -52,5 +52,6 @@ class ClientChatsPageController extends GetxController {
         .add(newMessage.toFirestore());
 
     messageController.clear(); // Bersihkan input field setelah mengirim pesan
+    Get.focusScope?.unfocus();
   }
 }

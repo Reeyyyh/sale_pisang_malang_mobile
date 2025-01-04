@@ -80,5 +80,6 @@ class ChatWithClientController extends GetxController {
 
     // Bersihkan input field setelah mengirim pesan
     messageController.clear();
+    Get.focusScope?.unfocus();
   }
 }
