@@ -33,15 +33,6 @@ class CardDetailView extends StatelessWidget {
           color: Colors.white,
           onPressed: () => Get.back(),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.ios_share),
-            color: Colors.white,
-            onPressed: () {
-              // Aksi untuk share produk
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
