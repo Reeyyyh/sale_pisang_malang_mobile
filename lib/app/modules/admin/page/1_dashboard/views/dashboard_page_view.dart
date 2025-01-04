@@ -14,8 +14,7 @@ class DashboardPageView extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(
-              100), // Mengatur tinggi AppBar sesuai yang diinginkan
+          preferredSize: const Size.fromHeight(100),
           child: AppBar(
             centerTitle: true,
             title: const Text(
@@ -23,7 +22,7 @@ class DashboardPageView extends StatelessWidget {
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
-            backgroundColor: Colors.blueAccent,
+            backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
             bottom: const TabBar(
               indicatorColor: Colors.white,
               labelColor: Colors.white,
@@ -52,15 +51,101 @@ class DashboardPageView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Tempatkan Pick Image di atas
+                        Center(
+                          child: Obx(
+                            () {
+                              final imageFile =
+                                  dashboardController.selectedImage.value;
+                              return Column(
+                                children: [
+                                  imageFile != null
+                                      ? Stack(
+                                          children: [
+                                            Image.file(imageFile,
+                                                height: 150, fit: BoxFit.cover),
+                                            Positioned(
+                                              top: 8,
+                                              right: 8,
+                                              child: IconButton(
+                                                icon: const Icon(Icons.close,
+                                                    color: Colors.red),
+                                                onPressed: () =>
+                                                    dashboardController
+                                                        .selectedImage
+                                                        .value = null,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Image.network(
+                                          'https://via.placeholder.com/250x100?text=No+Image',
+                                          fit: BoxFit.cover,
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              // Gambar berhasil dimuat
+                                              return child;
+                                            }
+                                            // Menampilkan CircularProgressIndicator selama fetching
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          },
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            // Menampilkan icon jika ada error
+                                            return const Center(
+                                              child: Icon(
+                                                Icons.broken_image,
+                                                size: 100,
+                                                color: Colors.grey,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                  const SizedBox(height: 12),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      onPressed: dashboardController.pickImage,
+                                      icon: const Icon(
+                                        Icons.image,
+                                        color: Colors.white,
+                                      ),
+                                      label: const Text(
+                                        'Pick Image',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Input Item Name
                         const Text(
-                          'Add New Item',
+                          'Item Name',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         TextFormField(
                           controller: dashboardController.nameController,
                           decoration: const InputDecoration(
@@ -70,6 +155,17 @@ class DashboardPageView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
+
+                        // Input Description
+                        const Text(
+                          'Description',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
                         TextFormField(
                           controller: dashboardController.descriptionController,
                           decoration: const InputDecoration(
@@ -79,6 +175,17 @@ class DashboardPageView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
+
+                        // Input Price
+                        const Text(
+                          'Price',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
                         TextFormField(
                           controller: dashboardController.hargaController,
                           keyboardType: TextInputType.number,
@@ -88,41 +195,25 @@ class DashboardPageView extends StatelessWidget {
                             prefixIcon: Icon(Icons.attach_money),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 16),
+
+                        // Add Item Button
                         Center(
                           child: Container(
-                            width: double
-                                .infinity, // Membuat tombol selebar kontainer
-                            padding: const EdgeInsets.symmetric(
-                                horizontal:
-                                    16), // Memberi ruang di sisi kiri dan kanan
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blueAccent,
+                                backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 12),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      8), // Mengurangi radius untuk sudut lebih sedikit membulat
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                               onPressed: () {
-                                // Validasi inputan sebelum menambahkan item
-                                if (dashboardController
-                                        .nameController.text.isEmpty ||
-                                    dashboardController
-                                        .descriptionController.text.isEmpty ||
-                                    dashboardController
-                                        .hargaController.text.isEmpty) {
-                                  Get.snackbar(
-                                    'Error',
-                                    'Please fill in all fields',
-                                    backgroundColor: Colors.redAccent,
-                                    colorText: Colors.white,
-                                  );
-                                  return;
-                                }
-                                dashboardController.addItem();
+                                dashboardController.addItem(
+                                    dashboardController.selectedImage.value);
                               },
                               icon: const Icon(
                                 Icons.add,
@@ -130,11 +221,13 @@ class DashboardPageView extends StatelessWidget {
                               ),
                               label: const Text(
                                 'Add Item',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -171,6 +264,7 @@ class DashboardPageView extends StatelessWidget {
                   return Column(
                     children: [
                       Card(
+                        // color: const Color.fromRGBO(255, 170, 0, 1),
                         elevation: 4,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),

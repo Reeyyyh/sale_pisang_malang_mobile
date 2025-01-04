@@ -33,7 +33,7 @@ class FavoritePageView extends StatelessWidget {
                   ClipPath(
                     clipper: AppBarClipper(),
                     child: Container(
-                      color: Colors.blueAccent,
+                      color: const Color.fromRGBO(255, 170, 0, 1),
                       child: const Center(
                         child: Text(
                           'Favorites',

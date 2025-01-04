@@ -7,12 +7,15 @@ class ItemModel {
   final String name;
   final String description;
   final String harga;
+  final String imgUrl;
 
-  ItemModel(
-      {required this.id,
-      required this.name,
-      required this.description,
-      required this.harga});
+  ItemModel({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.harga,
+    required this.imgUrl,
+  });
 
   factory ItemModel.fromDocument(DocumentSnapshot doc) {
     return ItemModel(
@@ -20,6 +23,7 @@ class ItemModel {
       name: doc['name'] ?? 'Tidak ada nama',
       description: doc['description'] ?? 'Tidak ada deskripsi',
       harga: doc['harga'] ?? '0',
+      imgUrl: doc['imgUrl'] ?? '', // Nilai default kosong jika tidak ada URL
     );
   }
 }

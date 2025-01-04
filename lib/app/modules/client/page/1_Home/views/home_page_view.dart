@@ -72,142 +72,166 @@ class HomePageView extends StatelessWidget {
                 SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.75,
+                    childAspectRatio: 0.737,
+                    mainAxisSpacing: 2,
+                    crossAxisSpacing: 2,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       final item = homeController.items[index];
-                      return Card(
-                        elevation: 8, // Menambahkan shadow untuk card
+                      return Container(
                         margin: const EdgeInsets.all(8),
-                        shape: RoundedRectangleBorder(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 4,
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize
-                                .min, // Menjaga tinggi card tetap minimal
-                            children: [
-                              ListTile(
-                                title: Text(
-                                  item.name,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                                subtitle: Text(
-                                  item.description,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Gambar produk penuh
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(12),
                               ),
-                              const Divider(), // Pemisah antara deskripsi dan harga
-                              Flexible(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                              child: Image.network(
+                                item.imgUrl.isNotEmpty
+                                    ? item.imgUrl
+                                    : 'https://via.placeholder.com/150?text=No+Image',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: 150, // Tinggi tetap untuk gambar
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Center(
+                                    child: Icon(
+                                      Icons.broken_image,
+                                      size: 50,
+                                      color: Colors.grey,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            // Nama, harga, dan ikon
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Nama item
+                                  Text(
+                                    item.name,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  // description
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    item.description,
+                                    style: const TextStyle(
+                                      fontSize: 8,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  // Harga dan ikon
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Harga
+                                      Text(
+                                        'Rp ${item.harga}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green[800],
+                                        ),
+                                      ),
+                                      // Ikon Add to Cart dan Favorite
+                                      Row(
                                         children: [
-                                          Text(
-                                            'Rp ${item.harga}',
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors
-                                                  .green, // Memberi warna pada harga
-                                            ),
-                                            overflow: TextOverflow
-                                                .ellipsis, // Menghindari overflow harga
+                                          IconButton(
+                                            icon: const Icon(
+                                                Icons.add_shopping_cart),
+                                            onPressed: () {
+                                              homeController
+                                                  .checkUserAccess('Cart');
+                                              if (!homeController
+                                                  .isUserGuest.value) {
+                                                homeController.addToCart(item);
+                                              }
+                                            },
                                           ),
-                                          const SizedBox(
-                                              height:
-                                                  8), // Memberikan jarak antara harga dan ikon
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              IconButton(
-                                                icon: const Icon(
-                                                    Icons.add_shopping_cart),
+                                          Obx(
+                                            () {
+                                              return IconButton(
+                                                icon: Icon(
+                                                  homeController
+                                                          .isUserGuest.value
+                                                      ? Icons
+                                                          .favorite_border_rounded
+                                                      : (homeController
+                                                              .isItemInFavorites(
+                                                                  item.id)
+                                                              .value
+                                                          ? Icons
+                                                              .favorite_rounded
+                                                          : Icons
+                                                              .favorite_border_rounded),
+                                                  color: homeController
+                                                          .isUserGuest.value
+                                                      ? null
+                                                      : (homeController
+                                                              .isItemInFavorites(
+                                                                  item.id)
+                                                              .value
+                                                          ? Colors.redAccent
+                                                          : null),
+                                                ),
                                                 onPressed: () {
                                                   homeController
-                                                      .checkUserAccess('Cart');
+                                                      .checkUserAccess(
+                                                          'Favorites');
                                                   if (!homeController
                                                       .isUserGuest.value) {
-                                                    homeController
-                                                        .addToCart(item);
+                                                    if (homeController
+                                                        .isItemInFavorites(
+                                                            item.id)
+                                                        .value) {
+                                                      homeController
+                                                          .removeFromFavorites(
+                                                              item.id,
+                                                              item.name);
+                                                    } else {
+                                                      homeController
+                                                          .addToFavorites(item);
+                                                    }
                                                   }
                                                 },
-                                              ),
-                                              Obx(() {
-                                                return IconButton(
-                                                  icon: Icon(
-                                                    homeController
-                                                            .isUserGuest.value
-                                                        ? Icons
-                                                            .favorite_border_rounded // Jika user guest, tampilkan ikon border
-                                                        : (homeController
-                                                                .isItemInFavorites(
-                                                                    item.id)
-                                                                .value
-                                                            ? Icons
-                                                                .favorite_rounded // Jika item di favorit, tampilkan ikon penuh
-                                                            : Icons
-                                                                .favorite_border_rounded), // Jika item tidak di favorit, tampilkan ikon border
-                                                    color: homeController
-                                                            .isUserGuest.value
-                                                        ? null
-                                                        : (homeController
-                                                                .isItemInFavorites(
-                                                                    item.id)
-                                                                .value
-                                                            ? Colors.redAccent
-                                                            : null),
-                                                  ),
-                                                  onPressed: () {
-                                                    homeController
-                                                        .checkUserAccess(
-                                                            'Favorites');
-                                                    if (!homeController
-                                                        .isUserGuest.value) {
-                                                      if (homeController
-                                                          .isItemInFavorites(
-                                                              item.id)
-                                                          .value) {
-                                                        homeController
-                                                            .removeFromFavorites(
-                                                                item.id,
-                                                                item.name);
-                                                      } else {
-                                                        homeController
-                                                            .addToFavorites(
-                                                                item);
-                                                      }
-                                                    }
-                                                  },
-                                                );
-                                              })
-                                            ],
+                                              );
+                                            },
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -246,16 +270,7 @@ class AppBarSliverDelegate extends SliverPersistentHeaderDelegate {
           clipper: AppBarClipper(),
           child: Container(
             height: maxExtent,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blueAccent,
-                  Colors.blue,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
+            color: const Color.fromRGBO(255, 170, 0, 1),
             child: const Center(
               child: Text(
                 'Welcome To Sale Pisang Malang',

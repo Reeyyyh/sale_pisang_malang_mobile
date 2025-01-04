@@ -51,7 +51,6 @@ class FavoriteController extends GetxController {
     }
   }
 
-
   Future<void> addToFavorites(ItemModel item) async {
     if (isUserGuest) {
       checkUserAccess('Favorites');
@@ -61,6 +60,8 @@ class FavoriteController extends GetxController {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String userID = user.uid;
+      // Tutup semua Snackbar yang sedang aktif
+      Get.closeAllSnackbars();
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userID)
@@ -74,7 +75,17 @@ class FavoriteController extends GetxController {
 
       isFavorites.add(item.id); // Perbarui lokal
       fetchFavorites(); // Pastikan UI diperbarui dengan data terbaru
-      Get.snackbar('Success', 'Item ${item.name} added to favorites.');
+      Get.snackbar(
+        'Success',
+        'Item ${item.name} added to favorites',
+        duration: const Duration(seconds: 1, milliseconds: 500),
+        animationDuration: Duration.zero,
+        backgroundColor: Colors.green[400]!
+            .withOpacity(0.6),
+        colorText: Colors.black,
+        snackPosition: SnackPosition.TOP,
+        borderRadius: 15,
+      );
     }
   }
 
@@ -87,6 +98,8 @@ class FavoriteController extends GetxController {
 
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      // Tutup semua Snackbar yang sedang aktif
+      Get.closeAllSnackbars();
       await _firestore
           .collection('users')
           .doc(user.uid)
@@ -96,7 +109,17 @@ class FavoriteController extends GetxController {
 
       isFavorites.remove(itemId); // Perbarui lokal
       fetchFavorites(); // Pastikan UI diperbarui dengan data terbaru
-      Get.snackbar("Success", "$itemName removed from favorites.");
+      Get.snackbar(
+        "Success",
+        "$itemName removed from favorites",
+        duration: const Duration(seconds: 1, milliseconds: 500),
+        animationDuration: Duration.zero,
+        backgroundColor: Colors.red[400]!
+            .withOpacity(0.6),
+        colorText: Colors.black,
+        snackPosition: SnackPosition.TOP,
+        borderRadius: 15,
+      );
     }
   }
 
@@ -118,7 +141,9 @@ class FavoriteController extends GetxController {
             price: doc['itemPrice'],
           );
         }).toList();
-        isFavorites..clear()..addAll(snapshot.docs.map((doc) => doc.id));
+        isFavorites
+          ..clear()
+          ..addAll(snapshot.docs.map((doc) => doc.id));
         update(); // Perbarui UI
       });
     } else {

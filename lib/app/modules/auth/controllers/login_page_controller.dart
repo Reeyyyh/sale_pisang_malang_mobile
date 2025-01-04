@@ -55,8 +55,8 @@ class LoginController extends GetxController {
               "Login Success",
               "Welcome back, ${userData['name'] ?? 'User'}!",
               snackPosition: SnackPosition.TOP,
-              backgroundColor: Colors.greenAccent,
-              colorText: Colors.black,
+              backgroundColor: Colors.blue[400],
+              colorText: Colors.white,
             );
           }
         }

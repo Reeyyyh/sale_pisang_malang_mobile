@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/models/items_model.dart';
 import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
@@ -63,6 +64,7 @@ class CartPageController extends GetxController {
         String userID = user.uid;
 
         // Menambahkan item ke dalam cart di Firestore
+        Get.closeAllSnackbars();
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userID)
@@ -76,7 +78,17 @@ class CartPageController extends GetxController {
         });
 
         // Menampilkan notifikasi sukses
-        Get.snackbar('Success', '${item.name} added to cart.');
+        Get.snackbar(
+          'Success',
+          'Item ${item.name} added to cart.',
+          duration: const Duration(seconds: 1, milliseconds: 500),
+          animationDuration: Duration.zero,
+          backgroundColor: Colors.green[400]!
+            .withOpacity(0.6),
+        colorText: Colors.black,
+        snackPosition: SnackPosition.TOP,
+        borderRadius: 15,
+        );
 
         // Memperbarui tampilan cart
         fetchOrders();
@@ -96,6 +108,7 @@ class CartPageController extends GetxController {
       // Pastikan user sudah login
       if (_authService.currentUser != null) {
         // Hapus item dari Firestore (cart)
+        Get.closeAllSnackbars();
         await FirebaseFirestore.instance
             .collection('users')
             .doc(_authService.currentUser!.uid)
@@ -105,7 +118,12 @@ class CartPageController extends GetxController {
 
         // Optional: Perbarui daftar orders setelah item dihapus
         fetchOrders();
-        Get.snackbar("Success", "$orderName removed from orders.");
+        Get.snackbar(
+          'Success',
+          '$orderName remove from cart.',
+          duration: const Duration(seconds: 1, milliseconds: 500),
+          animationDuration: Duration.zero,
+        );
       } else {
         Get.snackbar("Error", "Please login to remove items from orders.");
       }

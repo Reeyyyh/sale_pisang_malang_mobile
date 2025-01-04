@@ -31,7 +31,7 @@ class LoginPageView extends StatelessWidget {
               clipper: CustomAppBarClipper(),
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Colors.blueAccent,
+                  color: Color.fromRGBO(255, 170, 0, 1),
                 ),
                 child: AppBar(
                   title: const Text(
@@ -72,7 +72,7 @@ class LoginPageView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueAccent,
+                    color: Color.fromRGBO(255, 170, 0, 1),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -90,7 +90,7 @@ class LoginPageView extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'Email',
                     prefixIcon:
-                        const Icon(Icons.email, color: Colors.blueAccent),
+                        const Icon(Icons.email, color: Color.fromRGBO(255, 170, 0, 1)),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -116,7 +116,7 @@ class LoginPageView extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: 'Password',
                         prefixIcon:
-                            const Icon(Icons.lock, color: Colors.blueAccent),
+                            const Icon(Icons.lock, color: Color.fromRGBO(255, 170, 0, 1)),
                         suffixIcon: IconButton(
                           icon: Icon(loginController.isPasswordHidden.value
                               ? Icons.visibility_off
@@ -149,7 +149,7 @@ class LoginPageView extends StatelessWidget {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -180,7 +180,7 @@ class LoginPageView extends StatelessWidget {
                         'Sign Up',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent,
+                          color: Color.fromRGBO(255, 170, 0, 1),
                         ),
                       ),
                     ),

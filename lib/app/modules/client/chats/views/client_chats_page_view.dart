@@ -27,7 +27,7 @@ class ClientChatsAdminPageView extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
       ),
       body: Column(
         children: [
@@ -93,7 +93,7 @@ class ClientChatsAdminPageView extends StatelessWidget {
                             margin: const EdgeInsets.symmetric(vertical: 5.0),
                             padding: const EdgeInsets.all(12.0),
                             decoration: BoxDecoration(
-                              color: isUser ? Colors.blueAccent : Colors.grey[300],
+                              color: isUser ? const Color.fromRGBO(255, 170, 0, 1) : Colors.grey[300],
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             child: Column(
@@ -145,7 +145,7 @@ class ClientChatsAdminPageView extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Colors.blueAccent),
+                  icon: const Icon(Icons.send, color: Color.fromRGBO(255, 170, 0, 1)),
                   onPressed: controller.sendMessage,
                 ),
               ],

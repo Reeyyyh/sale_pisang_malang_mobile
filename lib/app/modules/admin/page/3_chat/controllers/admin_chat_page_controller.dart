@@ -13,19 +13,19 @@ class AdminChatPageController extends GetxController {
   }
 
   // Method untuk mengambil data pengguna dari Firestore
-  void fetchUsers() async {
-    try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').get();
-      
-      // Filter untuk menghindari pengguna dengan role 'admin'
-      users.value = snapshot.docs.where((doc) {
-        // Memeriksa apakah pengguna bukan admin
-        return doc['role'] != 'admin';
-      }).toList();  // Hanya memasukkan user yang bukan admin
-    } catch (e) {
-      print("Error fetching users: $e");
-    }
-  }
+  void fetchUsers() {
+  FirebaseFirestore.instance
+      .collection('users')
+      .snapshots()  // Menggunakan snapshots untuk mendengarkan perubahan
+      .listen((QuerySnapshot snapshot) {
+    // Filter untuk menghindari pengguna dengan role 'admin'
+    users.value = snapshot.docs.where((doc) {
+      return doc['role'] != 'admin';
+    }).toList();  // Hanya memasukkan user yang bukan admin
+  }, onError: (e) {
+    print("Error fetching users: $e");
+  });
+}
 
   // Method untuk menavigasi ke halaman chat
   void goToChat(String userId) {

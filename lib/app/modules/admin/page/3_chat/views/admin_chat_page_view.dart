@@ -19,7 +19,7 @@ class AdminChatPageView extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
       ),
       body: Obx(
         () {
@@ -36,6 +36,7 @@ class AdminChatPageView extends StatelessWidget {
                 final user = controller.users[index];
                 return ListTile(
                   leading: CircleAvatar(
+                    backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
                     radius:
                         20, // Tambahkan atau sesuaikan radius untuk memperbesar
                     child: Text(

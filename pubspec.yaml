@@ -50,6 +50,8 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.20.1
+  http: ^1.2.2
+  image_picker: ^1.1.2
   
 
 dev_dependencies:

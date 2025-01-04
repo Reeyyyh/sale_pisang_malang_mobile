@@ -44,7 +44,7 @@ class ProfilePageView extends StatelessWidget {
                   ),
                 ),
                 centerTitle: true,
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
                 actions: [
                   Builder(
                     builder: (BuildContext context) {
@@ -78,7 +78,7 @@ class ProfilePageView extends StatelessWidget {
                     tag: 'drawerToAppBarHero',
                     child: Container(
                       height: 100,
-                      color: Colors.blueAccent,
+                      color: const Color.fromRGBO(255, 170, 0, 1),
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: const Center(
@@ -292,7 +292,7 @@ class ProfilePageView extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
                       minimumSize: const Size(double.infinity, 40),
                     ),
                   );

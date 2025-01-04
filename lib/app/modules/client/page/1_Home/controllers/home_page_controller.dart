@@ -78,9 +78,6 @@ class HomeController extends GetxController {
   
 
   // Todo : Remove data
-
-
-
   Future<void> removeFromFavorites(String itemId, String itemName) async {
     if (isUserGuest.value) {
       checkUserAccess('Favorites');

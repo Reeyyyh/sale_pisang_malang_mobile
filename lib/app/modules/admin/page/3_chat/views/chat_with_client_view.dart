@@ -31,7 +31,7 @@ class ChatWithClientView extends StatelessWidget {
             ),
           );
         }),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
       ),
       body: Column(
         children: [
@@ -108,7 +108,7 @@ class ChatWithClientView extends StatelessWidget {
                               padding: const EdgeInsets.all(12.0),
                               decoration: BoxDecoration(
                                 color: isAdmin
-                                    ? Colors.blueAccent
+                                    ? const Color.fromRGBO(255, 170, 0, 1)
                                     : Colors.grey[300],
                                 borderRadius: BorderRadius.circular(8.0),
                               ),

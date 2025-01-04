@@ -35,7 +35,7 @@ class CartPageView extends StatelessWidget {
                   ClipPath(
                     clipper: AppBarClipper(),
                     child: Container(
-                      color: Colors.blueAccent,
+                      color: const Color.fromRGBO(255, 170, 0, 1),
                       child: const Center(
                         child: Text(
                           'My Orders',
@@ -185,7 +185,7 @@ class CartPageView extends StatelessWidget {
                   Icon(
                     Icons.lock_outline,
                     size: 60,
-                    color: Colors.redAccent,
+                    color: Color.fromRGBO(255, 170, 0, 1),
                   ),
                   SizedBox(height: 16),
                   Text(
@@ -219,7 +219,7 @@ class CartPageView extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
@@ -258,7 +258,7 @@ class CartPageView extends StatelessWidget {
             }
           }
         },
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
         tooltip: "Chat with Admin",
         child: const Icon(
           Icons.chat,
