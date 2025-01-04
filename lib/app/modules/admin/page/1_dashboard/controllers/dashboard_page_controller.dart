@@ -16,13 +16,18 @@ class DashboardController extends GetxController {
   }
 
   void fetchItems() async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('items').get();
-    items.value = snapshot.docs.map((doc) => ItemModel.fromDocument(doc)).toList();
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('items').get();
+    items.value =
+        snapshot.docs.map((doc) => ItemModel.fromDocument(doc)).toList();
   }
 
   Future<void> addItem() async {
-    if (nameController.text.isNotEmpty && descriptionController.text.isNotEmpty && hargaController.text.isNotEmpty) {
-      DocumentReference docRef = await FirebaseFirestore.instance.collection('items').add({
+    if (nameController.text.isNotEmpty &&
+        descriptionController.text.isNotEmpty &&
+        hargaController.text.isNotEmpty) {
+      DocumentReference docRef =
+          await FirebaseFirestore.instance.collection('items').add({
         'name': nameController.text,
         'description': descriptionController.text,
         'harga': hargaController.text,
@@ -32,16 +37,19 @@ class DashboardController extends GetxController {
       descriptionController.clear();
       hargaController.clear();
       fetchItems();
-      Get.snackbar('Item Added', '${nameController.text} has been added.', snackPosition: SnackPosition.TOP);
+      Get.snackbar('Item Added', '${nameController.text} has been added.',
+          snackPosition: SnackPosition.TOP);
     } else {
-      Get.snackbar('Error', 'Please fill all fields', snackPosition: SnackPosition.TOP);
+      Get.snackbar('Error', 'Please fill all fields',
+          snackPosition: SnackPosition.TOP);
     }
   }
 
   Future<void> deleteItem(String id) async {
     await FirebaseFirestore.instance.collection('items').doc(id).delete();
     fetchItems();
-    Get.snackbar('Item Deleted', 'Item has been deleted.', snackPosition: SnackPosition.TOP);
+    Get.snackbar('Item Deleted', 'Item has been deleted.',
+        snackPosition: SnackPosition.TOP);
   }
 
   void showEditDialog(ItemModel item) {
@@ -52,28 +60,84 @@ class DashboardController extends GetxController {
 
     Get.defaultDialog(
       title: 'Edit Item',
-      content: Column(
-        children: [
-          TextFormField(
-            controller: nameController,
-            decoration: const InputDecoration(labelText: 'Item Name'),
-          ),
-          TextFormField(
-            controller: descriptionController,
-            decoration: const InputDecoration(labelText: 'Description'),
-          ),
-          TextFormField(
-            controller: hargaController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: 'Price'),
-          ),
-        ],
+      titleStyle: const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: Colors.blueAccent,
+      ),
+      contentPadding: const EdgeInsets.all(16),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Update the details below:',
+              style: TextStyle(fontSize: 16, color: Colors.black54),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: nameController,
+              decoration: InputDecoration(
+                labelText: 'Item Name',
+                labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: descriptionController,
+              decoration: InputDecoration(
+                labelText: 'Description',
+                labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: hargaController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Price',
+                labelStyle: const TextStyle(fontSize: 14, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       textConfirm: 'Save',
+      confirmTextColor: Colors.white,
       textCancel: 'Cancel',
+      cancelTextColor: Colors.blueAccent,
+      buttonColor: Colors.blueAccent,
+      radius: 10,
       onConfirm: () {
         updateItem(item.id);
+        nameController.clear();
+        descriptionController.clear();
+        hargaController.clear();
         Get.back(); // Close dialog
+      },
+      onCancel: () {
+        nameController.clear();
+        descriptionController.clear();
+        hargaController.clear();
+        Get.back();
       },
     );
   }
@@ -85,6 +149,7 @@ class DashboardController extends GetxController {
       'harga': hargaController.text,
     });
     fetchItems();
-    Get.snackbar('Item Updated', 'Item has been updated.', snackPosition: SnackPosition.TOP);
+    Get.snackbar('Item Updated', 'Item has been updated.',
+        snackPosition: SnackPosition.TOP);
   }
 }

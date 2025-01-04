@@ -57,7 +57,7 @@ class DashboardPageView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blueAccent,
+                            color: Colors.black,
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -182,7 +182,7 @@ class DashboardPageView extends StatelessWidget {
                             item.name,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent,
+                              color: Colors.black,
                             ),
                           ),
                           subtitle: Text(
