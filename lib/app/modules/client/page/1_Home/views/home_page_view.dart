@@ -87,7 +87,8 @@ class HomePageView extends StatelessWidget {
                                 title: item.name,
                                 description: item.description,
                                 imgUrl: item.imgUrl,
-                                harga: item.harga),
+                                harga: item.harga,
+                                ),
                           );
                         },
                         child: Container(

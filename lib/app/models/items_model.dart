@@ -34,12 +34,14 @@ class FavoriteItem {
   final String name;
   final String price;
   final String imgUrl;
+  final String description;
 
   FavoriteItem({
     required this.id,
     required this.name,
     required this.price,
     required this.imgUrl,
+    required this.description,
   });
 }
 

@@ -72,6 +72,7 @@ class FavoriteController extends GetxController {
         'itemName': item.name,
         'itemPrice': item.harga,
         'itemImageUrl': item.imgUrl,
+        'itemDescription': item.description,
       });
 
       isFavorites.add(item.id); // Perbarui lokal
@@ -141,6 +142,7 @@ class FavoriteController extends GetxController {
             name: doc['itemName'],
             price: doc['itemPrice'],
             imgUrl: doc['itemImageUrl'],
+            description: doc['itemDescription'],
           );
         }).toList();
         isFavorites
