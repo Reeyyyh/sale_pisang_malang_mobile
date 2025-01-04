@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sale_pisang_malang/app/components/component.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/3_Favorite/controllers/favorite_page_controller.dart';
@@ -117,19 +116,35 @@ class FavoritePageView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 12.0),
-                        leading: const FaIcon(Icons.favorite,
-                            color: Colors.redAccent, size: 40),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12.0),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            favorite.imgUrl,
+                            width: 60, // Atur ukuran lebar
+                            height: 60, // Atur ukuran tinggi
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(
+                                Icons.broken_image,
+                                color: Colors.grey,
+                                size: 40,
+                              ); // Gambar default jika URL error
+                            },
+                          ),
+                        ),
                         title: Text(
                           favorite.name,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                         subtitle: Text(
-                          'Price: ${favorite.price}',
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
+                          'Rp : ${favorite.price}',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.green[800],
+                              fontWeight: FontWeight.bold),
                         ),
                         trailing: const Icon(Icons.arrow_left_rounded),
                       ),
