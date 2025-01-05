@@ -8,6 +8,8 @@ import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 class CartPageController extends GetxController {
   var orders = <OrderModel>[].obs;
   var isGuest = false.obs;
+  var activeTab = 0.obs; // Menyimpan tab yang aktif (default: Orders)
+
   final AuthService _authService = Get.find<AuthService>();
 
   @override
@@ -26,6 +28,10 @@ class CartPageController extends GetxController {
       _authService.initializeGuestUser();
       isGuest.value = true;
     }
+  }
+
+  void setActiveTab(int index) {
+    activeTab.value = index; // Memperbarui tab aktif
   }
 
   // Fungsi untuk mengambil daftar cart dari Firestore

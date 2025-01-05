@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sale_pisang_malang/app/components/component.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/client/chats/views/client_chats_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/2_MyOrder/controllers/cart_page_controller.dart';
@@ -13,266 +12,225 @@ class CartPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final CartPageController orderController = Get.put(CartPageController());
 
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          // SliverAppBar melengkung
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _SliverAppBarDelegate(
-              height: 150.0,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Transform.scale(
-                      scale: 1.1,
-                      child: ClipPath(
-                        clipper: AppBarClipper(),
-                        child: Container(color: Colors.black.withOpacity(0.2)),
-                      ),
-                    ),
-                  ),
-                  ClipPath(
-                    clipper: AppBarClipper(),
-                    child: Container(
-                      color: const Color.fromRGBO(255, 170, 0, 1),
-                      child: const Center(
-                        child: Text(
-                          'My Orders',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 24,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
+          title: const Text(
+            'My Orders',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          // Konten ListView atau pesan jika user belum login
-          Obx(() {
-            if (orderController.isGuest.value) {
-              return const SliverFillRemaining(
-                child: Center(
-                  child: Text(
-                    'Please login to see your cart.',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-              );
-            }
-
-            if (orderController.orders.isEmpty) {
-              return const SliverFillRemaining(
-                child: Center(
-                  child: Text(
-                    'No Item Yet.',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-              );
-            }
-
-            return SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final order = orderController.orders[index];
-                  return Dismissible(
-                    key: Key(order.id), // Pastikan ID unik untuk setiap item
-                    direction:
-                        DismissDirection.endToStart, // Swipe dari kanan ke kiri
-                    onDismissed: (direction) {
-                      // Menghapus item dari daftar
-                      orderController.removeFromOrders(order.id, order.name);
-                    },
-                    background: Container(
-                      color: Colors.red,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Text(
-                              'Swipe to delete',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Icon(Icons.delete, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                    child: Card(
-                      elevation: 4.0,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(16.0),
-                        title: Text(
-                          order.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+          centerTitle: true,
+          elevation: 4.0,
+          shadowColor: Colors.black26,
+          bottom: TabBar(
+            indicatorColor: Colors.white,
+            indicatorWeight: 3,
+            labelColor: Colors.white, // Warna teks aktif
+            unselectedLabelColor: Colors.white70, // Warna teks tidak aktif
+            tabs: const [
+              Tab(
+                icon: Icon(Icons.shopping_basket),
+                text: 'Orders',
+              ),
+              Tab(
+                icon: Icon(Icons.history),
+                text: 'History',
+              ),
+            ],
+            onTap: (index) {
+              orderController.setActiveTab(index); // Update activeTab
+            },
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            // Tab pertama: daftar pesanan
+            CustomScrollView(
+              slivers: [
+                Obx(() {
+                  if (orderController.isGuest.value) {
+                    return const SliverFillRemaining(
+                      child: Center(
+                        child: Text(
+                          'Please login to see your cart.',
+                          style: TextStyle(
                             fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
                           ),
                         ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Price: ${order.price}',
-                              style: const TextStyle(
-                                color: Colors.green,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              'Status: ${order.status}',
-                              style: const TextStyle(
-                                color: Colors.orange,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        trailing: Icon(
-                          Icons.chevron_left,
-                          color: Colors.grey[600],
-                        ),
-                        onTap: () {
-                          // Tambahkan fungsionalitas onTap di sini jika diperlukan
-                        },
                       ),
+                    );
+                  }
+
+                  if (orderController.orders.isEmpty) {
+                    return const SliverFillRemaining(
+                      child: Center(
+                        child: Text(
+                          'No Item Yet.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final order = orderController.orders[index];
+                        return Dismissible(
+                          key: Key(order.id),
+                          direction: DismissDirection.endToStart,
+                          onDismissed: (direction) {
+                            orderController.removeFromOrders(
+                                order.id, order.name);
+                          },
+                          background: Container(
+                            color: Colors.red,
+                            alignment: Alignment.centerRight,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                              size: 28,
+                            ),
+                          ),
+                          child: Card(
+                            elevation: 2.0,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 16.0, vertical: 8.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(16.0),
+                              title: Text(
+                                order.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Price: ${order.price}',
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Status: ${order.status}',
+                                    style: const TextStyle(
+                                      color: Colors.orange,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              trailing: const Icon(
+                                Icons.chevron_left,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: orderController.orders.length,
                     ),
                   );
-                },
-                childCount: orderController.orders.length,
-              ),
-            );
-          }),
-        ],
-      ),
-      // Floating Action Button untuk chat
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final CartPageController cartController =
-              Get.find<CartPageController>();
-
-          // Periksa apakah user adalah guest
-          if (cartController.isGuest.value) {
-            // Jika user belum login
-            Get.defaultDialog(
-              title: "",
-              content: const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.lock_outline,
-                    size: 60,
-                    color: Color.fromRGBO(255, 170, 0, 1),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    "Login Required",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    "You need to login to use the chat feature.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                ],
-              ),
-              confirm: ElevatedButton.icon(
-                onPressed: () {
-                  Get.back(); // Tutup dialog
-                  Get.off(() => LoginPageView()); // Navigasi ke halaman login
-                },
-                icon: const Icon(
-                  Icons.login,
-                  size: 20,
-                  color: Colors.white,
-                ),
-                label: const Text(
-                  "Login",
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                }),
+              ],
+            ),
+            // Tab kedua: riwayat pesanan
+            Center(
+              child: Text(
+                'Order History',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[600],
                 ),
               ),
-              cancel: TextButton(
-                onPressed: () => Get.back(),
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.grey, // Warna teks
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        8), // Kurangi radius jika ingin lebih kecil
-                    side: const BorderSide(
-                        color: Colors.grey), // Tambahkan border
-                  ),
-                ),
-                child: const Text(
-                  "Cancel",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500, // Teks sedikit lebih tebal
-                  ),
-                ),
-              ),
-              radius: 8, // Membuat sudut dialog melengkung
-            );
-          } else {
-            // Jika user sudah login
-            final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-            if (userId.isNotEmpty) {
-              Get.to(() => ClientChatsAdminPageView(userId: userId));
-            }
-          }
-        },
-        backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
-        tooltip: "Chat with Admin",
-        child: const Icon(
-          Icons.chat,
-          color: Colors.white,
+            ),
+          ],
         ),
-      ),
-
-      bottomNavigationBar: Obx(
-        () {
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            final CartPageController cartController =
+                Get.find<CartPageController>();
+            if (cartController.isGuest.value) {
+              Get.defaultDialog(
+                title: "",
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.lock_outline,
+                      size: 60,
+                      color: Color.fromRGBO(255, 170, 0, 1),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      "Login Required",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      "You need to login to use the chat feature.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                  ],
+                ),
+                confirm: ElevatedButton.icon(
+                  onPressed: () {
+                    Get.back();
+                    Get.off(() => LoginPageView());
+                  },
+                  icon: const Icon(
+                    Icons.login,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                  label: const Text("Login"),
+                ),
+                cancel: TextButton(
+                  onPressed: () => Get.back(),
+                  child: const Text("Cancel"),
+                ),
+              );
+            } else {
+              final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+              if (userId.isNotEmpty) {
+                Get.to(() => ClientChatsAdminPageView(userId: userId));
+              }
+            }
+          },
+          backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
+          tooltip: "Chat with Admin",
+          child: const Icon(Icons.chat, color: Colors.white),
+        ),
+        bottomNavigationBar: Obx(() {
           final isGuest = orderController.isGuest.value;
           final hasOrders = orderController.orders.isNotEmpty;
+          final isInOrdersTab = orderController.activeTab.value == 0;
 
           // Cek apakah pengguna adalah guest atau pesanan kosong
-          if (isGuest || !hasOrders) {
+          if (isGuest || !hasOrders || !isInOrdersTab) {
             return const SizedBox
                 .shrink(); // Tidak menampilkan tombol jika kondisi tidak terpenuhi
           }
@@ -282,10 +240,9 @@ class CartPageView extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: () {
                 // Aksi ketika tombol checkout ditekan
-                // Navigasi ke halaman checkout atau melakukan proses lainnya
               },
               icon: const Icon(
-                Icons.shopping_cart_checkout_sharp, // Ganti dengan ikon yang diinginkan
+                Icons.shopping_cart_checkout_sharp,
                 color: Colors.white,
               ),
               label: const Text(
@@ -305,38 +262,8 @@ class CartPageView extends StatelessWidget {
               ),
             ),
           );
-        },
+        }),
       ),
     );
-  }
-}
-
-// Custom SliverPersistentHeader Delegate
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  final double height;
-  final Widget child;
-
-  _SliverAppBarDelegate({
-    required this.height,
-    required this.child,
-  });
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(
-      child: child,
-    );
-  }
-
-  @override
-  double get maxExtent => height;
-
-  @override
-  double get minExtent => height;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }
