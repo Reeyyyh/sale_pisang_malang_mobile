@@ -51,7 +51,6 @@ class DashboardPageView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Tempatkan Pick Image di atas
                         Center(
                           child: Obx(
                             () {
@@ -60,57 +59,86 @@ class DashboardPageView extends StatelessWidget {
                               return Column(
                                 children: [
                                   imageFile != null
-                                      ? Stack(
-                                          children: [
-                                            Image.file(imageFile,
-                                                height: 150, fit: BoxFit.cover),
-                                            Positioned(
-                                              top: 8,
-                                              right: 8,
-                                              child: IconButton(
-                                                icon: const Icon(Icons.close,
-                                                    color: Colors.red),
-                                                onPressed: () =>
-                                                    dashboardController
-                                                        .selectedImage
-                                                        .value = null,
+                                      ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              8), // Membulatkan sudut
+                                          child: Stack(
+                                            children: [
+                                              Image.file(
+                                                imageFile,
+                                                height: 150,
+                                                width: double.infinity,
+                                                fit: BoxFit.cover,
                                               ),
-                                            ),
-                                          ],
+                                              Positioned(
+                                                top: 8,
+                                                right: 8,
+                                                child: Tooltip(
+                                                  message: 'Remove Image',
+                                                  child: IconButton(
+                                                    icon: const Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red),
+                                                    onPressed: () =>
+                                                        dashboardController
+                                                            .selectedImage
+                                                            .value = null,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         )
-                                      : Image.network(
-                                          'https://via.placeholder.com/250x100?text=No+Image',
-                                          fit: BoxFit.cover,
-                                          loadingBuilder: (context, child,
-                                              loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              // Gambar berhasil dimuat
-                                              return child;
-                                            }
-                                            // Menampilkan CircularProgressIndicator selama fetching
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
-                                          },
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            // Menampilkan icon jika ada error
-                                            return const Center(
-                                              child: Icon(
-                                                Icons.broken_image,
-                                                size: 100,
-                                                color: Colors.grey,
-                                              ),
-                                            );
-                                          },
+                                      : ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              8), // Membulatkan sudut
+                                          child: FadeInImage(
+                                            placeholder: const NetworkImage(
+                                                'https://media.giphy.com/media/uIJBFZoOaifHf52MER/giphy.gif'), // URL GIF loading
+                                            image: const NetworkImage(
+                                                'https://via.placeholder.com/270x100?text=No+Image+Selected'),
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: 150,
+                                            fadeInDuration: const Duration(
+                                                milliseconds: 250),
+                                            fadeOutDuration: const Duration(
+                                                milliseconds: 250),
+                                            imageErrorBuilder:
+                                                (context, error, stackTrace) {
+                                              return const Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.hide_image_outlined,
+                                                      size: 100,
+                                                      color: Colors.grey,
+                                                    ),
+                                                    SizedBox(height: 8),
+                                                    Text(
+                                                      'No Image Selected',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.grey,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ),
                                   const SizedBox(height: 12),
                                   SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton.icon(
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
+                                        backgroundColor: const Color.fromRGBO(
+                                            255, 170, 0, 1),
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 12),
                                         shape: RoundedRectangleBorder(
@@ -128,7 +156,7 @@ class DashboardPageView extends StatelessWidget {
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
                               );
                             },
@@ -199,12 +227,12 @@ class DashboardPageView extends StatelessWidget {
 
                         // Add Item Button
                         Center(
-                          child: Container(
+                          child: SizedBox(
                             width: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
+                                backgroundColor:
+                                    const Color.fromRGBO(255, 170, 0, 1),
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 12),
                                 shape: RoundedRectangleBorder(
