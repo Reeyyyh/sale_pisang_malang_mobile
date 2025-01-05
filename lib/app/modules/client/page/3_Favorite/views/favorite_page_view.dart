@@ -113,6 +113,7 @@ class FavoritePageView extends StatelessWidget {
                       onTap: () {
                         // Navigasi ke CardDetailView saat item diklik
                         Get.to(() => CardDetailView(
+                              id: favorite.id,
                               imgUrl: favorite.imgUrl,
                               title: favorite.name,
                               description: favorite.description,
@@ -129,7 +130,8 @@ class FavoritePageView extends StatelessWidget {
                           contentPadding:
                               const EdgeInsets.symmetric(horizontal: 12.0),
                           leading: Hero(
-                            tag: favorite.name, // Gunakan tag yang unik, bisa favorite.name atau favorite.id
+                            tag: favorite
+                                .name, // Gunakan tag yang unik, bisa favorite.name atau favorite.id
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
@@ -174,7 +176,6 @@ class FavoritePageView extends StatelessWidget {
     );
   }
 }
-
 
 // Custom SliverPersistentHeader Delegate
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

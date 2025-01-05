@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sale_pisang_malang/app/models/items_model.dart';
+import 'package:sale_pisang_malang/app/modules/client/widget/card_detail_controller.dart'; // Import controller
 
 class CardDetailView extends StatelessWidget {
+  final String id;
   final String title;
   final String description;
   final String imgUrl;
@@ -9,6 +12,7 @@ class CardDetailView extends StatelessWidget {
 
   const CardDetailView({
     super.key,
+    required this.id,
     required this.title,
     required this.description,
     required this.imgUrl,
@@ -17,6 +21,8 @@ class CardDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CardDetailController cardDetailController = Get.put(CardDetailController()); // Menginisialisasi controller
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -135,7 +141,15 @@ class CardDetailView extends StatelessWidget {
         ),
         child: ElevatedButton(
           onPressed: () {
-            // Tambahkan aksi, seperti menambah ke keranjang
+            final item = ItemModel(
+              id: id, // Gunakan ID yang diteruskan
+              name: title,
+              description: description,
+              harga: harga,
+              imgUrl: imgUrl,
+            );
+            // Panggil addItemToCart dari controller
+            cardDetailController.addItemToCart(item);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromRGBO(255, 170, 0, 1),

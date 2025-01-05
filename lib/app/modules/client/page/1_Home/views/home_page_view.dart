@@ -84,6 +84,7 @@ class HomePageView extends StatelessWidget {
                         onTap: () {
                           Get.to(
                             () => CardDetailView(
+                                id: item.id,
                                 title: item.name,
                                 description: item.description,
                                 imgUrl: item.imgUrl,

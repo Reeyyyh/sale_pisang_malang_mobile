@@ -83,18 +83,23 @@ class CartPageController extends GetxController {
           'Item ${item.name} added to cart.',
           duration: const Duration(seconds: 1, milliseconds: 500),
           animationDuration: Duration.zero,
-          backgroundColor: Colors.green[400]!
-            .withOpacity(0.6),
-        colorText: Colors.black,
-        snackPosition: SnackPosition.TOP,
-        borderRadius: 15,
+          backgroundColor: Colors.green[400]!.withOpacity(0.6),
+          colorText: Colors.black,
+          snackPosition: SnackPosition.TOP,
+          borderRadius: 15,
         );
 
         // Memperbarui tampilan cart
         fetchOrders();
       } else {
         // Jika pengguna belum login
-        Get.snackbar("Error", "Please login to add items to cart.");
+        Get.snackbar(
+        'Login Required',
+        'Please login to add item to cart',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
       }
     } catch (e) {
       // Menangani error saat proses penyimpanan data
@@ -123,6 +128,10 @@ class CartPageController extends GetxController {
           '$orderName remove from cart.',
           duration: const Duration(seconds: 1, milliseconds: 500),
           animationDuration: Duration.zero,
+          backgroundColor: Colors.red[400]!.withOpacity(0.6),
+          colorText: Colors.black,
+          snackPosition: SnackPosition.TOP,
+          borderRadius: 15,
         );
       } else {
         Get.snackbar("Error", "Please login to remove items from orders.");

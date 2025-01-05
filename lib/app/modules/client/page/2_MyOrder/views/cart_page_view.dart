@@ -58,7 +58,7 @@ class CartPageView extends StatelessWidget {
               return const SliverFillRemaining(
                 child: Center(
                   child: Text(
-                    'Please login to see your orders.',
+                    'Please login to see your cart.',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
@@ -73,7 +73,7 @@ class CartPageView extends StatelessWidget {
               return const SliverFillRemaining(
                 child: Center(
                   child: Text(
-                    'No Orders Yet.',
+                    'No Item Yet.',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
