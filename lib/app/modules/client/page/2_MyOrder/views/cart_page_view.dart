@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:sale_pisang_malang/app/modules/auth/views/login_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/client/chats/views/client_chats_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/client/page/2_MyOrder/controllers/cart_page_controller.dart';
@@ -152,15 +153,96 @@ class CartPageView extends StatelessWidget {
               ],
             ),
             // Tab kedua: riwayat pesanan
-            Center(
-              child: Text(
-                'Order History',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[600],
-                ),
-              ),
+            CustomScrollView(
+              slivers: [
+                Obx(() {
+                  if (orderController.isGuest.value) {
+                    return const SliverFillRemaining(
+                      child: Center(
+                        child: Text(
+                          'Please login to see your order history.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (orderController.history.isEmpty) {
+                    return const SliverFillRemaining(
+                      child: Center(
+                        child: Text(
+                          'No Order History Yet.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final history = orderController.history[index];
+                        return Card(
+                          elevation: 2.0,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 8.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(16.0),
+                            title: Text(
+                              history.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Price: ${history.price}',
+                                  style: const TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  'Ordered on: ${DateFormat('yyyy-MM-dd HH:mm').format(history.timestamp.toDate())}',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                              onPressed: () {
+                                // Panggil fungsi deleteHistory dengan ID history yang dipilih
+                                orderController.deleteHistory(history.id);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: orderController.history.length,
+                    ),
+                  );
+                }),
+              ],
             ),
           ],
         ),
@@ -225,12 +307,19 @@ class CartPageView extends StatelessWidget {
           child: const Icon(Icons.chat, color: Colors.white),
         ),
         bottomNavigationBar: Obx(() {
+          orderController.setActiveTab(0);
           final isGuest = orderController.isGuest.value;
           final hasOrders = orderController.orders.isNotEmpty;
           final isInOrdersTab = orderController.activeTab.value == 0;
 
+          print(isGuest);
+          print(hasOrders);
+          print(isInOrdersTab);
+
           // Cek apakah pengguna adalah guest atau pesanan kosong
           if (isGuest || !hasOrders || !isInOrdersTab) {
+            print('Conditions not met for checkout button');
+
             return const SizedBox
                 .shrink(); // Tidak menampilkan tombol jika kondisi tidak terpenuhi
           }
@@ -240,6 +329,7 @@ class CartPageView extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: () {
                 // Aksi ketika tombol checkout ditekan
+                orderController.checkoutOrders();
               },
               icon: const Icon(
                 Icons.shopping_cart_checkout_sharp,

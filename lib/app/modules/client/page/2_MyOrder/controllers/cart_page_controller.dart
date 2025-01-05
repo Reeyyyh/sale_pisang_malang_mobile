@@ -7,6 +7,7 @@ import 'package:sale_pisang_malang/app/modules/auth/services/auth_service.dart';
 
 class CartPageController extends GetxController {
   var orders = <OrderModel>[].obs;
+  var history = <HistoryModel>[].obs;
   var isGuest = false.obs;
   var activeTab = 0.obs; // Menyimpan tab yang aktif (default: Orders)
 
@@ -18,6 +19,7 @@ class CartPageController extends GetxController {
     checkUserStatus(); // Memeriksa status user
     if (!isGuest.value) {
       fetchOrders(); // Fetch data orders jika bukan guest
+      fetchHistory(); // Fetch data history jika bukan guest
     }
   }
 
@@ -31,7 +33,8 @@ class CartPageController extends GetxController {
   }
 
   void setActiveTab(int index) {
-    activeTab.value = index; // Memperbarui tab aktif
+    activeTab.value = index; // Memperbarui tab yang aktif
+    print("Tab berubah menjadi $index");
   }
 
   // Fungsi untuk mengambil daftar cart dari Firestore
@@ -58,6 +61,34 @@ class CartPageController extends GetxController {
       });
     } else {
       orders.clear(); // Jika user tidak login, kosongkan daftar orders
+    }
+  }
+
+  Future<void> fetchHistory() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userID = user.uid;
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .collection('history') // Koleksi history
+          .snapshots()
+          .listen((snapshot) {
+        history.value = snapshot.docs.map((doc) {
+          return HistoryModel(
+            id: doc.id, // Firestore akan memberikan ID otomatis
+            name: doc['itemName'],
+            price: doc['itemPrice'],
+            timestamp: doc['timestamp'], // Pastikan timestamp ada di Firestore
+          );
+        }).toList();
+        history.sort((a, b) => b.timestamp
+            .compareTo(a.timestamp)); // Urutkan berdasarkan timestamp terbaru
+
+        update(); // Update UI dengan data terbaru
+      });
+    } else {
+      history.clear(); // Jika user tidak login, kosongkan daftar history
     }
   }
 
@@ -100,12 +131,12 @@ class CartPageController extends GetxController {
       } else {
         // Jika pengguna belum login
         Get.snackbar(
-        'Login Required',
-        'Please login to add item to cart',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
+          'Login Required',
+          'Please login to add item to cart',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
       // Menangani error saat proses penyimpanan data
@@ -146,4 +177,92 @@ class CartPageController extends GetxController {
       Get.snackbar("Error", "Failed to remove order: $e");
     }
   }
+
+  void deleteHistory(String historyId) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        String userID = user.uid;
+
+        // Menghapus dokumen history berdasarkan ID
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userID)
+            .collection('history')
+            .doc(historyId)
+            .delete();
+
+        // Menghapus dari list history yang ditampilkan secara lokal
+        history.removeWhere((item) => item.id == historyId);
+
+        // Notifikasi sukses
+        Get.snackbar(
+          'Success',
+          'history deleted succesfully',
+          duration: const Duration(seconds: 1, milliseconds: 500),
+          animationDuration: Duration.zero,
+          backgroundColor: Colors.green[400]!.withOpacity(0.6),
+          colorText: Colors.black,
+          snackPosition: SnackPosition.TOP,
+          borderRadius: 15,
+        );
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to delete history: $e');
+    }
+  }
+
+  // Fungsi untuk checkout dan memindahkan item ke history
+  Future<void> checkoutOrders() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    String userID = user.uid;
+
+    for (var order in orders) {
+      try {
+        // Menyimpan riwayat pesanan di koleksi history dengan ID otomatis
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userID)
+            .collection('history')
+            .add({
+          'itemName': order.name,
+          'itemPrice': order.price,
+          'itemStatus': order.status,
+          'timestamp': FieldValue.serverTimestamp(), // Menambahkan timestamp
+        });
+
+        // Menghapus item dari cart setelah checkout
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userID)
+            .collection('cart')
+            .doc(order.id)
+            .delete();
+      } catch (e) {
+        Get.snackbar("Error", "Failed to checkout: $e");
+      }
+    }
+
+    // Setelah checkout, perbarui status hasOrders
+    orders.clear(); // Kosongkan daftar orders
+    
+
+    // Setelah checkout, kamu bisa memperbarui tampilan
+    fetchHistory();
+    fetchOrders();
+
+    // Menampilkan notifikasi sukses
+    Get.snackbar(
+      'Success',
+      'Orders checked out succesfully',
+      duration: const Duration(seconds: 1, milliseconds: 500),
+      animationDuration: Duration.zero,
+      backgroundColor: Colors.green[400]!.withOpacity(0.6),
+      colorText: Colors.black,
+      snackPosition: SnackPosition.TOP,
+      borderRadius: 15,
+    );
+  }
+}
 }

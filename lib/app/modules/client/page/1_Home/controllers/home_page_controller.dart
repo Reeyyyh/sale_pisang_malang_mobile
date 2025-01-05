@@ -87,7 +87,7 @@ class HomeController extends GetxController {
   }
 
   void startLoadingTimeout() {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if (items.isEmpty) {
         isLoading.value = false;
         hasError.value = true;

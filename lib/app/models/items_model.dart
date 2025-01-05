@@ -89,3 +89,39 @@ class ChatMessage {
     };
   }
 }
+
+// model untuk history
+class HistoryModel {
+  final String id;
+  final String name;
+  final String price;
+  final Timestamp timestamp;
+
+  HistoryModel({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.timestamp,
+  });
+
+  // Menambahkan fungsi untuk mengkonversi dari data Firestore
+  factory HistoryModel.fromFirestore(DocumentSnapshot doc) {
+    var data = doc.data() as Map<String, dynamic>;
+
+    return HistoryModel(
+      id: doc.id,
+      name: data['itemName'],
+      price: data['itemPrice'],
+      timestamp: data['timestamp'], // Pastikan timestamp disimpan di Firestore
+    );
+  }
+
+  // Menambahkan fungsi untuk mengubah data ke dalam format untuk disimpan di Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      'itemName': name,
+      'itemPrice': price,
+      'timestamp': timestamp,
+    };
+  }
+}
