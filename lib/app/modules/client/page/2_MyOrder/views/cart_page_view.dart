@@ -265,6 +265,48 @@ class CartPageView extends StatelessWidget {
           color: Colors.white,
         ),
       ),
+
+      bottomNavigationBar: Obx(
+        () {
+          final isGuest = orderController.isGuest.value;
+          final hasOrders = orderController.orders.isNotEmpty;
+
+          // Cek apakah pengguna adalah guest atau pesanan kosong
+          if (isGuest || !hasOrders) {
+            return const SizedBox
+                .shrink(); // Tidak menampilkan tombol jika kondisi tidak terpenuhi
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                // Aksi ketika tombol checkout ditekan
+                // Navigasi ke halaman checkout atau melakukan proses lainnya
+              },
+              icon: const Icon(
+                Icons.shopping_cart_checkout_sharp, // Ganti dengan ikon yang diinginkan
+                color: Colors.white,
+              ),
+              label: const Text(
+                "Checkout",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
