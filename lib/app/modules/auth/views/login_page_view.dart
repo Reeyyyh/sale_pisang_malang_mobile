@@ -58,7 +58,7 @@ class LoginPageView extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
-              key: loginController.loginFormKey,
+            key: loginController.loginFormKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -89,8 +89,8 @@ class LoginPageView extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    prefixIcon:
-                        const Icon(Icons.email, color: Color.fromRGBO(255, 170, 0, 1)),
+                    prefixIcon: const Icon(Icons.email,
+                        color: Color.fromRGBO(255, 170, 0, 1)),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -115,8 +115,8 @@ class LoginPageView extends StatelessWidget {
                       obscureText: loginController.isPasswordHidden.value,
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        prefixIcon:
-                            const Icon(Icons.lock, color: Color.fromRGBO(255, 170, 0, 1)),
+                        prefixIcon: const Icon(Icons.lock,
+                            color: Color.fromRGBO(255, 170, 0, 1)),
                         suffixIcon: IconButton(
                           icon: Icon(loginController.isPasswordHidden.value
                               ? Icons.visibility_off
@@ -144,7 +144,8 @@ class LoginPageView extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (loginController.loginFormKey .currentState!.validate()) {
+                      if (loginController.loginFormKey.currentState!
+                          .validate()) {
                         loginController.login();
                       }
                     },
@@ -172,15 +173,27 @@ class LoginPageView extends StatelessWidget {
                       'Don’t have an account?',
                       style: TextStyle(color: Colors.black54),
                     ),
+                    const SizedBox(width: 8),
                     TextButton(
                       onPressed: () {
                         Get.offAll(() => SignUpPageView());
                       },
+                      style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(4.0), // Sudut melengkung
+                            side: const BorderSide(
+                                color: Color.fromRGBO(255, 170, 0, 1)), // Garis tepi
+                          ),
+                        ),
+                      ),
                       child: const Text(
                         'Sign Up',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color.fromRGBO(255, 170, 0, 1),
+                          fontSize: 16
                         ),
                       ),
                     ),

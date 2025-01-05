@@ -199,15 +199,27 @@ class SignUpPageView extends StatelessWidget {
                       'Already have an account? ',
                       style: TextStyle(color: Colors.black54),
                     ),
+                    const SizedBox(width: 8),
                     TextButton(
                       onPressed: () {
                         Get.offAll(() => LoginPageView());
                       },
+                      style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(4.0), // Sudut melengkung
+                            side: const BorderSide(
+                                color: Color.fromRGBO(255, 170, 0, 1)), // Garis tepi
+                          ),
+                        ),
+                      ),
                       child: const Text(
                         'Login',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color.fromRGBO(255, 170, 0, 1),
+                          fontSize: 16
                         ),
                       ),
                     ),
