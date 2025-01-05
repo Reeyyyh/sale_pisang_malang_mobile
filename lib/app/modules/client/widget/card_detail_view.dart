@@ -88,8 +88,8 @@ class CardDetailView extends StatelessWidget {
             ),
             const Divider(
               height: 30,
-              thickness: 1,
-              color: Colors.grey,
+              thickness: 2,
+              color: Colors.red,
             ),
             // Deskripsi
             const Text(
@@ -103,11 +103,17 @@ class CardDetailView extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               description,
+              textAlign: TextAlign.justify,
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.black87,
                 height: 1.5,
               ),
+            ),
+            const Divider(
+              height: 30,
+              thickness: 2,
+              color: Colors.red,
             ),
           ],
         ),
@@ -119,6 +125,13 @@ class CardDetailView extends StatelessWidget {
             top: BorderSide(color: Colors.grey.shade300, width: 0.5),
           ),
           color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2), // Warna bayangan
+              blurRadius: 4, // Jarak blur
+              offset: const Offset(0, -1), // Bayangan ke atas
+            ),
+          ],
         ),
         child: ElevatedButton(
           onPressed: () {
@@ -128,10 +141,8 @@ class CardDetailView extends StatelessWidget {
             backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
             ),
-            shadowColor: Colors.orange.withOpacity(0.5),
-            elevation: 10,
           ),
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
