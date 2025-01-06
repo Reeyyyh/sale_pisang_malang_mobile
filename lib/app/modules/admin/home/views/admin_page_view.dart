@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:curved_navigation_bar_with_label/curved_navigation_bar.dart';
 import 'package:sale_pisang_malang/app/modules/admin/home/controllers/admin_page_controller.dart';
 import 'package:sale_pisang_malang/app/modules/admin/page/1_dashboard/views/dashboard_page_view.dart';
+import 'package:sale_pisang_malang/app/modules/admin/page/2_checkout/views/list_checkout_view.dart';
 import 'package:sale_pisang_malang/app/modules/admin/page/3_chat/views/admin_chat_page_view.dart';
 import 'package:sale_pisang_malang/app/modules/admin/page/4_profile/views/profile_page_view.dart';
 
@@ -100,13 +101,3 @@ class AdminPageView extends StatelessWidget {
   }
 }
 
-class ListCheckoutPage extends StatelessWidget {
-  const ListCheckoutPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('List Order Page'),
-    );
-  }
-}

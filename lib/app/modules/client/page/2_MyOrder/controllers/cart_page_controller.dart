@@ -33,7 +33,7 @@ class CartPageController extends GetxController {
   }
 
   void setActiveTab(int index) {
-    activeTab.value = index; 
+    activeTab.value = index;
   }
 
   // Fungsi untuk mengambil daftar cart dari Firestore
@@ -216,51 +216,81 @@ class CartPageController extends GetxController {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String userID = user.uid;
+      print(userID);
 
-      for (var order in orders) {
-        try {
-          // Menyimpan riwayat pesanan di koleksi history dengan ID otomatis
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(userID)
-              .collection('history')
-              .add({
-            'itemName': order.name,
-            'itemPrice': order.price,
-            'itemStatus': order.status,
-            'timestamp': FieldValue.serverTimestamp(), // Menambahkan timestamp
-          });
+      try {
+        // Ambil userName dari koleksi 'users' berdasarkan userID
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userID)
+            .get();
 
-          // Menghapus item dari cart setelah checkout
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(userID)
-              .collection('cart')
-              .doc(order.id)
-              .delete();
-        } catch (e) {
-          Get.snackbar("Error", "Failed to checkout: $e");
+        if (userSnapshot.exists) {
+          String userName = userSnapshot['name']; // Ambil nama pengguna
+
+          for (var order in orders) {
+            try {
+              // Menyimpan riwayat pesanan di koleksi history dengan ID otomatis
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(userID)
+                  .collection('history')
+                  .add({
+                'itemName': order.name,
+                'itemPrice': order.price,
+                'itemStatus': order.status,
+                'timestamp':
+                    FieldValue.serverTimestamp(), // Menambahkan timestamp
+              });
+
+              // Menambahkan pesanan ke koleksi checkout (di luar user)
+              await FirebaseFirestore.instance.collection('checkout').add({
+                'userID': userID,
+                'userName': userName, // Menambahkan userName
+                'orderDetails': [
+                  {
+                    'itemName': order.name,
+                    'itemPrice': order.price,
+                    'itemStatus': order.status
+                  }
+                ],
+                'timestamp': FieldValue.serverTimestamp(),
+              });
+
+              // Menghapus item dari cart setelah checkout
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(userID)
+                  .collection('cart')
+                  .doc(order.id)
+                  .delete();
+            } catch (e) {
+              Get.snackbar("Error", "Failed to checkout: $e");
+            }
+          }
+
+          // Setelah checkout, perbarui status hasOrders
+          orders.clear(); // Kosongkan daftar orders
+
+          // Setelah checkout, kamu bisa memperbarui tampilan
+          fetchHistory();
+          fetchOrders();
+
+          // Menampilkan notifikasi sukses
+          Get.snackbar(
+            'Success',
+            'Orders checked out successfully',
+            duration: const Duration(seconds: 1, milliseconds: 500),
+            animationDuration: Duration.zero,
+            backgroundColor: Colors.green[400]!.withOpacity(0.6),
+            colorText: Colors.black,
+            snackPosition: SnackPosition.TOP,
+            borderRadius: 15,
+          );
         }
+      } catch (e) {
+        Get.snackbar("Error", "Failed to fetch user data: $e");
       }
-
-      // Setelah checkout, perbarui status hasOrders
-      orders.clear(); // Kosongkan daftar orders
-
-      // Setelah checkout, kamu bisa memperbarui tampilan
-      fetchHistory();
-      fetchOrders();
-
-      // Menampilkan notifikasi sukses
-      Get.snackbar(
-        'Success',
-        'Orders checked out succesfully',
-        duration: const Duration(seconds: 1, milliseconds: 500),
-        animationDuration: Duration.zero,
-        backgroundColor: Colors.green[400]!.withOpacity(0.6),
-        colorText: Colors.black,
-        snackPosition: SnackPosition.TOP,
-        borderRadius: 15,
-      );
     }
   }
 }
