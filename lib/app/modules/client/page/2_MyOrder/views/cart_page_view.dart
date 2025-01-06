@@ -247,65 +247,78 @@ class CartPageView extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            final CartPageController cartController =
-                Get.find<CartPageController>();
-            if (cartController.isGuest.value) {
-              Get.defaultDialog(
-                title: "",
-                content: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.lock_outline,
-                      size: 60,
-                      color: Color.fromRGBO(255, 170, 0, 1),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      "Login Required",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      "You need to login to use the chat feature.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    ),
-                  ],
-                ),
-                confirm: ElevatedButton.icon(
-                  onPressed: () {
-                    Get.back();
-                    Get.off(() => LoginPageView());
-                  },
-                  icon: const Icon(
-                    Icons.login,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                  label: const Text("Login"),
-                ),
-                cancel: TextButton(
-                  onPressed: () => Get.back(),
-                  child: const Text("Cancel"),
-                ),
-              );
-            } else {
-              final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-              if (userId.isNotEmpty) {
-                Get.to(() => ClientChatsAdminPageView(userId: userId));
-              }
+        floatingActionButton: Obx(
+          () {
+            final isHistoryTab = orderController.activeTab.value ==
+                1; // Cek apakah tab aktif adalah History
+
+            // Jika tab aktif adalah History, sembunyikan FloatingActionButton
+            if (isHistoryTab) {
+              return SizedBox.shrink(); // Menyembunyikan FloatingActionButton
             }
+
+            // Jika tab aktif bukan History, tampilkan FloatingActionButton seperti biasa
+            return FloatingActionButton(
+              onPressed: () {
+                final CartPageController cartController =
+                    Get.find<CartPageController>();
+                if (cartController.isGuest.value) {
+                  Get.defaultDialog(
+                    title: "",
+                    content: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.lock_outline,
+                          size: 60,
+                          color: Color.fromRGBO(255, 170, 0, 1),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          "Login Required",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "You need to login to use the chat feature.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 14, color: Colors.black54),
+                        ),
+                      ],
+                    ),
+                    confirm: ElevatedButton.icon(
+                      onPressed: () {
+                        Get.back();
+                        Get.off(() => LoginPageView());
+                      },
+                      icon: const Icon(
+                        Icons.login,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                      label: const Text("Login"),
+                    ),
+                    cancel: TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text("Cancel"),
+                    ),
+                  );
+                } else {
+                  final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+                  if (userId.isNotEmpty) {
+                    Get.to(() => ClientChatsAdminPageView(userId: userId));
+                  }
+                }
+              },
+              backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
+              tooltip: "Chat with Admin",
+              child: const Icon(Icons.chat, color: Colors.white),
+            );
           },
-          backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
-          tooltip: "Chat with Admin",
-          child: const Icon(Icons.chat, color: Colors.white),
         ),
         bottomNavigationBar: Obx(() {
           final isGuest = orderController.isGuest.value;
