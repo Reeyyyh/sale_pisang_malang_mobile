@@ -15,6 +15,7 @@ class CartPageView extends StatelessWidget {
 
     return DefaultTabController(
       length: 2,
+      initialIndex: orderController.activeTab.value,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(255, 170, 0, 1),
@@ -307,19 +308,11 @@ class CartPageView extends StatelessWidget {
           child: const Icon(Icons.chat, color: Colors.white),
         ),
         bottomNavigationBar: Obx(() {
-          orderController.setActiveTab(0);
           final isGuest = orderController.isGuest.value;
           final hasOrders = orderController.orders.isNotEmpty;
           final isInOrdersTab = orderController.activeTab.value == 0;
 
-          print(isGuest);
-          print(hasOrders);
-          print(isInOrdersTab);
-
-          // Cek apakah pengguna adalah guest atau pesanan kosong
           if (isGuest || !hasOrders || !isInOrdersTab) {
-            print('Conditions not met for checkout button');
-
             return const SizedBox
                 .shrink(); // Tidak menampilkan tombol jika kondisi tidak terpenuhi
           }

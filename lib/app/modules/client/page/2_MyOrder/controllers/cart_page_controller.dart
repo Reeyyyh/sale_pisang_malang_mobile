@@ -33,8 +33,7 @@ class CartPageController extends GetxController {
   }
 
   void setActiveTab(int index) {
-    activeTab.value = index; // Memperbarui tab yang aktif
-    print("Tab berubah menjadi $index");
+    activeTab.value = index; 
   }
 
   // Fungsi untuk mengambil daftar cart dari Firestore
@@ -214,55 +213,54 @@ class CartPageController extends GetxController {
 
   // Fungsi untuk checkout dan memindahkan item ke history
   Future<void> checkoutOrders() async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    String userID = user.uid;
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userID = user.uid;
 
-    for (var order in orders) {
-      try {
-        // Menyimpan riwayat pesanan di koleksi history dengan ID otomatis
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userID)
-            .collection('history')
-            .add({
-          'itemName': order.name,
-          'itemPrice': order.price,
-          'itemStatus': order.status,
-          'timestamp': FieldValue.serverTimestamp(), // Menambahkan timestamp
-        });
+      for (var order in orders) {
+        try {
+          // Menyimpan riwayat pesanan di koleksi history dengan ID otomatis
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userID)
+              .collection('history')
+              .add({
+            'itemName': order.name,
+            'itemPrice': order.price,
+            'itemStatus': order.status,
+            'timestamp': FieldValue.serverTimestamp(), // Menambahkan timestamp
+          });
 
-        // Menghapus item dari cart setelah checkout
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userID)
-            .collection('cart')
-            .doc(order.id)
-            .delete();
-      } catch (e) {
-        Get.snackbar("Error", "Failed to checkout: $e");
+          // Menghapus item dari cart setelah checkout
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userID)
+              .collection('cart')
+              .doc(order.id)
+              .delete();
+        } catch (e) {
+          Get.snackbar("Error", "Failed to checkout: $e");
+        }
       }
+
+      // Setelah checkout, perbarui status hasOrders
+      orders.clear(); // Kosongkan daftar orders
+
+      // Setelah checkout, kamu bisa memperbarui tampilan
+      fetchHistory();
+      fetchOrders();
+
+      // Menampilkan notifikasi sukses
+      Get.snackbar(
+        'Success',
+        'Orders checked out succesfully',
+        duration: const Duration(seconds: 1, milliseconds: 500),
+        animationDuration: Duration.zero,
+        backgroundColor: Colors.green[400]!.withOpacity(0.6),
+        colorText: Colors.black,
+        snackPosition: SnackPosition.TOP,
+        borderRadius: 15,
+      );
     }
-
-    // Setelah checkout, perbarui status hasOrders
-    orders.clear(); // Kosongkan daftar orders
-    
-
-    // Setelah checkout, kamu bisa memperbarui tampilan
-    fetchHistory();
-    fetchOrders();
-
-    // Menampilkan notifikasi sukses
-    Get.snackbar(
-      'Success',
-      'Orders checked out succesfully',
-      duration: const Duration(seconds: 1, milliseconds: 500),
-      animationDuration: Duration.zero,
-      backgroundColor: Colors.green[400]!.withOpacity(0.6),
-      colorText: Colors.black,
-      snackPosition: SnackPosition.TOP,
-      borderRadius: 15,
-    );
   }
-}
 }
