@@ -43,6 +43,7 @@ class LoginController extends GetxController {
             } else {
               // Memuat data user (favorite, profile, dll.)
               await Get.find<CartPageController>().fetchOrders();
+              await Get.find<CartPageController>().fetchHistory();
               await Get.find<FavoriteController>().fetchFavorites();
               await Get.find<ProfileController>().fetchUserData();
 
