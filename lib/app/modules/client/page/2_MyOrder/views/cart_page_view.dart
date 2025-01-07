@@ -254,7 +254,8 @@ class CartPageView extends StatelessWidget {
 
             // Jika tab aktif adalah History, sembunyikan FloatingActionButton
             if (isHistoryTab) {
-              return SizedBox.shrink(); // Menyembunyikan FloatingActionButton
+              return const SizedBox
+                  .shrink(); // Menyembunyikan FloatingActionButton
             }
 
             // Jika tab aktif bukan History, tampilkan FloatingActionButton seperti biasa
@@ -300,11 +301,40 @@ class CartPageView extends StatelessWidget {
                         size: 20,
                         color: Colors.white,
                       ),
-                      label: const Text("Login"),
+                      label: const Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(
+                            255, 170, 0, 1), // Background Color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              8), // Sedikit membulatkan sudut
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 20), // Padding tombol
+                      ),
                     ),
                     cancel: TextButton(
                       onPressed: () => Get.back(),
-                      child: const Text("Cancel"),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        side: const BorderSide(
+                            color: Colors.red, width: 1), // Border merah
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              8), // Sedikit membulatkan sudut
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 20), // Padding tombol
+                      ),
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyle(
+                          color: Colors.red, // Warna merah untuk tombol Cancel
+                        ),
+                      ),
                     ),
                   );
                 } else {
